@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using SullysToolkit;
 
-public class ReadInput : MonoBehaviour
+public class InputDetector : MonoSingleton<InputDetector>
 {
     [SerializeField] private Vector2 _moveInput;
+    [SerializeField] private float _turnInput;
     [SerializeField] private bool _shootInput;
     [SerializeField] private bool _boostInput;
 
@@ -33,6 +35,13 @@ public class ReadInput : MonoBehaviour
         else _boostInput = false;
     }
 
+    public void ReadTurnInput(InputAction.CallbackContext context)
+    {
+        if (context.started || context.performed)
+            _turnInput = context.ReadValue<float>();
+        else _turnInput = 0;
+    }
+
 
     //Getters
     public Vector2 GetMoveInput()
@@ -50,4 +59,8 @@ public class ReadInput : MonoBehaviour
         return _boostInput;
     }
 
+    public float GetTurnInput()
+    {
+        return _turnInput;
+    }
 }
