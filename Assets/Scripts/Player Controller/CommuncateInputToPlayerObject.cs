@@ -11,7 +11,7 @@ public class CommuncateInputToPlayerObject : MonoBehaviour
     private bool _boostInput = false;
 
     private MoveObject _playerMoveScriptReference;
-    private RotateObject _playerRotateScriptReference;
+    private AddRotationToObject _playerRotateScriptReference;
 
 
     //monos
@@ -37,7 +37,7 @@ public class CommuncateInputToPlayerObject : MonoBehaviour
             _playerMoveScriptReference = GetComponent<MoveObject>();
 
         if (_playerRotateScriptReference == null)
-            _playerRotateScriptReference = GetComponent<RotateObject>();
+            _playerRotateScriptReference = GetComponent<AddRotationToObject>();
     }
 
     private void GetInputsFromInputDetector()
