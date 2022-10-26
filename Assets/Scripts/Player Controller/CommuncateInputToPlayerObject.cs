@@ -12,6 +12,7 @@ public class CommuncateInputToPlayerObject : MonoBehaviour
 
     private MoveObject _playerMoveScriptReference;
     private AddRotationToObject _playerRotateScriptReference;
+    private SpawnLaserOnInput _playerSpawnLaserScriptReference;
 
 
     //monos
@@ -27,6 +28,7 @@ public class CommuncateInputToPlayerObject : MonoBehaviour
 
         ShareMoveInputWithPlayerMoveScript();
         ShareRotateInputWithPlayerRotateScript();
+        ShareShootInputWithLaserSpawnScript();
     }
 
 
@@ -38,6 +40,9 @@ public class CommuncateInputToPlayerObject : MonoBehaviour
 
         if (_playerRotateScriptReference == null)
             _playerRotateScriptReference = GetComponent<AddRotationToObject>();
+
+        if (_playerSpawnLaserScriptReference == null)
+            _playerSpawnLaserScriptReference = GetComponent<SpawnLaserOnInput>();
     }
 
     private void GetInputsFromInputDetector()
@@ -60,4 +65,11 @@ public class CommuncateInputToPlayerObject : MonoBehaviour
     {
         _playerRotateScriptReference.AddRotation(new Vector3(0, 0, _turnInput));
     }
+
+    private void ShareShootInputWithLaserSpawnScript()
+    {
+        _playerSpawnLaserScriptReference.SetShootInput( InputDetector.Instance.GetShootInput());
+    }
+
+
 }
