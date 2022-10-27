@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 7878436600147673597}
   - component: {fileID: 7878436600147673598}
   - component: {fileID: 7878436600147673594}
-  - component: {fileID: 7878436600147673595}
+  - component: {fileID: 303159136845251626}
   - component: {fileID: 7878436600147673596}
   - component: {fileID: 7878436600147673592}
   - component: {fileID: 7878436600147673593}
@@ -131,7 +131,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7878436600147673537}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &7878436600147673598
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -195,8 +195,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
---- !u!61 &7878436600147673595
-BoxCollider2D:
+--- !u!70 &303159136845251626
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -209,18 +209,8 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
+  m_Size: {x: 1, y: 2}
+  m_Direction: 0
 --- !u!114 &7878436600147673596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288,3 +278,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _laserPrefab: {fileID: 5297648272176262383, guid: 2a9d01dd7a63e014eb91c17ad44e4114, type: 3}
   _laserSpawnPosition: {fileID: 7878436600086333100}
+  _createdLaser: {fileID: 0}
+  _shotCooldownDuration: 0.5

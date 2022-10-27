@@ -8,6 +8,7 @@ public class LaserBehavior : MonoBehaviour
     [SerializeField] private float _moveSpeed = 5;
     [SerializeField] private float _lifeExpectancy = 5;
     [SerializeField] private float _currentLifetime = 0;
+    [SerializeField] private float _speedOffset = 0;
 
     private bool _isEnabled = false;
 
@@ -49,12 +50,13 @@ public class LaserBehavior : MonoBehaviour
 
     private void MoveLaser()
     {
-        transform.Translate(Vector2.up * Time.deltaTime * _moveSpeed);
+        transform.Translate(Vector2.up * Time.deltaTime * (_moveSpeed + _speedOffset));
     }
 
     private void ResetProjectile()
     {
         _currentLifetime = 0;
+        _speedOffset = 0;
         _isEnabled = false;
 
     }
@@ -64,4 +66,8 @@ public class LaserBehavior : MonoBehaviour
         ObjectPooler.PoolObject(this.gameObject);
     }
 
+    public void SetSpeedOffset(float value)
+    {
+        _speedOffset = value;
+    }
 }

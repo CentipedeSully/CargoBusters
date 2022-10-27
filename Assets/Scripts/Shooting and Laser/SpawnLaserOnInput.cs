@@ -20,6 +20,7 @@ public class SpawnLaserOnInput : MonoBehaviour
     private void Update()
     {
         ShootLaser();
+        
     }
 
     private void ShootLaser()
@@ -38,6 +39,12 @@ public class SpawnLaserOnInput : MonoBehaviour
 
         //Reposition Laser
         _createdLaser.transform.SetPositionAndRotation(_laserSpawnPosition.transform.position, Quaternion.Euler(transform.rotation.eulerAngles));
+
+
+
+        //Apply Speed Offset by the player's yMove velocity
+        _createdLaser.gameObject.GetComponent<LaserBehavior>().SetSpeedOffset(CalculateLaserSpeedOffset());
+        
 
         //Enable Laser Behavior
         _createdLaser.SetActive(true);
@@ -61,5 +68,16 @@ public class SpawnLaserOnInput : MonoBehaviour
         _shootInput = newValue;
     }
 
+
+    private float CalculateLaserSpeedOffset()
+    {
+        
+        Vector2 relativeVelocity = transform.InverseTransformVector(GetComponent<Rigidbody2D>().GetRelativePointVelocity(Vector2.zero));
+        float offset = relativeVelocity.y;
+        
+        //Debug.Log($"Relative velocity: {relativeVelocity}, Y Offset: {offset}");
+
+        return offset;
+    }
 
 }
