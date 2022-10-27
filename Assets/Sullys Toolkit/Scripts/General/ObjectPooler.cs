@@ -23,12 +23,16 @@ namespace SullysToolkit
 
         public static void PoolObject(GameObject existingObject)
         {
-            if (existingObject.activeSelf == true)
-                existingObject.SetActive(false);
+            if (DoesInstanceExistInList(existingObject.GetInstanceID()) == false)
+            {
+                if (existingObject.activeSelf == true)
+                    existingObject.SetActive(false);
 
-            ParentPoolerToGameObject(existingObject);
+                ParentPoolerToGameObject(existingObject);
 
-            _pooledObjects.Add(existingObject);
+                _pooledObjects.Add(existingObject);
+            }
+            
         }
 
         private static void ParentPoolerToGameObject(GameObject pooledObject)
@@ -55,22 +59,16 @@ namespace SullysToolkit
 
             //Find a matching object to return and mark its location in the list.
             GameObject recycledGameObject = null;
-            int removalIndex = -1;
             for (int i = 0; i < _pooledObjects.Count; i++)
             {
                 if (_pooledObjects[i].CompareTag(requestedPrefab.tag))
                 {
                     recycledGameObject = _pooledObjects[i].gameObject;
-                    removalIndex = i;
-                    //Debug.Log("Selected ObjectID: " + recycledGameObject.GetInstanceID());
+                    _pooledObjects.RemoveAt(i);
+                    
                     break;
                 }
             }
-
-            _pooledObjects.RemoveAt(removalIndex);
-            _pooledObjects.RemoveAt(removalIndex);
-
-            //Debug.Log("Object Instance at removed position: " + _pooledObjects[removalIndex].GetInstanceID());
 
 
             //Return the object
@@ -84,29 +82,16 @@ namespace SullysToolkit
             }
 
         }
+
         private static bool DoesInstanceExistInList(int instanceID)
         {
             for (int i = 0; i < _pooledObjects.Count; i++)
             {
                 if (instanceID == _pooledObjects[i].GetInstanceID())
-                {
-                    //_pooledObjects.RemoveAt(i);
                     return true;
-                }
-                    
             }
-            return false;
-        }
 
-        private static void RemoveInstanceFromList(int instanceID)
-        {
-            for (int i = 0; i < _pooledObjects.Count; i++)
-            {
-                if (instanceID == _pooledObjects[i].GetInstanceID())
-                {
-                    _pooledObjects.RemoveAt(i);
-                }
-            }
+            return false;
         }
 
         public static bool DoesObjectExistInPool(GameObject objectInQuestion)
@@ -123,9 +108,10 @@ namespace SullysToolkit
         private static void AddPopulationToPool(GameObject prefab, int amountToAdd)
         {
             int count = 0;
+            GameObject newObject;
             while (count < amountToAdd)
             {
-                GameObject newObject = Instantiate(prefab, _objectPoolerGameObject.transform);
+                newObject = Instantiate(prefab, _objectPoolerGameObject.transform);
                 newObject.SetActive(false);
                 PoolObject(newObject);
                 count++;
