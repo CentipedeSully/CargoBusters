@@ -7,11 +7,11 @@ public class SpawnLaserOnInput : MonoBehaviour
 {
     [SerializeField] private GameObject _laserPrefab;
     [SerializeField] private GameObject _laserSpawnPosition;
-    private GameObject _createdLaser;
+    [SerializeField] private GameObject _createdLaser;
 
     private bool _shootInput = false;
     private bool _isShotReady = true;
-    private float _shotCooldownDuration = .5f;
+    [SerializeField] private float _shotCooldownDuration = .5f;
 
 
 
@@ -38,6 +38,11 @@ public class SpawnLaserOnInput : MonoBehaviour
 
         //Reposition Laser
         _createdLaser.transform.SetPositionAndRotation(_laserSpawnPosition.transform.position, Quaternion.Euler(transform.rotation.eulerAngles));
+
+        //Enable Laser Behavior
+        _createdLaser.SetActive(true);
+        _createdLaser.GetComponent<LaserBehavior>().EnableLaserBehavior();
+
     }
 
     private void CooldownShot()

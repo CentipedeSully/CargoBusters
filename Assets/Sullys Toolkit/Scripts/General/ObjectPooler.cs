@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace SullysToolkit
 {
@@ -34,7 +35,10 @@ namespace SullysToolkit
         {
             ParentObjectToNewTransform(pooledObject, _objectPoolerGameObject.transform);
 
-            pooledObject.transform.position = _objectPoolerGameObject.transform.position;
+            Quaternion poolerRotation = Quaternion.Euler(_objectPoolerGameObject.transform.rotation.eulerAngles);
+
+            pooledObject.transform.SetPositionAndRotation(_objectPoolerGameObject.transform.position, poolerRotation);
+            //pooledObject.transform.position = _objectPoolerGameObject.transform.position;
         }
 
 
@@ -45,25 +49,33 @@ namespace SullysToolkit
 
         public static GameObject TakePooledGameObject(GameObject requestedPrefab)
         {
+            //Populate the pool with an amount of the desired objects if none currently exist in the pool
             if (DoesObjectExistInPool(requestedPrefab) == false)
                 AddPopulationToPool(requestedPrefab, _defaultPopulationValue);
 
+            //Find a matching object to return and mark its location in the list.
             GameObject recycledGameObject = null;
-            foreach (GameObject pooledObject in _pooledObjects)
+            int removalIndex = -1;
+            for (int i = 0; i < _pooledObjects.Count; i++)
             {
-                if (requestedPrefab.tag == pooledObject.tag)
+                if (_pooledObjects[i].CompareTag(requestedPrefab.tag))
                 {
-                    recycledGameObject = pooledObject;
-                    _pooledObjects.Remove(pooledObject);
+                    recycledGameObject = _pooledObjects[i].gameObject;
+                    removalIndex = i;
+                    //Debug.Log("Selected ObjectID: " + recycledGameObject.GetInstanceID());
                     break;
                 }
             }
 
+            _pooledObjects.RemoveAt(removalIndex);
+            _pooledObjects.RemoveAt(removalIndex);
+
+            //Debug.Log("Object Instance at removed position: " + _pooledObjects[removalIndex].GetInstanceID());
+
+
+            //Return the object
             if (recycledGameObject != null)
-            {
-                recycledGameObject.SetActive(true);
                 return recycledGameObject;
-            }
 
             else
             {
@@ -71,6 +83,30 @@ namespace SullysToolkit
                 return null;
             }
 
+        }
+        private static bool DoesInstanceExistInList(int instanceID)
+        {
+            for (int i = 0; i < _pooledObjects.Count; i++)
+            {
+                if (instanceID == _pooledObjects[i].GetInstanceID())
+                {
+                    //_pooledObjects.RemoveAt(i);
+                    return true;
+                }
+                    
+            }
+            return false;
+        }
+
+        private static void RemoveInstanceFromList(int instanceID)
+        {
+            for (int i = 0; i < _pooledObjects.Count; i++)
+            {
+                if (instanceID == _pooledObjects[i].GetInstanceID())
+                {
+                    _pooledObjects.RemoveAt(i);
+                }
+            }
         }
 
         public static bool DoesObjectExistInPool(GameObject objectInQuestion)
