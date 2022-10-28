@@ -101,6 +101,8 @@ GameObject:
   - component: {fileID: 2806156924394103111}
   - component: {fileID: 2806156924394103108}
   - component: {fileID: 4600061289684335386}
+  - component: {fileID: -92612837336429872}
+  - component: {fileID: 8494770810763125907}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -299,3 +301,37 @@ MonoBehaviour:
   _maxMoveSpeed: 600
   _minRotationSpeed: 50
   _maxRotationSpeed: 100
+--- !u!114 &-92612837336429872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2806156924394103130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb984b053278ecf449ad44b9a78683b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8494770810763125907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2806156924394103130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfafe2ecc50a4f245bcd04c56fd9cd38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _target: {fileID: 0}
+  _laserSpawnPointTransform: {fileID: 2806156924288373515}
+  _validTargetsLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _shotRangeDistance: 6
+  _castRadius: 1
+  _shotDirection: {x: 0, y: 0}
+  _shootSignal: 0
+  _spawnLaserScriptRef: {fileID: 0}
