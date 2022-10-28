@@ -100,6 +100,7 @@ GameObject:
   - component: {fileID: 2806156924394103110}
   - component: {fileID: 2806156924394103111}
   - component: {fileID: 2806156924394103108}
+  - component: {fileID: 4600061289684335386}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -182,7 +183,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 2806156924394103130}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 0a891c76abd5239448c9421779c556d8, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -215,7 +216,7 @@ Rigidbody2D:
   m_LinearDrag: 0.2
   m_AngularDrag: 0.05
   m_GravityScale: 0
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 0a891c76abd5239448c9421779c556d8, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
@@ -282,3 +283,19 @@ MonoBehaviour:
   _enemyRotationVector: {x: 0, y: 0, z: 0}
   _differenceInDegrees: 0
   _isEngagingTarget: 1
+--- !u!114 &4600061289684335386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2806156924394103130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da91d045cee7613459bfeda8ec4604cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _minMoveSpeed: 300
+  _maxMoveSpeed: 600
+  _minRotationSpeed: 50
+  _maxRotationSpeed: 100

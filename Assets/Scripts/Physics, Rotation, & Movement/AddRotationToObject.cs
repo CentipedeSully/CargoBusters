@@ -38,4 +38,9 @@ public class AddRotationToObject: MonoBehaviour
 
         return Mathf.Clamp(value, minValue, maxValue);
     }
+
+    public void SetRotationSpeed(float value)
+    {
+        _rotationSpeed = value;
+    }
 }

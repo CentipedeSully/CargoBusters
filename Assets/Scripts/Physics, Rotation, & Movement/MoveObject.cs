@@ -46,5 +46,10 @@ public class MoveObject : MonoBehaviour
         _moveDirection = newMoveDirection;
     }
 
+    public void SetSpeed(float value)
+    {
+        _moveSpeed = value;
+    }
+
 
 }

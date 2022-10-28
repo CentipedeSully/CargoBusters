@@ -190,7 +190,7 @@ Rigidbody2D:
   m_LinearDrag: 0.2
   m_AngularDrag: 0.05
   m_GravityScale: 0
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 0a891c76abd5239448c9421779c556d8, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
@@ -204,7 +204,7 @@ CapsuleCollider2D:
   m_GameObject: {fileID: 7878436600147673537}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 0a891c76abd5239448c9421779c556d8, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -276,6 +276,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f60fd46118dd5b341865dbd9bccc3fc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _activeLaserContainer: {fileID: 0}
   _laserPrefab: {fileID: 5297648272176262383, guid: 2a9d01dd7a63e014eb91c17ad44e4114, type: 3}
   _laserSpawnPosition: {fileID: 7878436600086333100}
   _createdLaser: {fileID: 0}

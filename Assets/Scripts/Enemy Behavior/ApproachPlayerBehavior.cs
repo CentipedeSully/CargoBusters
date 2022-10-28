@@ -40,6 +40,8 @@ public class ApproachPlayerBehavior : MonoBehaviour
     {
         if (_isEngagingTarget)
         {
+            if (_target == null)
+                GetPlayerReference();
             CalculateEnemyInputBasedOnRelativePlayerLocation();
             CalculateEnemyRotationVector();
             CommunicateRotationDirection();
@@ -83,7 +85,7 @@ public class ApproachPlayerBehavior : MonoBehaviour
         _moveScriptRef.SetDirection(new Vector2(0,_enemyInput.y));
     }
 
-    private void FindTarget()
+    private void GetPlayerReference()
     {
         _target =  GameObject.Find("Player");
     }
