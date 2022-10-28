@@ -28,30 +28,43 @@ namespace SullysToolkit
                 if (existingObject.activeSelf == true)
                     existingObject.SetActive(false);
 
-                ParentPoolerToGameObject(existingObject);
-
                 _pooledObjects.Add(existingObject);
+
+                MakeGameObjectChildOfPooler(existingObject);
             }
             
         }
 
-        private static void ParentPoolerToGameObject(GameObject pooledObject)
+        private static void PoolFreshObject(GameObject existingObject)
         {
-            ParentObjectToNewTransform(pooledObject, _objectPoolerGameObject.transform);
+            if (DoesInstanceExistInList(existingObject.GetInstanceID()) == false)
+            {
+
+                if (existingObject.activeSelf == true)
+                    existingObject.SetActive(false);
+
+                _pooledObjects.Add(existingObject);
+            }
+
+        }
+
+        private static void MakeGameObjectChildOfPooler(GameObject pooledObject)
+        {
+            MakeGameObjectChildOfTransform(pooledObject, _objectPoolerGameObject.transform);
 
             Quaternion poolerRotation = Quaternion.Euler(_objectPoolerGameObject.transform.rotation.eulerAngles);
 
             pooledObject.transform.SetPositionAndRotation(_objectPoolerGameObject.transform.position, poolerRotation);
-            //pooledObject.transform.position = _objectPoolerGameObject.transform.position;
         }
 
 
-        public static void ParentObjectToNewTransform(GameObject childObject, Transform parentTransform)
+        public static void MakeGameObjectChildOfTransform(GameObject childObject, Transform parentTransform)
         {
             childObject.transform.SetParent(parentTransform);
+
         }
 
-        public static GameObject TakePooledGameObject(GameObject requestedPrefab)
+        public static GameObject TakePooledGameObject(GameObject requestedPrefab, Transform containerTransform)
         {
             //Populate the pool with an amount of the desired objects if none currently exist in the pool
             if (DoesObjectExistInPool(requestedPrefab) == false)
@@ -70,7 +83,9 @@ namespace SullysToolkit
                 }
             }
 
-
+            //Parent new object to prefab container
+            MakeGameObjectChildOfTransform(recycledGameObject,containerTransform);
+            Debug.Log($"Pooler Population: {_pooledObjects.Count}");
             //Return the object
             if (recycledGameObject != null)
                 return recycledGameObject;
@@ -113,7 +128,7 @@ namespace SullysToolkit
             {
                 newObject = Instantiate(prefab, _objectPoolerGameObject.transform);
                 newObject.SetActive(false);
-                PoolObject(newObject);
+                PoolFreshObject(newObject);
                 count++;
             }
         }

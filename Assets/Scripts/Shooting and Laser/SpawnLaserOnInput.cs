@@ -5,6 +5,7 @@ using SullysToolkit;
 
 public class SpawnLaserOnInput : MonoBehaviour
 {
+    [SerializeField] private GameObject _activeLaserContainer;
     [SerializeField] private GameObject _laserPrefab;
     [SerializeField] private GameObject _laserSpawnPosition;
     [SerializeField] private GameObject _createdLaser;
@@ -14,7 +15,10 @@ public class SpawnLaserOnInput : MonoBehaviour
     [SerializeField] private float _shotCooldownDuration = .5f;
 
 
-
+    private void Awake()
+    {
+        _activeLaserContainer = GameObject.Find("Lasers Container");
+    }
 
 
     private void Update()
@@ -35,7 +39,7 @@ public class SpawnLaserOnInput : MonoBehaviour
     private void GetLaserFromObjectPoolerToSpawnLocation()
     {
         //Get Laser
-        _createdLaser = ObjectPooler.TakePooledGameObject(_laserPrefab);
+        _createdLaser = ObjectPooler.TakePooledGameObject(_laserPrefab, _activeLaserContainer.transform);
 
         //Reposition Laser
         _createdLaser.transform.SetPositionAndRotation(_laserSpawnPosition.transform.position, Quaternion.Euler(transform.rotation.eulerAngles));

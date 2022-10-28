@@ -5,6 +5,7 @@ using SullysToolkit;
 
 public class LaserBehavior : MonoBehaviour
 {
+
     [SerializeField] private float _moveSpeed = 5;
     [SerializeField] private float _lifeExpectancy = 5;
     [SerializeField] private float _currentLifetime = 0;
@@ -20,11 +21,6 @@ public class LaserBehavior : MonoBehaviour
     }
 
 
-    private void OnDisable()
-    {
-        ResetProjectile();
-        PoolSelf();
-    }
 
 
     public void EnableLaserBehavior()
@@ -43,7 +39,8 @@ public class LaserBehavior : MonoBehaviour
             if (_currentLifetime >= _lifeExpectancy)
             {
                 _isEnabled = false;
-                gameObject.SetActive(false);
+                ResetProjectile();
+                PoolSelf();
             }
         }
     }
