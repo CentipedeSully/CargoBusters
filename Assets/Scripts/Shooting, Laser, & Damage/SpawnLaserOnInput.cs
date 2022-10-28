@@ -13,6 +13,8 @@ public class SpawnLaserOnInput : MonoBehaviour
     private bool _shootInput = false;
     private bool _isShotReady = true;
     [SerializeField] private float _shotCooldownDuration = .5f;
+    [SerializeField] private float _laserPushForce = 5;
+    [SerializeField] private float _laserDamage = 1;
 
 
     private void Awake()
@@ -44,7 +46,14 @@ public class SpawnLaserOnInput : MonoBehaviour
         //Reposition Laser
         _createdLaser.transform.SetPositionAndRotation(_laserSpawnPosition.transform.position, Quaternion.Euler(transform.rotation.eulerAngles));
 
+        //Set the laser's shooterID to this object's ID
+        _createdLaser.GetComponent<LaserBehavior>().SetShooterID(gameObject.GetInstanceID());
 
+        //Set the laser's push force
+        _createdLaser.GetComponent<LaserBehavior>().SetPushForce(_laserPushForce);
+
+        //Set laser damage
+        _createdLaser.GetComponent<LaserBehavior>().SetDamage(_laserDamage);
 
         //Apply Speed Offset by the player's yMove velocity
         _createdLaser.gameObject.GetComponent<LaserBehavior>().SetSpeedOffset(CalculateLaserSpeedOffset());

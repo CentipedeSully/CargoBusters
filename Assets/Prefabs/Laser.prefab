@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4159898021438056100}
   - component: {fileID: 8818906563976019693}
   - component: {fileID: 7179898187681162582}
+  - component: {fileID: 4665512959951657446}
   m_Layer: 7
   m_Name: Laser
   m_TagString: Laser
@@ -113,8 +114,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f25934f62ca579c4da9a363ccdbaa04d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _activeObjectContainer: {fileID: 0}
   _moveSpeed: 15
-  _lifeExpectancy: 5
+  _lifeExpectancy: 1
   _currentLifetime: 0
   _speedOffset: 0
+  _forceMagnitude: 0
+  _explosionPrefab: {fileID: 9000114151373274540, guid: 3f05e644e710a6840b1b663524ece7f5, type: 3}
+--- !u!114 &4665512959951657446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5297648272176262383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00744be8e0c18cb4b99cea28b3d5e9e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _forceMagnitude: 0

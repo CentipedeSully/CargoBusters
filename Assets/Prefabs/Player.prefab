@@ -281,3 +281,4 @@ MonoBehaviour:
   _laserSpawnPosition: {fileID: 7878436600086333100}
   _createdLaser: {fileID: 0}
   _shotCooldownDuration: 0.5
+  _laserPushForce: 2.5
