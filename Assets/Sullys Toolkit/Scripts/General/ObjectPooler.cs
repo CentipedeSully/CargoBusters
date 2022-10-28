@@ -85,7 +85,7 @@ namespace SullysToolkit
 
             //Parent new object to prefab container
             MakeGameObjectChildOfTransform(recycledGameObject,containerTransform);
-            Debug.Log($"Pooler Population: {_pooledObjects.Count}");
+            
             //Return the object
             if (recycledGameObject != null)
                 return recycledGameObject;
