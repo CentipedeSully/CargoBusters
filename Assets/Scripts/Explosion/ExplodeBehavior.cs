@@ -39,7 +39,11 @@ public class ExplodeBehavior : MonoBehaviour
         {
             //Debug.Log($"{allCollidersWithinArea[i].gameObject.name} Rigidbody Detected: {allCollidersWithinArea[i].gameObject.GetComponent<Rigidbody2D>() != null}");
             if (allCollidersWithinArea[i].gameObject.GetComponent<Rigidbody2D>() != null)
+            {
                 PushRigidbodyAway(allCollidersWithinArea[i].gameObject.GetComponent<Rigidbody2D>());
+                TryDamageObject(allCollidersWithinArea[i].gameObject);
+            }
+                
         }
 
 
@@ -59,6 +63,14 @@ public class ExplodeBehavior : MonoBehaviour
     private void DestroySelf()
     {
         Destroy(gameObject);
+    }
+
+    private void TryDamageObject(GameObject damagableObject)
+    {
+        if (damagableObject.GetComponent<HealthBehavior>() != null)
+        {
+            damagableObject.GetComponent<HealthBehavior>().ModifyCurrentHealth(-1 * _damage);
+        }
     }
 
 

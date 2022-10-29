@@ -32,7 +32,7 @@ public class LaserBehavior : MonoBehaviour
     {
         if (_isShooterIDSet && _shooterID != collision.gameObject.GetInstanceID())
         {
-            Debug.Log($"Hit Detected: {collision.gameObject.name }");
+            //Debug.Log($"Hit Detected: {collision.gameObject.name }");
             CreateExplosion();
             EndLaser();
         }

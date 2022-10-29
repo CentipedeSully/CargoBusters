@@ -114,12 +114,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f25934f62ca579c4da9a363ccdbaa04d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 15
-  _lifeExpectancy: 1
+  _moveSpeed: 30
+  _lifeExpectancy: 8
   _currentLifetime: 0
   _speedOffset: 0
   _forceMagnitude: 0
   _explosionPrefab: {fileID: 9000114151373274540, guid: 3f05e644e710a6840b1b663524ece7f5, type: 3}
+  _damage: 0
 --- !u!114 &4665512959951657446
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,4 +133,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00744be8e0c18cb4b99cea28b3d5e9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _forceMagnitude: 0

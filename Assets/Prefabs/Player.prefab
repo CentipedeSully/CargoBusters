@@ -104,6 +104,7 @@ GameObject:
   - component: {fileID: -1604774347102377021}
   - component: {fileID: -7093349671337816682}
   - component: {fileID: 2871299479758142314}
+  - component: {fileID: 1099425079580276723}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -298,12 +299,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b79df6ca91f99b40a44130fa40ab884, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 0
-  _currentHealth: 0
+  _maxHealth: 3
+  _currentHealth: 5
   _isDead: 0
   _OnDeath:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1099425079580276723}
+        m_TargetAssemblyTypeName: KillObject, Assembly-CSharp
+        m_MethodName: KillSelf
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &-7093349671337816682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -330,7 +343,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd5aa888381536541b9cd68a19e2e7b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _explosionPrefab: {fileID: 9000114151373274540, guid: 3f05e644e710a6840b1b663524ece7f5, type: 3}
+  _explosionPrefab: {fileID: 4352265038394955072, guid: 389b1e6f08ea92e43ac4e94bae40e91f, type: 3}
   _forceMagnitude: 5
-  _radius: 1
+  _radius: 1.5
   _damage: 1
+--- !u!114 &1099425079580276723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7878436600147673537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab6078ece7569b5458496ead83190eda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

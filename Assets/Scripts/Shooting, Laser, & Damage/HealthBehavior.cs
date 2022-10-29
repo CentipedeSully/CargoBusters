@@ -16,7 +16,10 @@ public class HealthBehavior : MonoBehaviour
     //Monobehaviors
 
 
-
+    private void Start()
+    {
+        SetCurrentHealth(_maxHealth);
+    }
 
 
 
@@ -41,10 +44,11 @@ public class HealthBehavior : MonoBehaviour
 
     public void ModifyCurrentHealth(float valueToAdd)
     {
+        //Debug.Log($"{gameObject.name} Sustained Damage: {valueToAdd}");
         _currentHealth += valueToAdd;
         Mathf.Clamp(_currentHealth, 0, _maxHealth);
-
-        if (_currentHealth == 0)
+        //Debug.Log($"{gameObject.name} Current Health: {_currentHealth}");
+        if (_currentHealth <= 0)
         {
             _isDead = true;
             _OnDeath?.Invoke(gameObject);
