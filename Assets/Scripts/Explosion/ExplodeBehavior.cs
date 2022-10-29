@@ -8,7 +8,7 @@ public class ExplodeBehavior : MonoBehaviour
     private float _radius = 1;
     private float _damage = 1;
     private float _pushOffset = 100;
-    [SerializeField] private float _forceMagnitude = 5;
+    private float _forceMagnitude = 5;
 
     private bool _explodeCommand = false;
 
@@ -18,10 +18,12 @@ public class ExplodeBehavior : MonoBehaviour
     {
         if (_explodeCommand)
         {
+            
             PushAwayAllRigidbodiesInRadius();
             _explodeCommand = false;
 
-            Destroy(gameObject);
+            GetComponent<ParticleSystem>().Play();
+            Invoke("DestroySelf", GetComponent<ParticleSystem>().main.duration);
         }
     }
 
@@ -54,6 +56,10 @@ public class ExplodeBehavior : MonoBehaviour
         return new Vector3(Mathf.Clamp(positionalVector.x, -1, 1), Mathf.Clamp(positionalVector.y, -1, 1), Mathf.Clamp(positionalVector.z, -1, 1));
     }
 
+    private void DestroySelf()
+    {
+        Destroy(gameObject);
+    }
 
 
     public void SetRadius(float value)

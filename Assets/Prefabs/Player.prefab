@@ -101,6 +101,9 @@ GameObject:
   - component: {fileID: 7878436600147673593}
   - component: {fileID: 7878436600147673591}
   - component: {fileID: 7019573162793509274}
+  - component: {fileID: -1604774347102377021}
+  - component: {fileID: -7093349671337816682}
+  - component: {fileID: 2871299479758142314}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -282,3 +285,52 @@ MonoBehaviour:
   _createdLaser: {fileID: 0}
   _shotCooldownDuration: 0.5
   _laserPushForce: 2.5
+  _laserDamage: 1
+--- !u!114 &-1604774347102377021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7878436600147673537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b79df6ca91f99b40a44130fa40ab884, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxHealth: 0
+  _currentHealth: 0
+  _isDead: 0
+  _OnDeath:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &-7093349671337816682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7878436600147673537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ec6880ef9899504d9a9ae074ffc2cff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _meshRenderers: []
+  _collider: {fileID: 0}
+--- !u!114 &2871299479758142314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7878436600147673537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd5aa888381536541b9cd68a19e2e7b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _explosionPrefab: {fileID: 9000114151373274540, guid: 3f05e644e710a6840b1b663524ece7f5, type: 3}
+  _forceMagnitude: 5
+  _radius: 1
+  _damage: 1
