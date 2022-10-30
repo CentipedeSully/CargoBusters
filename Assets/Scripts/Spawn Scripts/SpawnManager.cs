@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class SpawnManager : MonoBehaviour
 {
@@ -26,10 +27,9 @@ public class SpawnManager : MonoBehaviour
     private bool _errorDetected = false;
 
     //events
-    public delegate void SpawnManagerEvent();
-    public event SpawnManagerEvent OnCooldownEntered;
-    public event SpawnManagerEvent OnCooldownExited;
-    public event SpawnManagerEvent OnSpawnTriggered;
+    public UnityEvent OnCooldownEntered;
+    public UnityEvent OnCooldownExited;
+    public UnityEvent OnSpawnTriggered;
 
 
 
@@ -49,16 +49,16 @@ public class SpawnManager : MonoBehaviour
 
     private void OnEnable()
     {
-        OnCooldownEntered += StartCooldown;
-        OnCooldownExited += ExitCooldown;
-        OnSpawnTriggered += SpawnThing;
+        OnCooldownEntered.AddListener(StartCooldown);
+        OnCooldownExited.AddListener(ExitCooldown);
+        OnSpawnTriggered.AddListener(SpawnThing);
     }
 
     private void OnDisable()
     {
-        OnCooldownEntered -= StartCooldown;
-        OnCooldownExited -= ExitCooldown;
-        OnSpawnTriggered -= SpawnThing;
+        OnCooldownEntered.RemoveListener(StartCooldown);
+        OnCooldownExited.RemoveListener(ExitCooldown);
+        OnSpawnTriggered.RemoveListener(SpawnThing);
     }
 
 

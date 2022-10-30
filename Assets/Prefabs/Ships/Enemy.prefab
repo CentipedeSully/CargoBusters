@@ -107,6 +107,7 @@ GameObject:
   - component: {fileID: 2452397238478709220}
   - component: {fileID: 5197418446487147218}
   - component: {fileID: 1526872372222338063}
+  - component: {fileID: 4783277371955668496}
   m_Layer: 8
   m_Name: Enemy
   m_TagString: Enemy
@@ -324,7 +325,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b79df6ca91f99b40a44130fa40ab884, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 3
+  _maxHealth: 1
   _currentHealth: 5
   _isDead: 0
   _OnDeath:
@@ -401,6 +402,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab6078ece7569b5458496ead83190eda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onDeath:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4783277371955668496}
+        m_TargetAssemblyTypeName: ReportDeath, Assembly-CSharp
+        m_MethodName: ReportDeathToCounter
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1526872372222338063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -416,3 +432,16 @@ MonoBehaviour:
   _spawnChance: 1
   _showDebug: 0
   prefabContainer: {fileID: 0}
+--- !u!114 &4783277371955668496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2806156924394103130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1565c9ee6d86e2647bc3adfb3d46dfa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _instanceCounterRef: {fileID: 0}
