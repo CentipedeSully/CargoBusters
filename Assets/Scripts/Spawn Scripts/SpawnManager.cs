@@ -44,7 +44,7 @@ public class SpawnManager : MonoBehaviour
 
     private void Start()
     {
-        StartSpawning();
+        //StartSpawning();
     }
 
     private void OnEnable()
