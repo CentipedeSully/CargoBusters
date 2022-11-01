@@ -565,7 +565,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &251783862
 Transform:
   m_ObjectHideFlags: 0
@@ -939,6 +939,11 @@ MonoBehaviour:
     m_Bits: 64
   _isPositionAvailable: 0
   _gizmoColor: {r: 0, g: 0, b: 1, a: 1}
+--- !u!1 &365644306 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7878436600147673537, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+  m_PrefabInstance: {fileID: 7878436600071091167}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &394659801
 GameObject:
   m_ObjectHideFlags: 0
@@ -954,7 +959,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &394659802
 Transform:
   m_ObjectHideFlags: 0
@@ -1679,7 +1684,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &628223285
 Transform:
   m_ObjectHideFlags: 0
@@ -2056,6 +2061,7 @@ GameObject:
   - component: {fileID: 678123753}
   - component: {fileID: 678123755}
   - component: {fileID: 678123754}
+  - component: {fileID: 678123756}
   m_Layer: 0
   m_Name: Background Star effects
   m_TagString: Untagged
@@ -2071,7 +2077,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 678123752}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -25}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2136,14 +2142,20 @@ VisualEffect:
     m_Float:
       m_Array: []
     m_Vector2f:
-      m_Array: []
+      m_Array:
+      - m_Value: {x: 1, y: 0}
+        m_Name: Simulated Move Velocity
+        m_Overridden: 1
     m_Vector3f:
       m_Array:
       - m_Value: {x: 50, y: 50, z: 0}
         m_Name: New Vector3
         m_Overridden: 1
-      - m_Value: {x: 50, y: 50, z: 0}
+      - m_Value: {x: 75, y: 50, z: 0}
         m_Name: Size
+        m_Overridden: 1
+      - m_Value: {x: 0, y: 0, z: 0}
+        m_Name: Simulated Velocity
         m_Overridden: 1
     m_Vector4f:
       m_Array: []
@@ -2164,6 +2176,22 @@ VisualEffect:
         m_Overridden: 1
     m_Bool:
       m_Array: []
+--- !u!114 &678123756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 678123752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a945a24bf4b59d6429902973c22b0fa3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _player: {fileID: 365644306}
+  _simulatedVelocity: {x: 0, y: 0, z: 0}
+  _VfxVelocityFieldName: Simulated Velocity
+  _playerRB: {fileID: 0}
 --- !u!1 &678349576
 GameObject:
   m_ObjectHideFlags: 0
@@ -2803,8 +2831,8 @@ MonoBehaviour:
   m_LookaheadTime: 0
   m_LookaheadSmoothing: 0
   m_LookaheadIgnoreY: 0
-  m_XDamping: 1
-  m_YDamping: 1
+  m_XDamping: 0.5
+  m_YDamping: 0.5
   m_ZDamping: 1
   m_TargetMovementOnly: 1
   m_ScreenX: 0.5
@@ -2815,7 +2843,7 @@ MonoBehaviour:
   m_DeadZoneDepth: 0
   m_UnlimitedSoftZone: 0
   m_SoftZoneWidth: 0.1
-  m_SoftZoneHeight: 0.12
+  m_SoftZoneHeight: 0.1
   m_BiasX: 0
   m_BiasY: 0
   m_CenterOnActivate: 1
@@ -4723,7 +4751,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1942425753
 Transform:
   m_ObjectHideFlags: 0
@@ -4997,6 +5025,7 @@ MonoBehaviour:
   _spawnDelay: 0.5
   _isSpawning: 0
   _showDebug: 0
+  _startSpawningOnStart: 0
   _spawnableObjectCollection:
   - {fileID: 1526872372222338063, guid: 975357e30c1e04649aa90c8f6796b24e, type: 3}
   _spawnPositionManager: {fileID: 1645907183}
@@ -5218,24 +5247,88 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2123110180}
     m_Modifications:
-    - target: {fileID: -1604774347102377021, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
-      propertyPath: _currentHealth
-      value: 5
+    - target: {fileID: 805357637140921069, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.size
+      value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 303159136845251626, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 6200000, guid: 0a891c76abd5239448c9421779c556d8, type: 2}
-    - target: {fileID: 7019573162793509274, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
-      propertyPath: _activeLaserContainer
-      value: 
-      objectReference: {fileID: 904979373}
-    - target: {fileID: 7019573162793509274, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
-      propertyPath: _shotCooldownDuration
-      value: 0.25
+    - target: {fileID: 805357637140921069, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Name
+      value: Particle Spawn Rate
       objectReference: {fileID: 0}
-    - target: {fileID: 7878436600086333097, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
-      propertyPath: m_Enabled
+    - target: {fileID: 805357637140921069, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Value
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 805357637140921069, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Overridden
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2611732283700340635, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2611732283700340635, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Name
+      value: Particle Spawn Rate
+      objectReference: {fileID: 0}
+    - target: {fileID: 2611732283700340635, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Value
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 2611732283700340635, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Overridden
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3143872388732358690, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3143872388732358690, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Name
+      value: Particle Spawn Rate
+      objectReference: {fileID: 0}
+    - target: {fileID: 3143872388732358690, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Value
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 3143872388732358690, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Overridden
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3474097733615271072, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3474097733615271072, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Name
+      value: Particle Spawn Rate
+      objectReference: {fileID: 0}
+    - target: {fileID: 3474097733615271072, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Value
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 3474097733615271072, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Overridden
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4895623883662944808, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: _spawnRateFieldName
+      value: Particle Spawn Rate
+      objectReference: {fileID: 0}
+    - target: {fileID: 6861885755151915431, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6861885755151915431, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Name
+      value: Particle Spawn Rate
+      objectReference: {fileID: 0}
+    - target: {fileID: 6861885755151915431, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Value
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 6861885755151915431, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Overridden
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7878436600147673536, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
@@ -5286,15 +5379,53 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 7878436600147673596, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
-      propertyPath: _moveSpeed
-      value: 700
+    - target: {fileID: 7967392683947607295, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.size
+      value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 7878436600147673598, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
-      propertyPath: m_Enabled
+    - target: {fileID: 7967392683947607295, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Name
+      value: Particle Spawn Rate
+      objectReference: {fileID: 0}
+    - target: {fileID: 7967392683947607295, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Value
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 7967392683947607295, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Overridden
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: -3415780479057320974, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
-    - {fileID: 7878436600147673595, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+    - target: {fileID: 8004070852845676956, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8004070852845676956, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Name
+      value: Particle Spawn Rate
+      objectReference: {fileID: 0}
+    - target: {fileID: 8004070852845676956, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Value
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8004070852845676956, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Overridden
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8454745280476629424, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8454745280476629424, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Name
+      value: Particle Spawn Rate
+      objectReference: {fileID: 0}
+    - target: {fileID: 8454745280476629424, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Value
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8454745280476629424, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Overridden
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}

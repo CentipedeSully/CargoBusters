@@ -43,7 +43,8 @@ public class SimulateStarMovementFromPlayerMovement : MonoBehaviour
     
     private void SetVFXPositionToPlayerPosition()
     {
-        transform.position = _player.transform.position;
+        if (_player != null)
+            transform.position = _player.transform.position;
     }
 
 

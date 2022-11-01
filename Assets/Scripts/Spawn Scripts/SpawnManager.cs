@@ -16,6 +16,7 @@ public class SpawnManager : MonoBehaviour
     [Tooltip("Read Only. Determines whether or not the class is actively spawning.")]
     [SerializeField] private bool _isSpawning = false;
     [SerializeField] private bool _showDebug = false;
+    [SerializeField] private bool _startSpawningOnStart = false;
 
     //references
     [Tooltip("All (random) spawnable objects go here. It's imperitive that the sum of each item's spawnChance equals 1, otherwise this script will complain. Also limit chances to the nearest hundreth.")]
@@ -44,7 +45,8 @@ public class SpawnManager : MonoBehaviour
 
     private void Start()
     {
-        //StartSpawning();
+        if (_startSpawningOnStart)
+            StartSpawning();
     }
 
     private void OnEnable()

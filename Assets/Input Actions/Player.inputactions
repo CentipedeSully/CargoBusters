@@ -44,7 +44,7 @@
             ],
             "bindings": [
                 {
-                    "name": "WASD",
+                    "name": "WAQE",
                     "id": "8ee8de6f-4a35-4b62-a159-3a9a5f3c9d0b",
                     "path": "2DVector",
                     "interactions": "",
@@ -121,7 +121,7 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "Q/E Rotation",
+                    "name": "A/D Rotation",
                     "id": "917239a8-02c3-4a7a-8324-1ce0fad30f04",
                     "path": "1DAxis",
                     "interactions": "",
