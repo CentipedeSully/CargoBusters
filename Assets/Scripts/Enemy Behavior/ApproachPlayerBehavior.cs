@@ -89,4 +89,9 @@ public class ApproachPlayerBehavior : MonoBehaviour
     {
         _target =  GameObject.Find("Player");
     }
+
+    public Vector2 GetShipInput()
+    {
+        return _enemyInput;
+    }
 }

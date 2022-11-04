@@ -51,5 +51,8 @@ public class MoveObject : MonoBehaviour
         _moveSpeed = value;
     }
 
-
+    public Vector2 GetMoveDirection()
+    {
+        return _moveDirection;
+    }
 }
