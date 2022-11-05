@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TakeDamageOnCollision : MonoBehaviour
 {
-    [SerializeField] private float _damagingVelocityThreshold = 50;
+    //[SerializeField] private float _damagingVelocityThreshold = 50;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {

@@ -67,9 +67,9 @@ public class ExplodeBehavior : MonoBehaviour
 
     private void TryDamageObject(GameObject damagableObject)
     {
-        if (damagableObject.GetComponent<HealthBehavior>() != null)
+        if (damagableObject.GetComponent<DamageHandler>() != null)
         {
-            damagableObject.GetComponent<HealthBehavior>().ModifyCurrentHealth(-1 * _damage);
+            damagableObject.GetComponent<DamageHandler>().DelegateDamage( _damage);
         }
     }
 

@@ -67,7 +67,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2723631800618157440}
-  - component: {fileID: 48841194969275389}
   m_Layer: 6
   m_Name: Colliders
   m_TagString: Player
@@ -95,18 +94,6 @@ Transform:
   m_Father: {fileID: 7878436600147673536}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &48841194969275389
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1505268220391323553}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50d217f1efcec774f937bd89be3e45dd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1574532682268039904
 GameObject:
   m_ObjectHideFlags: 0
@@ -376,6 +363,9 @@ GameObject:
   - component: {fileID: 3875793581646894413}
   - component: {fileID: 5252255108290651647}
   - component: {fileID: 466135670281032019}
+  - component: {fileID: 3943183411924960259}
+  - component: {fileID: 1827461683612492606}
+  - component: {fileID: 720431774}
   m_Layer: 0
   m_Name: Shield
   m_TagString: Untagged
@@ -481,6 +471,87 @@ VFXRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &3943183411924960259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4677015517709285261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb02a5389890880418ea3fa6eb44037f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _shieldIntegrity: 0
+  _maxShieldIntegrity: 5
+  _regenDelay: 5
+  _regenRate: 0.5
+  _shieldRegeneratorRef: {fileID: 0}
+  _shieldTimerRef: {fileID: 1827461683612492606}
+  _vfxShieldReference: {fileID: 3429639482880964593}
+--- !u!114 &1827461683612492606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4677015517709285261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70799c10a69bb0f4084763dd29d02c59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _name: Regen Delay Timer
+  _isTicking: 0
+  _timePassed: 0
+  _duration: 0
+  OnTimerExpired:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3943183411924960259}
+        m_TargetAssemblyTypeName: ShieldBehavior, Assembly-CSharp
+        m_MethodName: StartRegenerating
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &720431774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4677015517709285261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf7b5c73debf3604aa7fd6cdf33fd34f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _regeneratorName: Shield Regenerator
+  _regenRate: 0
+  _regenTickDuration: 1
+  _isRegenerating: 0
+  OnRegenerationTick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3943183411924960259}
+        m_TargetAssemblyTypeName: ShieldBehavior, Assembly-CSharp
+        m_MethodName: IncreaseIntegrity
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7705660115133791043
 GameObject:
   m_ObjectHideFlags: 0
@@ -591,6 +662,7 @@ GameObject:
   - component: {fileID: 2871299479758142314}
   - component: {fileID: 1099425079580276723}
   - component: {fileID: 3429639482880964593}
+  - component: {fileID: 6694791547484059817}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -890,8 +962,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fc6c45e17c32aa48bfaa84b955b3c70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _originalParticleSpawnRate: 150
-  _shieldRadius: 2.2
   _currentShieldSpawnRate: 0
   _currentShieldRadius: 0
   _vfxSpawnRateFieldName: Spawn Rate
@@ -903,20 +973,20 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 300
-      outSlope: 300
-      tangentMode: 34
+      inSlope: 2071.698
+      outSlope: 2071.698
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.33333334
+      outWeight: 0.020833334
     - serializedVersion: 3
       time: 0.5
       value: 150
-      inSlope: 300
-      outSlope: 300
-      tangentMode: 34
+      inSlope: -594.09344
+      outSlope: -594.09344
+      tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
+      inWeight: 0.06465745
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -927,20 +997,20 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 1.5669029
-      outSlope: 1.5669029
+      inSlope: -6.1018867
+      outSlope: -6.1018867
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.79068977
+      outWeight: 0.083333336
     - serializedVersion: 3
       time: 0.5
       value: 2.2
-      inSlope: 1.2249616
-      outSlope: 1.2249616
+      inSlope: -6.513791
+      outSlope: -6.513791
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.4966905
+      inWeight: 0.054166675
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -949,13 +1019,49 @@ MonoBehaviour:
   _isShieldRestoreAnimPlaying: 0
   _shieldDamageSpawnRateCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 150
+      inSlope: -0.17787386
+      outSlope: -0.17787386
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.17500001
+    - serializedVersion: 3
+      time: 0.2
+      value: 150
+      inSlope: -0.18636078
+      outSlope: -0.18636078
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.1874999
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   _shieldDamageRadiusCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 2.2
+      inSlope: -6.6640363
+      outSlope: -6.6640363
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.052187946
+    - serializedVersion: 3
+      time: 0.2
+      value: 2.2
+      inSlope: -7.709931
+      outSlope: -7.709931
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.025878698
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -963,18 +1069,98 @@ MonoBehaviour:
   _isShieldDamagedAnimPlaying: 0
   _shieldBreakSpawnRateCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 150
+      inSlope: -724.5281
+      outSlope: -724.5281
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.06276048
+    - serializedVersion: 3
+      time: 0.4979248
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.3556591
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   _shieldBreakRadiusCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 2.2
+      inSlope: 1.5999999
+      outSlope: 1.5999999
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5
+      value: 3
+      inSlope: 1.5999999
+      outSlope: 1.5999999
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   _shieldBreakAnimDuration: 0.5
   _isShieldBreakAnimPlaying: 0
+--- !u!114 &6694791547484059817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7878436600147673537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb3364ca217720846b633e2725ff8f2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _healthReference: {fileID: -1604774347102377021}
+  _shieldReference: {fileID: 3943183411924960259}
+  OnHealthDamaged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -1604774347102377021}
+        m_TargetAssemblyTypeName: HealthBehavior, Assembly-CSharp
+        m_MethodName: DamageHealth
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnShieldDamaged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3943183411924960259}
+        m_TargetAssemblyTypeName: ShieldBehavior, Assembly-CSharp
+        m_MethodName: DecreaseIntegrity
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1001 &8333605749510612012
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -982,6 +1168,54 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7878436600147673536}
     m_Modifications:
+    - target: {fileID: 500920244873981340, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 500920244873981340, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Name
+      value: Particle Spawn Rate
+      objectReference: {fileID: 0}
+    - target: {fileID: 500920244873981340, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Value
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 500920244873981340, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Overridden
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2067933217651363248, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2067933217651363248, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Name
+      value: Particle Spawn Rate
+      objectReference: {fileID: 0}
+    - target: {fileID: 2067933217651363248, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Value
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 2067933217651363248, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Overridden
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2105211996915228883, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2105211996915228883, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Name
+      value: Particle Spawn Rate
+      objectReference: {fileID: 0}
+    - target: {fileID: 2105211996915228883, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Value
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 2105211996915228883, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Overridden
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2242559349900907424, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -1026,9 +1260,89 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3214649823661604235, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3214649823661604235, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Name
+      value: Particle Spawn Rate
+      objectReference: {fileID: 0}
+    - target: {fileID: 3214649823661604235, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Value
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 3214649823661604235, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Overridden
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4868553091460044940, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4868553091460044940, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Name
+      value: Particle Spawn Rate
+      objectReference: {fileID: 0}
+    - target: {fileID: 4868553091460044940, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Value
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 4868553091460044940, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Overridden
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6311890441719202743, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6311890441719202743, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Name
+      value: Particle Spawn Rate
+      objectReference: {fileID: 0}
+    - target: {fileID: 6311890441719202743, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Value
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 6311890441719202743, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Overridden
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6343228821192750094, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6343228821192750094, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Name
+      value: Particle Spawn Rate
+      objectReference: {fileID: 0}
+    - target: {fileID: 6343228821192750094, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Value
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 6343228821192750094, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Overridden
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7257654059398063436, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
       propertyPath: m_Name
       value: Player Thrusters
+      objectReference: {fileID: 0}
+    - target: {fileID: 8686281255200038593, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8686281255200038593, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Name
+      value: Particle Spawn Rate
+      objectReference: {fileID: 0}
+    - target: {fileID: 8686281255200038593, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Value
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8686281255200038593, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}
+      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Overridden
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 52bb06407e49bc54fa1ad4dcd890d811, type: 3}

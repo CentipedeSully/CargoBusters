@@ -4,11 +4,11 @@ using UnityEngine;
 using UnityEngine.VFX;
 using SullysToolkit;
 
-public class ShieldController : MonoBehaviour
+public class ShieldVFXController : MonoBehaviour
 {
     //Declarations
-    [SerializeField] private int _originalParticleSpawnRate = 100;
-    [SerializeField] private float _shieldRadius = 2;
+    //[SerializeField] private int _originalParticleSpawnRate = 100;
+    //[SerializeField] private float _shieldRadius = 2;
 
     [SerializeField] private int _currentShieldSpawnRate;
     [SerializeField] private float _currentShieldRadius;
@@ -39,16 +39,18 @@ public class ShieldController : MonoBehaviour
     //Monobehaviors
     private void Update()
     {
-
-
         EvaluateCurvesOverTime();
-        
     }
 
 
 
 
     //Utilities
+    public void DepleteShields()
+    {
+        ApplyChangeToVFX(0, 0);
+    }
+
     public void PlayShieldRestoreAnim()
     {
         _isShieldRestoreAnimPlaying = true;

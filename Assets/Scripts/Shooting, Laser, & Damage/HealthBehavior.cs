@@ -55,6 +55,18 @@ public class HealthBehavior : MonoBehaviour
         }
     }
 
+    public void DamageHealth(float value)
+    {
+        _currentHealth -= value;
+        Mathf.Clamp(_currentHealth, 0, _maxHealth);
+
+        if (_currentHealth <= 0)
+        {
+            _isDead = true;
+            _OnDeath?.Invoke(gameObject);
+        }
+    }
+
     public float GetMaxHealth()
     {
         return _maxHealth;
