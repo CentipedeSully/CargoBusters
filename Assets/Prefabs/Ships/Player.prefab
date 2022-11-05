@@ -671,7 +671,7 @@ MonoBehaviour:
   _laserPrefab: {fileID: 5297648272176262383, guid: 2a9d01dd7a63e014eb91c17ad44e4114, type: 3}
   _laserSpawnPosition: {fileID: 7878436600086333100}
   _createdLaser: {fileID: 0}
-  _shotCooldownDuration: 0.5
+  _shotCooldownDuration: 0.15
   _laserPushForce: 2.5
   _laserDamage: 1
 --- !u!114 &-1604774347102377021

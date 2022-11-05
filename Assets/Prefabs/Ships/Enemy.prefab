@@ -614,7 +614,7 @@ MonoBehaviour:
   _laserPrefab: {fileID: 5297648272176262383, guid: 2a9d01dd7a63e014eb91c17ad44e4114, type: 3}
   _laserSpawnPosition: {fileID: 2806156924288373512}
   _createdLaser: {fileID: 0}
-  _shotCooldownDuration: 0.5
+  _shotCooldownDuration: 0.2
   _laserPushForce: 2.5
   _laserDamage: 1
 --- !u!114 &4600061289684335386
@@ -701,7 +701,7 @@ MonoBehaviour:
   _enemyInput: {x: 0, y: 0}
   _enemyRotationVector: {x: 0, y: 0, z: 0}
   _differenceInDegrees: 0
-  _isEngagingTarget: 0
+  _isEngagingTarget: 1
 --- !u!114 &-7082774059634179040
 MonoBehaviour:
   m_ObjectHideFlags: 0
