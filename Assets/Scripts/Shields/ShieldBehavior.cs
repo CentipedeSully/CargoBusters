@@ -11,9 +11,12 @@ public class ShieldBehavior : MonoBehaviour
     [SerializeField] float _regenDelay = 5;
     [SerializeField] float _regenRate = .5f;
 
+    [SerializeField] private UniversalStateMachine _shieldsStateMachine;
+
     [SerializeField] private Regenerator _shieldRegeneratorRef;
     [SerializeField] private Timer _shieldTimerRef;
     [SerializeField] private ShieldVFXController _vfxShieldReference;
+    [SerializeField] private DamageHandler _damageHandlerRef;
 
 
     //Monobehaviors
@@ -21,7 +24,9 @@ public class ShieldBehavior : MonoBehaviour
     {
         _shieldTimerRef = GetComponent<Timer>();
         _shieldRegeneratorRef = GetComponent<Regenerator>();
-        
+        _shieldsStateMachine = GetComponent<UniversalStateMachine>();
+
+
 
         _shieldRegeneratorRef.SetRegenRate(_regenRate);
         _shieldTimerRef.SetDuration(_regenDelay);
@@ -30,18 +35,25 @@ public class ShieldBehavior : MonoBehaviour
     private void OnEnable()
     {
         _shieldRegeneratorRef.OnRegenerationTick.AddListener(IncreaseIntegrity);
+        _damageHandlerRef.OnShieldDamaged.AddListener(DecreaseIntegrity);
+        _damageHandlerRef.OnHealthDamaged.AddListener(InterruptRegenDelay);
+        _damageHandlerRef.OnHealthDamaged.AddListener(ForceShieldDeplete);
     }
 
     private void OnDisable()
     {
         _shieldRegeneratorRef.OnRegenerationTick.RemoveListener(IncreaseIntegrity);
+        _damageHandlerRef.OnShieldDamaged.RemoveListener(DecreaseIntegrity);
+        _damageHandlerRef.OnHealthDamaged.RemoveListener(InterruptRegenDelay);
+        _damageHandlerRef.OnHealthDamaged.RemoveListener(ForceShieldDeplete);
     }
 
     private void Start()
     {
-        if (_shieldIntegrity < _maxShieldIntegrity)
-            _shieldTimerRef.StartOrResumeTimer();
+        InitializeStates();
+            
     }
+
 
 
 
@@ -110,6 +122,14 @@ public class ShieldBehavior : MonoBehaviour
         {
             SetShieldIntegrity(_shieldIntegrity + value);
 
+            if (_shieldsStateMachine.GetStateActivity("isDepleted"))
+            {
+                _shieldsStateMachine.UpdateStateActivity("isDepleted", false);
+                _shieldsStateMachine.UpdateStateActivity("isAvailable", true);
+
+                _vfxShieldReference.PlayShieldRestoreAnim();
+            }
+
             if (_shieldIntegrity == _maxShieldIntegrity)
                 _shieldRegeneratorRef.StopRegen();
         }
@@ -129,17 +149,19 @@ public class ShieldBehavior : MonoBehaviour
             //restart regenDelay counting
             _shieldTimerRef.RestartTimer();
 
-            if (_shieldIntegrity == 0)
+            if (_shieldsStateMachine.GetStateActivity("isAvailable") && _shieldIntegrity > 0)
+                _vfxShieldReference.PlayShieldDamagedAnim();
+            else if (_shieldsStateMachine.GetStateActivity("isAvailable") && _shieldIntegrity == 0)
+            {
                 _vfxShieldReference.PlayShieldbreakAnim();
-            else _vfxShieldReference.PlayShieldDamagedAnim();
+                _shieldsStateMachine.UpdateStateActivity("isDepleted", true);
+                _shieldsStateMachine.UpdateStateActivity("isAvailable", false);
+            }
         }
     }
 
     public void StartRegenerating()
     {
-        if (_shieldIntegrity == 0)
-            _vfxShieldReference.PlayShieldRestoreAnim();
-
         _shieldRegeneratorRef.StartRegen();
     }
 
@@ -147,8 +169,57 @@ public class ShieldBehavior : MonoBehaviour
     {
         return _shieldIntegrity == 0;
     }
+
     public bool IsRegenerating()
     {
         return _shieldRegeneratorRef.IsRegenerating();
+    }
+
+    public void InterruptRegenDelay()
+    {
+        _shieldTimerRef.RestartTimer();
+    }
+
+    public void InterruptRegenDelay(float damage)
+    {
+        InterruptRegenDelay();
+    }
+
+    public void ForceShieldDeplete(float damage)
+    {
+        _vfxShieldReference.DepleteShields();
+    }
+
+    private void InitializeStates()
+    {
+        _shieldsStateMachine.AddState("isDepleted");
+        _shieldsStateMachine.AddState("isAvailable");
+
+        if (_shieldIntegrity == 0)
+        {
+            _shieldsStateMachine.UpdateStateActivity("isDepleted", true);
+            _vfxShieldReference.DepleteShields();
+            _shieldTimerRef.StartOrResumeTimer();
+        }
+
+        else if (_shieldIntegrity < _maxShieldIntegrity)
+        {
+            _shieldsStateMachine.UpdateStateActivity("isAvailable", true);
+            _shieldTimerRef.StartOrResumeTimer();
+        }
+
+        else if (_shieldIntegrity == _maxShieldIntegrity)
+        {
+            _shieldsStateMachine.UpdateStateActivity("isAvailable", true);
+        }
+    }
+
+    public void CalculateStates()
+    {
+        if (_shieldIntegrity == 0)
+        {
+            _shieldsStateMachine.UpdateStateActivity("isDepleted", true);
+            _shieldsStateMachine.UpdateStateActivity("isAvailable", false);
+        }
     }
 }

@@ -494,6 +494,34 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!1 &209357234 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4677015517709285261, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+  m_PrefabInstance: {fileID: 7878436600071091167}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &209357241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 209357234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 529ac835c73f7814cb939db5c27998e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &209357242 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3773345103960142920, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+  m_PrefabInstance: {fileID: 7878436600071091167}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 209357234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fc6c45e17c32aa48bfaa84b955b3c70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &227635743 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7878436600147673536, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
@@ -5389,6 +5417,42 @@ PrefabInstance:
       propertyPath: OnRegenerationTick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 3943183411924960259, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: _shieldsStateMachine
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6694791547484059817, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: OnHealthDamaged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6694791547484059817, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: OnHealthDamaged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6694791547484059817, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: OnHealthDamaged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 209357242}
+    - target: {fileID: 6694791547484059817, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: OnHealthDamaged.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 209357242}
+    - target: {fileID: 6694791547484059817, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: OnHealthDamaged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: DepleteShields
+      objectReference: {fileID: 0}
+    - target: {fileID: 6694791547484059817, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: OnHealthDamaged.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: DepleteShields
+      objectReference: {fileID: 0}
+    - target: {fileID: 6694791547484059817, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: OnHealthDamaged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ShieldVFXController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6694791547484059817, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+      propertyPath: OnHealthDamaged.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: ShieldVFXController, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 7878436600147673536, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -5439,4 +5503,5 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 720431773, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
+    - {fileID: 7837559381458194322, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 28ea757e98c40e943ae1124d44e3430e, type: 3}

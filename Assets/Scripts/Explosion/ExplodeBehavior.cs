@@ -69,6 +69,7 @@ public class ExplodeBehavior : MonoBehaviour
     {
         if (damagableObject.GetComponent<DamageHandler>() != null)
         {
+            
             damagableObject.GetComponent<DamageHandler>().DelegateDamage( _damage);
         }
     }

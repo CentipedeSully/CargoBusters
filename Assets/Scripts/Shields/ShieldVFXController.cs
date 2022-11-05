@@ -69,13 +69,13 @@ public class ShieldVFXController : MonoBehaviour
 
     private void EvaluateCurvesOverTime()
     {
-        if (_isShieldBreakAnimPlaying && !_isShieldDamagedAnimPlaying && !_isShieldRestoreAnimPlaying)
+        if (_isShieldBreakAnimPlaying)
             EvaluateShieldBreakAnimation();
 
-        else if (_isShieldDamagedAnimPlaying && !_isShieldBreakAnimPlaying && !_isShieldRestoreAnimPlaying)
+        else if (_isShieldDamagedAnimPlaying)
             EvaluateShieldDamageAnimation();
 
-        else if (_isShieldRestoreAnimPlaying && !_isShieldBreakAnimPlaying && !_isShieldDamagedAnimPlaying)
+        else if (_isShieldRestoreAnimPlaying)
             EvaluateRestorationAnimation();
 
     }
@@ -148,4 +148,5 @@ public class ShieldVFXController : MonoBehaviour
         _shieldVisualEffect.SetFloat(_vfxRadiusFieldName, newRadius);
         _shieldVisualEffect.SetInt(_vfxSpawnRateFieldName, newSpawnRate);
     }
+
 }

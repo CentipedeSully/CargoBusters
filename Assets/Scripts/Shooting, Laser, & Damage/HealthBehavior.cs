@@ -9,12 +9,26 @@ public class HealthBehavior : MonoBehaviour
     [SerializeField] private float _maxHealth;
     [SerializeField] private float _currentHealth;
     [SerializeField] private bool _isDead = false;
+    private DamageHandler _damageHandlerRef;
 
     public UnityEvent<GameObject> _OnDeath;
 
 
     //Monobehaviors
+    private void Awake()
+    {
+        _damageHandlerRef = GetComponent<DamageHandler>();
+    }
 
+    private void OnEnable()
+    {
+        _damageHandlerRef.OnHealthDamaged.AddListener(DamageHealth);
+    }
+
+    private void OnDisable()
+    {
+        _damageHandlerRef.OnHealthDamaged.RemoveListener(DamageHealth);
+    }
 
     private void Start()
     {
