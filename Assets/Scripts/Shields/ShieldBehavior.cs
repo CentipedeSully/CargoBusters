@@ -10,6 +10,7 @@ public class ShieldBehavior : MonoBehaviour
     [SerializeField] float _maxShieldIntegrity = 5;
     [SerializeField] float _regenDelay = 5;
     [SerializeField] float _regenRate = .5f;
+    [SerializeField] bool _shieldsReadyOnStart = false;
 
     [SerializeField] private UniversalStateMachine _shieldsStateMachine;
 
@@ -50,6 +51,7 @@ public class ShieldBehavior : MonoBehaviour
 
     private void Start()
     {
+        SetupShieldsOnStart();
         InitializeStates();
             
     }
@@ -221,5 +223,12 @@ public class ShieldBehavior : MonoBehaviour
             _shieldsStateMachine.UpdateStateActivity("isDepleted", true);
             _shieldsStateMachine.UpdateStateActivity("isAvailable", false);
         }
+    }
+
+    private void SetupShieldsOnStart()
+    {
+        if (_shieldsReadyOnStart)
+            _shieldIntegrity = _maxShieldIntegrity;
+        else _shieldIntegrity = 0;
     }
 }

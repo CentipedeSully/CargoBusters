@@ -9,6 +9,7 @@ public class SpawnLaserOnInput : MonoBehaviour
     [SerializeField] private GameObject _laserPrefab;
     [SerializeField] private GameObject _laserSpawnPosition;
     [SerializeField] private GameObject _createdLaser;
+    [SerializeField] private float _angularSpread = 2;
 
     private bool _shootInput = false;
     private bool _isShotReady = true;
@@ -45,6 +46,9 @@ public class SpawnLaserOnInput : MonoBehaviour
 
         //Reposition Laser
         _createdLaser.transform.SetPositionAndRotation(_laserSpawnPosition.transform.position, Quaternion.Euler(transform.rotation.eulerAngles));
+
+        //Apply Randomized Spread
+        _createdLaser.transform.Rotate(0, 0, Random.Range(-_angularSpread, _angularSpread));
 
         //Set the laser's shooterID to this object's ID
         _createdLaser.GetComponent<LaserBehavior>().SetShooterID(gameObject.GetInstanceID());
