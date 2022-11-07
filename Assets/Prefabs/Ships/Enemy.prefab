@@ -651,8 +651,8 @@ MonoBehaviour:
   _validTargetsLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  _shotRangeDistance: 25
-  _castRadius: 3
+  _shotRangeDistance: 30
+  _castRadius: 1.5
   _shotDirection: {x: 0, y: 0}
   _shootSignal: 0
   _spawnLaserScriptRef: {fileID: 0}

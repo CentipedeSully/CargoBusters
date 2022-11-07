@@ -48,7 +48,7 @@ public class SpawnLaserOnInput : MonoBehaviour
         _createdLaser.transform.SetPositionAndRotation(_laserSpawnPosition.transform.position, Quaternion.Euler(transform.rotation.eulerAngles));
 
         //Apply Randomized Spread
-        _createdLaser.transform.Rotate(0, 0, Random.Range(-_angularSpread, _angularSpread));
+        _createdLaser.transform.Rotate(0, 0, Random.Range(-_angularSpread/2, _angularSpread/2));
 
         //Set the laser's shooterID to this object's ID
         _createdLaser.GetComponent<LaserBehavior>().SetShooterID(gameObject.GetInstanceID());
