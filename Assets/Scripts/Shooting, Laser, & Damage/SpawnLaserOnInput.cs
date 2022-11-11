@@ -13,10 +13,12 @@ public class SpawnLaserOnInput : MonoBehaviour
 
     private bool _shootInput = false;
     private bool _isShotReady = true;
+
     [SerializeField] private float _shotCooldownDuration = .5f;
     [SerializeField] private float _laserPushForce = 5;
     [SerializeField] private float _laserDamage = 1;
 
+    [SerializeField] private FlashBarrelOnFire _barrelFlashScriptRef;
 
     private void Awake()
     {
@@ -35,6 +37,10 @@ public class SpawnLaserOnInput : MonoBehaviour
         if (_isShotReady && _shootInput == true)
         { 
             GetLaserFromObjectPoolerToSpawnLocation();
+
+            //Trigger flash
+            _barrelFlashScriptRef.TriggerFlash();
+
             CooldownShot();
         }
     }
@@ -61,7 +67,6 @@ public class SpawnLaserOnInput : MonoBehaviour
 
         //Apply Speed Offset by the player's yMove velocity
         _createdLaser.gameObject.GetComponent<LaserBehavior>().SetSpeedOffset(CalculateLaserSpeedOffset());
-        
 
         //Enable Laser Behavior
         _createdLaser.SetActive(true);
@@ -92,7 +97,6 @@ public class SpawnLaserOnInput : MonoBehaviour
         Vector2 relativeVelocity = transform.InverseTransformVector(GetComponent<Rigidbody2D>().GetRelativePointVelocity(Vector2.zero));
         float offset = relativeVelocity.y;
         
-        //Debug.Log($"Relative velocity: {relativeVelocity}, Y Offset: {offset}");
 
         return offset;
     }

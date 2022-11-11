@@ -18,7 +18,7 @@ public class ExplodeBehavior : MonoBehaviour
     {
         if (_explodeCommand)
         {
-            
+            FlashLight();
             PushAwayAllRigidbodiesInRadius();
             _explodeCommand = false;
 
@@ -74,6 +74,13 @@ public class ExplodeBehavior : MonoBehaviour
         }
     }
 
+
+    public void FlashLight()
+    {
+        LightController flashLightRef = GetComponent<LightController>();
+        if (flashLightRef != null)
+            flashLightRef.FlashLight();
+    }
 
     public void SetRadius(float value)
     {

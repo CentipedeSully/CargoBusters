@@ -21,11 +21,6 @@ public class BarrelFlashController : MonoBehaviour
         _vfxBarrelFlash = GetComponent<VisualEffect>();
     }
 
-    private void Update()
-    {
-        ToggleShotViaInput();
-    }
-
 
 
 
@@ -33,6 +28,7 @@ public class BarrelFlashController : MonoBehaviour
     public void SetShotInput(bool input)
     {
         _shotInput = input;
+        ToggleShotViaInput();
     }
 
     private void ToggleShotViaInput()
