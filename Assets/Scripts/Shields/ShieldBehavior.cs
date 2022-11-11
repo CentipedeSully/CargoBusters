@@ -11,6 +11,7 @@ public class ShieldBehavior : MonoBehaviour
     [SerializeField] float _regenDelay = 5;
     [SerializeField] float _regenRate = .5f;
     [SerializeField] bool _shieldsReadyOnStart = false;
+    [SerializeField] bool _isShieldsDisabled = false;
 
     [SerializeField] private UniversalStateMachine _shieldsStateMachine;
 
@@ -120,7 +121,7 @@ public class ShieldBehavior : MonoBehaviour
 
     public void IncreaseIntegrity(float value)
     {
-        if (value > 0)
+        if (value > 0 && _isShieldsDisabled == false)
         {
             SetShieldIntegrity(_shieldIntegrity + value);
 
@@ -149,7 +150,8 @@ public class ShieldBehavior : MonoBehaviour
             _shieldRegeneratorRef.StopRegen();
 
             //restart regenDelay counting
-            _shieldTimerRef.RestartTimer();
+            if (!_isShieldsDisabled)
+                _shieldTimerRef.RestartTimer();
 
             if (_shieldsStateMachine.GetStateActivity("isAvailable") && _shieldIntegrity > 0)
                 _vfxShieldReference.PlayShieldDamagedAnim();
@@ -230,5 +232,18 @@ public class ShieldBehavior : MonoBehaviour
         if (_shieldsReadyOnStart)
             _shieldIntegrity = _maxShieldIntegrity;
         else _shieldIntegrity = 0;
+    }
+
+    public void DisableShields()
+    {
+        _isShieldsDisabled = true;
+        DecreaseIntegrity(999);
+        _shieldTimerRef.ResetTimer();
+    }
+
+    public void EnableShields()
+    {
+        _isShieldsDisabled = false;
+        _shieldTimerRef.StartOrResumeTimer();
     }
 }

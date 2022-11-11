@@ -40,7 +40,7 @@ public class Timer : MonoBehaviour
 
     }
 
-    private void ResetTimer()
+    public void ResetTimer()
     {
         _timePassed = 0;
         _isTicking = false;

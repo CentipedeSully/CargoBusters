@@ -14,6 +14,7 @@ public class ShootAtTarget : MonoBehaviour
     [SerializeField] private Vector2 _shotDirection = Vector2.zero;
     [SerializeField] private bool _shootSignal = false;
     private RaycastHit2D _detectedCollider;
+    [SerializeField] private bool _isShootEnabled = true;
 
     [SerializeField] private SpawnLaserOnInput _spawnLaserScriptRef;
 
@@ -26,9 +27,13 @@ public class ShootAtTarget : MonoBehaviour
 
     private void Update()
     {
-        CalculateWorldSpaceShotVector();
-        CheckRangeForTarget();
-        CommunicateShootSignalToLaserSpawner();
+        if (_isShootEnabled)
+        {
+            CalculateWorldSpaceShotVector();
+            CheckRangeForTarget();
+            CommunicateShootSignalToLaserSpawner();
+        }
+       
     }
 
     private void OnDrawGizmos()
@@ -68,4 +73,16 @@ public class ShootAtTarget : MonoBehaviour
         Gizmos.DrawLine( _laserSpawnPointTransform.position, _laserSpawnPointTransform.position + _laserSpawnPointTransform.TransformDirection(new Vector2(0,_shotRangeDistance)));
         Gizmos.DrawWireSphere(_laserSpawnPointTransform.position + _laserSpawnPointTransform.TransformDirection(new Vector2(0, _shotRangeDistance)), _castRadius);
     }
+
+    public void DisableShooting()
+    {
+        _isShootEnabled = false;
+        _spawnLaserScriptRef.SetShootInput(false);
+    }
+
+    public void EnableShooting()
+    {
+        _isShootEnabled = true;
+    }
 }
+

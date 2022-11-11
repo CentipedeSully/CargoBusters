@@ -9,6 +9,8 @@ public class CommuncateInputToPlayerObject : MonoBehaviour
     [SerializeField] private float _turnInput = 0;
     private bool _shootInput = false;
     private bool _boostInput = false;
+    private bool _isMovementEnabled = true;
+    private bool _isShootEnabled = true;
 
     private MoveObject _playerMoveScriptReference;
     private AddRotationToObject _playerRotateScriptReference;
@@ -58,18 +60,40 @@ public class CommuncateInputToPlayerObject : MonoBehaviour
 
     private void ShareMoveInputWithPlayerMoveScript()
     {
+        if (_isMovementEnabled)
         _playerMoveScriptReference.SetDirection(_moveDirection);
     }
 
     private void ShareRotateInputWithPlayerRotateScript()
     {
-        _playerRotateScriptReference.AddRotation(new Vector3(0, 0, _turnInput));
+        if (_isMovementEnabled)
+            _playerRotateScriptReference.AddRotation(new Vector3(0, 0, _turnInput));
     }
 
     private void ShareShootInputWithLaserSpawnScript()
     {
-        _playerSpawnLaserScriptReference.SetShootInput( InputDetector.Instance.GetShootInput());
+        if (_isShootEnabled)
+            _playerSpawnLaserScriptReference.SetShootInput( InputDetector.Instance.GetShootInput());
     }
 
+    public void DisableMovement()
+    {
+        _isMovementEnabled = false;
+    }
+
+    public void EnableMovement()
+    {
+        _isMovementEnabled = true;
+    }
+
+    public void DisableShooting()
+    {
+        _isShootEnabled = false;
+    }
+
+    public void EnableShooting()
+    {
+        _isShootEnabled = true;
+    }
 
 }

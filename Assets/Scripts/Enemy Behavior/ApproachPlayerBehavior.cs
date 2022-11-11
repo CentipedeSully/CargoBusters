@@ -9,6 +9,7 @@ public class ApproachPlayerBehavior : MonoBehaviour
     [SerializeField] private Vector2 _enemyInput;
     [SerializeField] private Vector3 _enemyRotationVector;
     [SerializeField] private float _differenceInDegrees;
+    [SerializeField] private bool _isControlsEnabled = true;
 
     //references
     private Rigidbody2D _rigidbody2DRef;
@@ -38,7 +39,7 @@ public class ApproachPlayerBehavior : MonoBehaviour
 
     private void EngageTarget()
     {
-        if (_isEngagingTarget)
+        if (_isEngagingTarget && _isControlsEnabled)
         {
             if (_target == null)
                 GetPlayerReference();
@@ -93,5 +94,17 @@ public class ApproachPlayerBehavior : MonoBehaviour
     public Vector2 GetShipInput()
     {
         return _enemyInput;
+    }
+
+    public void DisableControls()
+    {
+        _isControlsEnabled = false;
+        _moveScriptRef.SetDirection(new Vector2(0, 0));
+        _enemyInput = Vector2.zero;
+    }
+
+    public void EnableControls()
+    {
+        _isControlsEnabled = true;
     }
 }

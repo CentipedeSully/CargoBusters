@@ -62,7 +62,7 @@ public class HealthBehavior : MonoBehaviour
         _currentHealth += valueToAdd;
         Mathf.Clamp(_currentHealth, 0, _maxHealth);
         //Debug.Log($"{gameObject.name} Current Health: {_currentHealth}");
-        if (_currentHealth <= 0)
+        if (_currentHealth <= 0 && _isDead == false)
         {
             _isDead = true;
             _OnDeath?.Invoke(gameObject);
@@ -74,7 +74,7 @@ public class HealthBehavior : MonoBehaviour
         _currentHealth -= value;
         Mathf.Clamp(_currentHealth, 0, _maxHealth);
 
-        if (_currentHealth <= 0)
+        if (_currentHealth <= 0 && _isDead == false)
         {
             _isDead = true;
             _OnDeath?.Invoke(gameObject);

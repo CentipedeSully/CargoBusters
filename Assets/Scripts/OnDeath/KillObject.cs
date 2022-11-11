@@ -8,13 +8,18 @@ public class KillObject : MonoBehaviour
     //Declarations
     public UnityEvent onDeath;
 
-
+    [SerializeField] private CommuncateInputToPlayerObject _inputCommunicator;
+    [SerializeField] private ShieldBehavior _shieldBehavior;
 
 
 
 
     //Monobehaviors
-
+    private void Awake()
+    {
+        _inputCommunicator = GetComponent<CommuncateInputToPlayerObject>();
+        
+    }
 
 
 
@@ -24,16 +29,25 @@ public class KillObject : MonoBehaviour
     //Utilities
     public void KillSelf()
     {
+        if (_inputCommunicator != null)
+        {
+            _inputCommunicator.DisableMovement();
+            _inputCommunicator.DisableShooting();
+        }
+
+        _shieldBehavior.DisableShields();
+        
+
         //Deactiviate meshes and renderers
-        GetComponent<DeactivateCollidersAndMeshes>().DisableMeshRenderersAndCollider();
+        //GetComponent<DeactivateCollidersAndMeshes>().DisableMeshRenderersAndCollider();
 
         //spawn explosion
-        GetComponent<SpawnExplosion>().CreateExplosion();
+        //GetComponent<SpawnExplosion>().CreateExplosion();
 
         onDeath?.Invoke();
 
         //DestroySelf
-        Destroy(gameObject);
+       // Destroy(gameObject);
     }
 
 
