@@ -1,29 +1,45 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
+using System;
 
-public class DamageHandler : MonoBehaviour
+public class DamageHandler: MonoBehaviour
 {
-    [SerializeField] private HealthBehavior _healthReference;
-    [SerializeField] private ShieldBehavior _shieldReference;
-
-    public UnityEvent<float> OnHealthDamaged;
-    public UnityEvent<float> OnShieldDamaged;
+    //Declarations
+    private ShipSystemReferencer _shipSystemReferencer;
 
 
-
-    public void DelegateDamage(float damageValue)
+    //monos
+    private void Awake()
     {
-        if (_shieldReference != null)
-        {
-            if (_shieldReference.IsShieldDepleted() == false)
-                OnShieldDamaged?.Invoke(damageValue);
+        _shipSystemReferencer = GetComponent<ShipSystemReferencer>();
+    }
 
-            else OnHealthDamaged?.Invoke(damageValue);
-        }
 
-        else OnHealthDamaged?.Invoke(damageValue);
+
+
+
+    //Utilities
+    public void ProcessDamage(float value)
+    {
+        //if shields available, then damage shields
+        if (GetShieldsIntegrityRef().GetCurrentIntegrity() > 0)
+            GetShieldsIntegrityRef().DecreaseIntegrity(value);
+
+        //else damage hull
+        else if (GetHullIntegrityRef().GetCurrentIntegrity() > 0)
+            GetHullIntegrityRef().DecreaseIntegrity(value);
 
     }
+
+    private IntegrityBehavior GetShieldsIntegrityRef()
+    {
+        return _shipSystemReferencer.GetShieldsObject().GetComponent<IntegrityBehavior>();
+    }
+
+    private IntegrityBehavior GetHullIntegrityRef()
+    {
+        return _shipSystemReferencer.GetHullObject().GetComponent<IntegrityBehavior>();
+    }
+
 }

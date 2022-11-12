@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class HealthBehavior : MonoBehaviour
+public class OldHealthBehavior : MonoBehaviour
 {
     //Declarations
     [SerializeField] private float _maxHealth;
     [SerializeField] private float _currentHealth;
     [SerializeField] private bool _isDead = false;
-    private DamageHandler _damageHandlerRef;
+    private OldDamageHandler _damageHandlerRef;
 
     public UnityEvent<GameObject> _OnDeath;
 
@@ -17,7 +17,7 @@ public class HealthBehavior : MonoBehaviour
     //Monobehaviors
     private void Awake()
     {
-        _damageHandlerRef = GetComponent<DamageHandler>();
+        _damageHandlerRef = GetComponent<OldDamageHandler>();
     }
 
     private void OnEnable()

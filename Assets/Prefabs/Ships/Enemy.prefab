@@ -1078,7 +1078,7 @@ MonoBehaviour:
   _enemyRotationVector: {x: 0, y: 0, z: 0}
   _differenceInDegrees: 0
   _isControlsEnabled: 1
-  _isEngagingTarget: 1
+  _isEngagingTarget: 0
 --- !u!114 &-7082774059634179040
 MonoBehaviour:
   m_ObjectHideFlags: 0

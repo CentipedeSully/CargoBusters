@@ -17,8 +17,8 @@ public class TakeDamageOnCollision : MonoBehaviour
 
     private void TryDamageObject(GameObject damagableObject, float damage)
     {
-        if (damagableObject.GetComponent<HealthBehavior>() != null)
-            damagableObject.GetComponent<HealthBehavior>().ModifyCurrentHealth(-damage);
+        if (damagableObject.GetComponent<OldHealthBehavior>() != null)
+            damagableObject.GetComponent<OldHealthBehavior>().ModifyCurrentHealth(-damage);
     }
 
     private float CalculateCollisionDamage()

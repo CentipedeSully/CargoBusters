@@ -18,7 +18,7 @@ public class ShieldBehavior : MonoBehaviour
     [SerializeField] private Regenerator _shieldRegeneratorRef;
     [SerializeField] private Timer _shieldTimerRef;
     [SerializeField] private ShieldVFXController _vfxShieldReference;
-    [SerializeField] private DamageHandler _damageHandlerRef;
+    [SerializeField] private OldDamageHandler _damageHandlerRef;
 
 
     //Monobehaviors
