@@ -2,15 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShieldsManager : MonoBehaviour
+public class ShieldsRegenerationManager : MonoBehaviour
 {
     //Declarations
     private IntegrityBehavior _shieldsIntegrityRef;
     private Timer _shieldsRegenDelayTimerRef;
     private Regenerator _shieldsRegeneratorRef;
-    private IntegrityBehavior _hullIntegrityRef;
 
-    private bool _isShieldsEnabled = true;
+    private bool _isShieldRegenEnabled = true;
 
     //Monobehaviors
     private void Awake()
@@ -22,9 +21,6 @@ public class ShieldsManager : MonoBehaviour
     {
         //Restart the Regen Timer whenever the shields are damaged
         _shieldsIntegrityRef.OnIntegrityDecreased += InterruptRegenDelaytimer;
-
-        //Restart Regen Timer on Hull Damage
-        _hullIntegrityRef.OnIntegrityDecreased += InterruptRegenDelaytimer;
 
         //Cancel Regeneration whenever Shields are damaged
         _shieldsIntegrityRef.OnIntegrityDecreased += InterruptRegenerator;
@@ -47,9 +43,6 @@ public class ShieldsManager : MonoBehaviour
         _shieldsIntegrityRef.OnIntegrityDecreased -= InterruptRegenDelaytimer;
 
         //unSub
-        _hullIntegrityRef.OnIntegrityDecreased -= InterruptRegenDelaytimer;
-
-        //unSub
         _shieldsIntegrityRef.OnIntegrityDecreased -= InterruptRegenerator;
 
         //unSub
@@ -68,7 +61,6 @@ public class ShieldsManager : MonoBehaviour
         _shieldsIntegrityRef = GetComponent<IntegrityBehavior>();
         _shieldsRegenDelayTimerRef = GetComponent<Timer>();
         _shieldsRegeneratorRef = GetComponent<Regenerator>();
-        _hullIntegrityRef = transform.parent.GetComponent<ShipSystemReferencer>().GetHullObject().GetComponent<IntegrityBehavior>();
     }
 
     private void InterruptRegenDelaytimer(float value)
@@ -78,7 +70,7 @@ public class ShieldsManager : MonoBehaviour
 
     private void EnterRegeneration()
     {
-        if (_shieldsIntegrityRef.GetCurrentIntegrity() < _shieldsIntegrityRef.GetMaxIntegrity() && _isShieldsEnabled)
+        if (_shieldsIntegrityRef.GetCurrentIntegrity() < _shieldsIntegrityRef.GetMaxIntegrity() && _isShieldRegenEnabled)
             _shieldsRegeneratorRef.StartRegen();
     }
 
@@ -87,14 +79,15 @@ public class ShieldsManager : MonoBehaviour
         _shieldsRegeneratorRef.StopRegen();
     }
 
-    private void DisableShields()
+    public void DisableShieldRegen()
     {
-        _isShieldsEnabled = false;
+        _isShieldRegenEnabled = false;
     }
 
-    private void EnableShields()
+    public void EnableShieldRegen()
     {
-        _isShieldsEnabled = true;
+        _isShieldRegenEnabled = true;
+        StartTimerUntilRegen();
     }
 
     private void EndRegenOnIntegrityFull(float value)
@@ -105,7 +98,7 @@ public class ShieldsManager : MonoBehaviour
 
     private void StartTimerUntilRegen()
     {
-        if (_isShieldsEnabled && _shieldsIntegrityRef.GetCurrentIntegrity() < _shieldsIntegrityRef.GetMaxIntegrity())
+        if (_isShieldRegenEnabled && _shieldsIntegrityRef.GetCurrentIntegrity() < _shieldsIntegrityRef.GetMaxIntegrity())
             _shieldsRegenDelayTimerRef.StartOrResumeTimer();
     }
 }

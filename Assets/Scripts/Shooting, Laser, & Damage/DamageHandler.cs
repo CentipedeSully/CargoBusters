@@ -23,8 +23,8 @@ public class DamageHandler: MonoBehaviour
     public void ProcessDamage(float value)
     {
         //if shields available, then damage shields
-        if (GetShieldsIntegrityRef().GetCurrentIntegrity() > 0)
-            GetShieldsIntegrityRef().DecreaseIntegrity(value);
+        if (GetShieldIntegrityRef().GetCurrentIntegrity() > 0)
+            GetShieldIntegrityRef().DecreaseIntegrity(value);
 
         //else damage hull
         else if (GetHullIntegrityRef().GetCurrentIntegrity() > 0)
@@ -32,7 +32,7 @@ public class DamageHandler: MonoBehaviour
 
     }
 
-    private IntegrityBehavior GetShieldsIntegrityRef()
+    private IntegrityBehavior GetShieldIntegrityRef()
     {
         return _shipSystemReferencer.GetShieldsObject().GetComponent<IntegrityBehavior>();
     }

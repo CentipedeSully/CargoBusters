@@ -118,4 +118,20 @@ public class IntegrityThresholdEvaluator : MonoBehaviour
     {
         Debug.Log($"=={_integrityBehaviorRef.GetName().ToUpper()} OPTIMAL==");
     }
+
+
+    public bool IsIntegrityCritical()
+    {
+        return _isIntegrityLow;
+    }
+
+    public bool IsIntegrityModerate()
+    {
+        return _isIntegrityModerate;
+    }
+
+    public bool IsIntegrityHigh()
+    {
+        return _isIntegrityHigh;
+    }
 }
