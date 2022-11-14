@@ -5,14 +5,14 @@ using UnityEngine;
 public class EnemyThrusterController : MonoBehaviour
 {
     private ApproachPlayerBehavior _approachPlayerScriptRef;
-    private ThrusterToggler _thrusterTogglerRef;
+    private OldThrusterToggler _thrusterTogglerRef;
 
 
 
     private void Awake()
     {
         _approachPlayerScriptRef = GetComponent<ApproachPlayerBehavior>();
-        _thrusterTogglerRef = GetComponent<ThrusterToggler>();
+        _thrusterTogglerRef = GetComponent<OldThrusterToggler>();
     }
 
 

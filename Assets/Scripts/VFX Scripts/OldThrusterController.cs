@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ThrusterController : MonoBehaviour
+public class OldThrusterController : MonoBehaviour
 {
     //Declarations
-    private ThrusterToggler _thrusterTogglerReference;
+    private OldThrusterToggler _thrusterTogglerReference;
 
 
 
@@ -15,7 +15,7 @@ public class ThrusterController : MonoBehaviour
     //Monobehaviors
     private void Awake()
     {
-        _thrusterTogglerReference = GetComponent<ThrusterToggler>();
+        _thrusterTogglerReference = GetComponent<OldThrusterToggler>();
     }
 
     private void Update()

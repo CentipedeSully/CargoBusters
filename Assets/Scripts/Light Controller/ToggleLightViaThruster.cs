@@ -5,7 +5,7 @@ using UnityEngine;
 public class ToggleLightViaThruster : MonoBehaviour
 {
     //Declarations
-    [SerializeField] private ThrusterToggler _thrusterTogglerRef;
+    [SerializeField] private OldThrusterToggler _thrusterTogglerRef;
     [SerializeField] private LightToggler _forwardsLightToggler;
     [SerializeField] private LightToggler _reverseLightToggler;
     [SerializeField] private LightToggler _rightStrafeLightToggler;

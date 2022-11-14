@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 
-public class ThrusterToggler : MonoBehaviour
+public class OldThrusterToggler : MonoBehaviour
 {
     [SerializeField] private string _spawnRateFieldName = "Particle Spawn Rate";
     [SerializeField] private int _maxForwardThrusterSpawnRate = 150;

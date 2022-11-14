@@ -38,13 +38,18 @@ public class DisableShieldsOnHullDamagedCritical : MonoBehaviour
 
     private void DisableShieldsIfIntegrityCritical(float value)
     {
-        if (_hullThresholdEvaluatorRef.IsIntegrityCritical())
-            DisableShields();
+        if (_hullThresholdEvaluatorRef!= null)
+        {
+            if (_hullThresholdEvaluatorRef.IsIntegrityCritical())
+                DisableShields();
+        }
+        
     }
 
     private void DisableShields()
     {
-        _shieldDisablerRef.DisableShieldRegeneration();
+        if (_shieldDisablerRef != null)
+            _shieldDisablerRef.DisableShieldRegeneration();
     }
 
 }
