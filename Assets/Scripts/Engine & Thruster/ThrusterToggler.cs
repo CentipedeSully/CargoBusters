@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class ThrusterToggler : MonoBehaviour
 {
-    [SerializeField] private List<IVisualEffectToggler> _forwardsThrusters;
-    [SerializeField] private List<IVisualEffectToggler> _reverseThrusters;
-    [SerializeField] private List<IVisualEffectToggler> _rightStrafeThrusters;
-    [SerializeField] private List<IVisualEffectToggler> _leftStrafeThrusters;
+    [SerializeField] private List<VisualEffectController> _forwardsThrusters;
+    [SerializeField] private List<VisualEffectController> _reverseThrusters;
+    [SerializeField] private List<VisualEffectController> _rightStrafeThrusters;
+    [SerializeField] private List<VisualEffectController> _leftStrafeThrusters;
 
     private bool _isForwardsThrustersOn = false;
     private bool _isReverseThrustersOn = false;
@@ -17,7 +17,7 @@ public class ThrusterToggler : MonoBehaviour
 
     public void ActivateForwardsThrusters()
     {
-        foreach (IVisualEffectToggler thrusterEffect in _forwardsThrusters)
+        foreach (VisualEffectController thrusterEffect in _forwardsThrusters)
             thrusterEffect.ActivateVisualEffect();
 
         _isForwardsThrustersOn = true;
@@ -25,7 +25,7 @@ public class ThrusterToggler : MonoBehaviour
 
     public void DeactivateForwardsThrusters()
     {
-        foreach (IVisualEffectToggler thrusterEffect in _forwardsThrusters)
+        foreach (VisualEffectController thrusterEffect in _forwardsThrusters)
             thrusterEffect.DeactivateVisualEffect();
 
         _isForwardsThrustersOn = false;
@@ -33,7 +33,7 @@ public class ThrusterToggler : MonoBehaviour
 
     public void ActivateReverseThrusters()
     {
-        foreach (IVisualEffectToggler thrusterEffect in _reverseThrusters)
+        foreach (VisualEffectController thrusterEffect in _reverseThrusters)
             thrusterEffect.ActivateVisualEffect();
 
         _isReverseThrustersOn = true;
@@ -41,7 +41,7 @@ public class ThrusterToggler : MonoBehaviour
 
     public void DeactivateReverseThrusters()
     {
-        foreach (IVisualEffectToggler thrusterEffect in _reverseThrusters)
+        foreach (VisualEffectController thrusterEffect in _reverseThrusters)
             thrusterEffect.DeactivateVisualEffect();
 
         _isReverseThrustersOn = false;
@@ -50,7 +50,7 @@ public class ThrusterToggler : MonoBehaviour
 
     public void ActivateRightStrafeThrusters()
     {
-        foreach (IVisualEffectToggler thrusterEffect in _rightStrafeThrusters)
+        foreach (VisualEffectController thrusterEffect in _rightStrafeThrusters)
             thrusterEffect.ActivateVisualEffect();
 
         _isRightStrafeThrustersOn = true;
@@ -58,7 +58,7 @@ public class ThrusterToggler : MonoBehaviour
 
     public void DeactivateRightStrafeThrusters()
     {
-        foreach (IVisualEffectToggler thrusterEffect in _rightStrafeThrusters)
+        foreach (VisualEffectController thrusterEffect in _rightStrafeThrusters)
             thrusterEffect.DeactivateVisualEffect();
 
         _isRightStrafeThrustersOn = false;
@@ -66,7 +66,7 @@ public class ThrusterToggler : MonoBehaviour
 
     public void ActivateLeftStrafeThrusters()
     {
-        foreach (IVisualEffectToggler thrusterEffect in _leftStrafeThrusters)
+        foreach (VisualEffectController thrusterEffect in _leftStrafeThrusters)
             thrusterEffect.ActivateVisualEffect();
 
         _isLeftStrafeThrustersOn = true;
@@ -74,7 +74,7 @@ public class ThrusterToggler : MonoBehaviour
 
     public void DeactivateLeftStrafeThrusters()
     {
-        foreach (IVisualEffectToggler thrusterEffect in _leftStrafeThrusters)
+        foreach (VisualEffectController thrusterEffect in _leftStrafeThrusters)
             thrusterEffect.DeactivateVisualEffect();
 
         _isLeftStrafeThrustersOn = false;
