@@ -17,21 +17,6 @@ public class ShieldsRegenerationManager : MonoBehaviour
         InitializeReferences();
     }
 
-    private void OnEnable()
-    {
-        //Restart the Regen Timer whenever the shields are damaged
-        _shieldsIntegrityRef.OnIntegrityDecreased += InterruptRegenDelaytimer;
-
-        //Cancel Regeneration whenever Shields are damaged
-        _shieldsIntegrityRef.OnIntegrityDecreased += InterruptRegenerator;
-
-        //Begin Regenerating whenever the Regen timer completes
-        _shieldsRegenDelayTimerRef.OnTimerExpired.AddListener(EnterRegeneration);
-
-        //End regen if Integrity At Max
-        _shieldsIntegrityRef.OnIntegrityIncreased += EndRegenOnIntegrityFull;
-    }
-
     private void Start()
     {
         StartTimerUntilRegen();
@@ -40,16 +25,16 @@ public class ShieldsRegenerationManager : MonoBehaviour
     private void OnDisable()
     {
         //unSub
-        _shieldsIntegrityRef.OnIntegrityDecreased -= InterruptRegenDelaytimer;
+        //_shieldsIntegrityRef.OnIntegrityDecreased -= InterruptRegenDelaytimer;
 
         //unSub
-        _shieldsIntegrityRef.OnIntegrityDecreased -= InterruptRegenerator;
+        //_shieldsIntegrityRef.OnIntegrityDecreased -= InterruptRegenerator;
 
         //unSub
-        _shieldsRegenDelayTimerRef.OnTimerExpired.RemoveListener(EnterRegeneration);
+        //_shieldsRegenDelayTimerRef.OnTimerExpired.RemoveListener(EnterRegeneration);
 
         //usSub
-        _shieldsIntegrityRef.OnIntegrityIncreased -= EndRegenOnIntegrityFull;
+        //_shieldsIntegrityRef.OnIntegrityIncreased -= EndRegenOnIntegrityFull;
     }
 
 
@@ -63,18 +48,18 @@ public class ShieldsRegenerationManager : MonoBehaviour
         _shieldsRegeneratorRef = GetComponent<Regenerator>();
     }
 
-    private void InterruptRegenDelaytimer(float value)
+    public void InterruptRegenDelaytimer(float value)
     {
         _shieldsRegenDelayTimerRef.RestartTimer();
     }
 
-    private void EnterRegeneration()
+    public void EnterRegeneration()
     {
         if (_shieldsIntegrityRef.GetCurrentIntegrity() < _shieldsIntegrityRef.GetMaxIntegrity() && _isShieldRegenEnabled)
             _shieldsRegeneratorRef.StartRegen();
     }
 
-    private void InterruptRegenerator(float value)
+    public void InterruptRegenerator(float value)
     {
         _shieldsRegeneratorRef.StopRegen();
     }

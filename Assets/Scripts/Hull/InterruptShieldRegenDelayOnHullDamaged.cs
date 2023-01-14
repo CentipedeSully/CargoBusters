@@ -17,16 +17,6 @@ public class InterruptShieldRegenDelayOnHullDamaged : MonoBehaviour
         InitializeReferences();
     }
 
-    private void OnEnable()
-    {
-        _hullIntegrityRef.OnIntegrityDecreased += ResetShieldRegenTimerOnHullDamaged;
-    }
-
-    private void OnDisable()
-    {
-        _hullIntegrityRef.OnIntegrityDecreased -= ResetShieldRegenTimerOnHullDamaged;
-    }
-
 
     //Utils
     private void InitializeReferences()
@@ -38,7 +28,7 @@ public class InterruptShieldRegenDelayOnHullDamaged : MonoBehaviour
         _hullIntegrityRef = GetComponent<IntegrityBehavior>();
     }
 
-    private void ResetShieldRegenTimerOnHullDamaged(float value)
+    public void ResetShieldRegenTimerOnHullDamaged(float value)
     {
         _shieldRegenDelayTimer.RestartTimer();
     }

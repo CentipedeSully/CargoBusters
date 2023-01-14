@@ -16,16 +16,6 @@ public class DisableShieldsOnHullDamagedCritical : MonoBehaviour
         InitializeReferences();
     }
 
-    private void OnEnable()
-    {
-        _hullIntegrityRef.OnIntegrityDecreased += DisableShieldsIfIntegrityCritical;
-    }
-
-    private void OnDisable()
-    {
-        _hullIntegrityRef.OnIntegrityDecreased -= DisableShieldsIfIntegrityCritical;
-    }
-
 
     //Utilities
     private void InitializeReferences()
@@ -36,7 +26,7 @@ public class DisableShieldsOnHullDamagedCritical : MonoBehaviour
         _hullIntegrityRef = GetComponent<IntegrityBehavior>();
     }
 
-    private void DisableShieldsIfIntegrityCritical(float value)
+    public void DisableShieldsIfIntegrityCritical(float value)
     {
         if (_hullThresholdEvaluatorRef!= null)
         {

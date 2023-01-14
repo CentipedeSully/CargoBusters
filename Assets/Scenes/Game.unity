@@ -5771,6 +5771,51 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _highThreshold: 0.7
   _lowThreshold: 0.3
+  OnIntegrityEnteringHigh:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1528993426}
+        m_TargetAssemblyTypeName: IntegrityThresholdEvaluator, Assembly-CSharp
+        m_MethodName: LogEnteringHighIntegrity
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnIntegrityEnteringModerate:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1528993426}
+        m_TargetAssemblyTypeName: IntegrityThresholdEvaluator, Assembly-CSharp
+        m_MethodName: LogEnteringModerateIntegrity
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnIntegrityEnteringLow:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1528993426}
+        m_TargetAssemblyTypeName: IntegrityThresholdEvaluator, Assembly-CSharp
+        m_MethodName: LogEnteringLowIntegrity
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1528993427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5787,6 +5832,36 @@ MonoBehaviour:
   _maxIntegrity: 10
   _currentIntegrity: 10
   _startWithFullIntegrity: 1
+  OnIntegrityDecreased:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1528993429}
+        m_TargetAssemblyTypeName: Timer, Assembly-CSharp
+        m_MethodName: ResetTimer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1528993428}
+        m_TargetAssemblyTypeName: Regenerator, Assembly-CSharp
+        m_MethodName: StopRegen
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnIntegrityIncreased:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1528993428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5805,7 +5880,19 @@ MonoBehaviour:
   _isRegenerating: 0
   OnRegenerationTick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1528993427}
+        m_TargetAssemblyTypeName: IntegrityBehavior, Assembly-CSharp
+        m_MethodName: IncreaseIntegrity
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1528993429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6923,7 +7010,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1786341073}
-  - component: {fileID: 1786341075}
+  - component: {fileID: 1786341078}
   - component: {fileID: 1786341074}
   - component: {fileID: 1786341077}
   - component: {fileID: 1786341076}
@@ -6963,22 +7050,51 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _highThreshold: 0.7
   _lowThreshold: 0.3
---- !u!114 &1786341075
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1786341072}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bf6fa6cff84fd44ebcc957444d757f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _name: Hull Integrity
-  _maxIntegrity: 10
-  _currentIntegrity: 10
-  _startWithFullIntegrity: 1
+  OnIntegrityEnteringHigh:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1786341074}
+        m_TargetAssemblyTypeName: IntegrityThresholdEvaluator, Assembly-CSharp
+        m_MethodName: LogEnteringHighIntegrity
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnIntegrityEnteringModerate:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1786341074}
+        m_TargetAssemblyTypeName: IntegrityThresholdEvaluator, Assembly-CSharp
+        m_MethodName: LogEnteringModerateIntegrity
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnIntegrityEnteringLow:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1786341074}
+        m_TargetAssemblyTypeName: IntegrityThresholdEvaluator, Assembly-CSharp
+        m_MethodName: LogEnteringLowIntegrity
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1786341076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7003,6 +7119,76 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c631049326e7fb7469876f0bab0eda2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1786341078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1786341072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bf6fa6cff84fd44ebcc957444d757f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _name: Hul Integrity
+  _maxIntegrity: 10
+  _currentIntegrity: 10
+  _startWithFullIntegrity: 1
+  OnIntegrityDecreased:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1786341074}
+        m_TargetAssemblyTypeName: IntegrityThresholdEvaluator, Assembly-CSharp
+        m_MethodName: RecalculateIntegrityValuesOnChange
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1786341077}
+        m_TargetAssemblyTypeName: InterruptShieldRegenDelayOnHullDamaged, Assembly-CSharp
+        m_MethodName: ResetShieldRegenTimerOnHullDamaged
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1786341076}
+        m_TargetAssemblyTypeName: DisableShieldsOnHullDamagedCritical, Assembly-CSharp
+        m_MethodName: DisableShieldsIfIntegrityCritical
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnIntegrityIncreased:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1786341074}
+        m_TargetAssemblyTypeName: IntegrityThresholdEvaluator, Assembly-CSharp
+        m_MethodName: RecalculateIntegrityValuesOnChange
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1808390425
 GameObject:
   m_ObjectHideFlags: 0

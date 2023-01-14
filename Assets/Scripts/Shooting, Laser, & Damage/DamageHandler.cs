@@ -16,9 +16,6 @@ public class DamageHandler: MonoBehaviour
     }
 
 
-
-
-
     //Utilities
     public void ProcessDamage(float value)
     {

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.Events;
 
 public class IntegrityThresholdEvaluator : MonoBehaviour
 {
@@ -12,32 +13,23 @@ public class IntegrityThresholdEvaluator : MonoBehaviour
     [SerializeField] [Range(0, 1)] private float _lowThreshold = .3f;
 
     private float _currentIntegrityPercentage = 1;
-
     private bool _isIntegrityHigh = false;
     private bool _isIntegrityModerate = false;
     private bool _isIntegrityLow = false;
 
+    [Header("Events")]
+    public UnityEvent OnIntegrityEnteringHigh;
+    public UnityEvent OnIntegrityEnteringModerate;
+    public UnityEvent OnIntegrityEnteringLow;
 
-    public event Action OnIntegrityEnteringHigh;
-    public event Action OnIntegrityEnteringModerate;
-    public event Action OnIntegrityEnteringLow;
-
+    //references
     private IntegrityBehavior _integrityBehaviorRef;
+
 
     //monos
     private void Awake()
     {
         _integrityBehaviorRef = GetComponent<IntegrityBehavior>();
-    }
-
-    private void OnEnable()
-    {
-        _integrityBehaviorRef.OnIntegrityDecreased += RecalculateIntegrityValuesOnChange;
-        _integrityBehaviorRef.OnIntegrityIncreased += RecalculateIntegrityValuesOnChange;
-
-        OnIntegrityEnteringLow += LogEnteringLowIntegrity;
-        OnIntegrityEnteringModerate += LogEnteringModerateIntegrity;
-        OnIntegrityEnteringHigh += LogEnteringHighIntegrity;
     }
 
     private void Start()
@@ -46,22 +38,12 @@ public class IntegrityThresholdEvaluator : MonoBehaviour
         UpdateIntegrityState();
     }
 
-    private void OnDisable()
-    {
-        _integrityBehaviorRef.OnIntegrityDecreased -= RecalculateIntegrityValuesOnChange;
-        _integrityBehaviorRef.OnIntegrityIncreased -= RecalculateIntegrityValuesOnChange;
-
-        OnIntegrityEnteringLow -= LogEnteringLowIntegrity;
-        OnIntegrityEnteringModerate -= LogEnteringModerateIntegrity;
-        OnIntegrityEnteringHigh -= LogEnteringHighIntegrity;
-    }
-
 
 
     //Utilities
     private void CalculateIntegrityPercentage()
     {
-        if (_integrityBehaviorRef.GetCurrentIntegrity() == 0)
+        if (_integrityBehaviorRef.GetMaxIntegrity() == 0 || _integrityBehaviorRef.GetCurrentIntegrity() == 0)
             _currentIntegrityPercentage = 0;
         else _currentIntegrityPercentage = _integrityBehaviorRef.GetCurrentIntegrity() / _integrityBehaviorRef.GetMaxIntegrity();
     }
@@ -104,17 +86,17 @@ public class IntegrityThresholdEvaluator : MonoBehaviour
 
 
 
-    private void LogEnteringLowIntegrity()
+    public void LogEnteringLowIntegrity()
     {
         Debug.Log($"=={_integrityBehaviorRef.GetName().ToUpper()} CRITICAL==");
     }
 
-    private void LogEnteringModerateIntegrity()
+    public void LogEnteringModerateIntegrity()
     {
         Debug.Log($"=={_integrityBehaviorRef.GetName().ToUpper()} WARNING==");
     }
 
-    private void LogEnteringHighIntegrity()
+    public void LogEnteringHighIntegrity()
     {
         Debug.Log($"=={_integrityBehaviorRef.GetName().ToUpper()} OPTIMAL==");
     }

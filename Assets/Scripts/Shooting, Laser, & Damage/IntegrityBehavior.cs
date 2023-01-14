@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using System;
 
 public class IntegrityBehavior : MonoBehaviour
@@ -11,8 +12,9 @@ public class IntegrityBehavior : MonoBehaviour
     [SerializeField] private float _currentIntegrity = 10;
     [SerializeField] private bool _startWithFullIntegrity = true;
 
-    public event Action<float> OnIntegrityDecreased;
-    public event Action<float> OnIntegrityIncreased;
+    [Header("Events")]
+    public UnityEvent<float> OnIntegrityDecreased;
+    public UnityEvent<float> OnIntegrityIncreased;
 
 
 
