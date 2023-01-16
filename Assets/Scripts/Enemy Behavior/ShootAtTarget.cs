@@ -16,13 +16,13 @@ public class ShootAtTarget : MonoBehaviour
     private RaycastHit2D _detectedCollider;
     [SerializeField] private bool _isShootEnabled = true;
 
-    [SerializeField] private SpawnLaserOnInput _spawnLaserScriptRef;
+    [SerializeField] private OldSpawnLaserOnInput _spawnLaserScriptRef;
 
 
     //Monobehaviors
     private void Awake()
     {
-        _spawnLaserScriptRef = GetComponent<SpawnLaserOnInput>();
+        _spawnLaserScriptRef = GetComponent<OldSpawnLaserOnInput>();
     }
 
     private void Update()

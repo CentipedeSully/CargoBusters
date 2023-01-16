@@ -5,46 +5,38 @@ using UnityEngine;
 public class CommuncateInputToPlayerObject : MonoBehaviour
 {
     //Declarations
+    [SerializeField] private GameObject _playerShipObject;
     private Vector2 _moveDirection = Vector2.zero;
-    [SerializeField] private float _turnInput = 0;
+    private float _turnInput = 0;
     private bool _shootInput = false;
     private bool _boostInput = false;
-    private bool _isMovementEnabled = true;
-    private bool _isShootEnabled = true;
 
-    private MoveObject _playerMoveScriptReference;
-    private AddRotationToObject _playerRotateScriptReference;
-    private SpawnLaserOnInput _playerSpawnLaserScriptReference;
+    //References
+    private EnginesSystemController _playerEnginesControllerRef;
+    private WeaponsSystemController _playerShotCommanderScriptRef;
 
 
     //monos
-    private void OnEnable()
+    private void Start()
     {
-        InitializeReferencesIfNull();
+        InitializeReferences();
     }
 
 
     private void Update()
     {
         GetInputsFromInputDetector();
-
-        ShareMoveInputWithPlayerMoveScript();
-        ShareRotateInputWithPlayerRotateScript();
-        ShareShootInputWithLaserSpawnScript();
+        ShareMoveInputWithEnginesControllerScript();
+        ShareShootInputWithWeaponsControllerScript();
     }
 
 
     //Utils
-    private void InitializeReferencesIfNull()
+    private void InitializeReferences()
     {
-        if (_playerMoveScriptReference == null)
-            _playerMoveScriptReference = GetComponent<MoveObject>();
-
-        if (_playerRotateScriptReference == null)
-            _playerRotateScriptReference = GetComponent<AddRotationToObject>();
-
-        if (_playerSpawnLaserScriptReference == null)
-            _playerSpawnLaserScriptReference = GetComponent<SpawnLaserOnInput>();
+        //Establish Refererences
+        _playerEnginesControllerRef = _playerShipObject.GetComponent<ShipSystemReferencer>().GetEnginesObject().GetComponent<EnginesSystemController>();
+        _playerShotCommanderScriptRef = _playerShipObject.GetComponent<ShipSystemReferencer>().GetWeaponsObject().GetComponent<WeaponsSystemController>();
     }
 
     private void GetInputsFromInputDetector()
@@ -58,42 +50,15 @@ public class CommuncateInputToPlayerObject : MonoBehaviour
         _turnInput = InputDetector.Instance.GetTurnInput();
     }
 
-    private void ShareMoveInputWithPlayerMoveScript()
+    private void ShareMoveInputWithEnginesControllerScript()
     {
-        if (_isMovementEnabled)
-        _playerMoveScriptReference.SetDirection(_moveDirection);
+        _playerEnginesControllerRef.SetMoveInput(_moveDirection);
+        _playerEnginesControllerRef.SetTurnInput(_turnInput);
     }
 
-    private void ShareRotateInputWithPlayerRotateScript()
+    private void ShareShootInputWithWeaponsControllerScript()
     {
-        if (_isMovementEnabled)
-            _playerRotateScriptReference.AddRotation(new Vector3(0, 0, _turnInput));
-    }
-
-    private void ShareShootInputWithLaserSpawnScript()
-    {
-        if (_isShootEnabled)
-            _playerSpawnLaserScriptReference.SetShootInput( InputDetector.Instance.GetShootInput());
-    }
-
-    public void DisableMovement()
-    {
-        _isMovementEnabled = false;
-    }
-
-    public void EnableMovement()
-    {
-        _isMovementEnabled = true;
-    }
-
-    public void DisableShooting()
-    {
-        _isShootEnabled = false;
-    }
-
-    public void EnableShooting()
-    {
-        _isShootEnabled = true;
+            _playerShotCommanderScriptRef.SetShotCommand(_shootInput);
     }
 
 }

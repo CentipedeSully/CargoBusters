@@ -5,7 +5,7 @@ using UnityEngine;
 public class MoveObject : MonoBehaviour
 {
     //Declarations
-    private Rigidbody2D _rigidbody2DReference;
+    [SerializeField] private Rigidbody2D _rigidbody2DReference;
     [SerializeField] private float _moveSpeed = 100;
     [SerializeField] private Vector2 _moveDirection = Vector2.zero;
     private bool _errorDetected = false;
@@ -15,7 +15,7 @@ public class MoveObject : MonoBehaviour
     //Monobehaviors
     private void OnEnable()
     {
-        TryInitializingRigidbody2DReference();
+        //TryInitializingRigidbody2DReference();
     }
 
     private void FixedUpdate()

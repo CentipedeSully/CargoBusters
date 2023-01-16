@@ -12,7 +12,7 @@ public class InterruptShieldRegenDelayOnHullDamaged : MonoBehaviour
 
 
     //Monos
-    private void Awake()
+    private void Start()
     {
         InitializeReferences();
     }

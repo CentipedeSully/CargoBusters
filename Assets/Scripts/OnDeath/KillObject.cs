@@ -31,8 +31,8 @@ public class KillObject : MonoBehaviour
     {
         if (_inputCommunicator != null)
         {
-            _inputCommunicator.DisableMovement();
-            _inputCommunicator.DisableShooting();
+            //_inputCommunicator.DisableMovement();
+            //_inputCommunicator.DisableShooting();
         }
 
         _shieldBehavior.DisableShields();

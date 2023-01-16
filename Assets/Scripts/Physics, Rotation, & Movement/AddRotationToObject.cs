@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class AddRotationToObject: MonoBehaviour
 {
+    [SerializeField] private Transform _targetObject;
     [SerializeField] private Vector3 _rotation;
     [SerializeField] private float _rotationSpeed = 1;
 
     private void OnEnable()
     {
-        _rotation = transform.rotation.eulerAngles;
+        if (_targetObject == null)
+            _targetObject = transform;
+
+        _rotation = _targetObject.rotation.eulerAngles;
     }
 
     private void Update()
@@ -21,7 +25,7 @@ public class AddRotationToObject: MonoBehaviour
     private void ApplyRotation()
     {
         //Debug.Log(Quaternion.Euler(_rotation * Time.deltaTime * _rotationSpeed));
-        transform.rotation = Quaternion.Euler(_rotation);
+        _targetObject.rotation = Quaternion.Euler(_rotation);
     }
 
     public void AddRotation(Vector3 newRotation)

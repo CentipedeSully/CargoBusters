@@ -20,8 +20,12 @@ public class DamageHandler: MonoBehaviour
     public void ProcessDamage(float value)
     {
         //if shields available, then damage shields
-        if (GetShieldIntegrityRef().GetCurrentIntegrity() > 0)
-            GetShieldIntegrityRef().DecreaseIntegrity(value);
+        if (GetShieldIntegrityRef() != null)
+        {
+            if (GetShieldIntegrityRef().GetCurrentIntegrity() > 0)
+                GetShieldIntegrityRef().DecreaseIntegrity(value);
+        }
+            
 
         //else damage hull
         else if (GetHullIntegrityRef().GetCurrentIntegrity() > 0)

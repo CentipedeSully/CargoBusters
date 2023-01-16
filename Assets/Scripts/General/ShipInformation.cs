@@ -9,12 +9,16 @@ public class ShipInformation : MonoBehaviour
     [SerializeField] private string _faction = "None";
     [SerializeField] private bool _isPlayer = false;
     [SerializeField] private bool _isDisabled = false;
+    [SerializeField] private int _shipID;
 
     private ShipSystemReferencer _shipSystemReferencer;
 
 
     //Monobehaviors
-
+    private void Awake()
+    {
+        _shipID = GetInstanceID();
+    }
 
 
 
@@ -29,7 +33,23 @@ public class ShipInformation : MonoBehaviour
         return _shipSystemReferencer;
     }
 
+    public bool IsDisabled()
+    {
+        return _isDisabled;
+    }
 
+    public bool IsPlayer()
+    {
+        return _isPlayer;
+    }
 
+    public void DisableShip()
+    {
+        _isDisabled = true;
+    }
 
+    public int GetShipID()
+    {
+        return _shipID;
+    }
 }

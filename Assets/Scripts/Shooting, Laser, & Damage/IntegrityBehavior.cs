@@ -15,6 +15,7 @@ public class IntegrityBehavior : MonoBehaviour
     [Header("Events")]
     public UnityEvent<float> OnIntegrityDecreased;
     public UnityEvent<float> OnIntegrityIncreased;
+    public UnityEvent OnIntegrityMaxed;
 
 
 
@@ -81,6 +82,9 @@ public class IntegrityBehavior : MonoBehaviour
             _currentIntegrity = Mathf.Clamp(_currentIntegrity, 0, _maxIntegrity);
 
             OnIntegrityIncreased?.Invoke(value);
+
+            if (_currentIntegrity == _maxIntegrity)
+                OnIntegrityMaxed?.Invoke();
         }
     }
 

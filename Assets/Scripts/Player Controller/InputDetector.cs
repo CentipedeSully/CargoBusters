@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Events;
 using SullysToolkit;
 
 public class InputDetector : MonoSingleton<InputDetector>
@@ -10,8 +11,6 @@ public class InputDetector : MonoSingleton<InputDetector>
     [SerializeField] private float _turnInput;
     [SerializeField] private bool _shootInput;
     [SerializeField] private bool _boostInput;
-
-
     
     //Read inputs from the Input Action via UnityEvents assigned from the Inspector
     public void ReadMoveInput(InputAction.CallbackContext context)

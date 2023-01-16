@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SullysToolkit;
 
-public class SpawnLaserOnInput : MonoBehaviour
+public class OldSpawnLaserOnInput : MonoBehaviour
 {
     [SerializeField] private GameObject _activeLaserContainer;
     [SerializeField] private GameObject _laserPrefab;
@@ -66,7 +66,7 @@ public class SpawnLaserOnInput : MonoBehaviour
         _createdLaser.GetComponent<LaserBehavior>().SetDamage(_laserDamage);
 
         //Apply Speed Offset by the player's yMove velocity
-        _createdLaser.gameObject.GetComponent<LaserBehavior>().SetSpeedOffset(CalculateLaserSpeedOffset());
+        //_createdLaser.gameObject.GetComponent<LaserBehavior>().SetSpeedOffset(CalculateLaserSpeedOffset());
 
         //Enable Laser Behavior
         _createdLaser.SetActive(true);

@@ -9,11 +9,10 @@ public class LaserBehavior : MonoBehaviour
     [SerializeField] private float _moveSpeed = 5;
     [SerializeField] private float _lifeExpectancy = 5;
     [SerializeField] private float _currentLifetime = 0;
-    [SerializeField] private float _speedOffset = 0;
+    [SerializeField] private Vector2 _speedOffset;
     [SerializeField] private float _forceMagnitude = 5;
     [SerializeField] private GameObject _explosionPrefab;
     [SerializeField] private float _damage = 0;
-
     private float _shooterID;
     private bool _isShooterIDSet = false;
     private bool _isEnabled = false;
@@ -30,9 +29,8 @@ public class LaserBehavior : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (_isShooterIDSet && _shooterID != collision.gameObject.GetInstanceID())
+        if (collision.CompareTag("Ship") && _isShooterIDSet && _shooterID != collision.gameObject.GetComponent<ShipInformation>().GetShipID())
         {
-            //Debug.Log($"Hit Detected. Name: {collision.gameObject.name }, ID: {collision.gameObject.GetInstanceID()}");
             CreateExplosion();
             EndLaser();
         }
@@ -45,7 +43,6 @@ public class LaserBehavior : MonoBehaviour
     {
         if (!_isEnabled)
             _isEnabled = true;
-        //else Debug.LogError("Attempting to enable laser that's already enabled");
     }
 
     private void TrackLifetime()
@@ -58,26 +55,31 @@ public class LaserBehavior : MonoBehaviour
             {
                 CreateExplosion();
                 EndLaser();
+                Destroy(this.gameObject);
             }
         }
     }
 
     private void MoveLaser()
     {
-        transform.Translate(Vector2.up * Time.deltaTime * (_moveSpeed + _speedOffset));
+        transform.Translate(new Vector2(_speedOffset.x * Time.deltaTime, 1 * Time.deltaTime * (_moveSpeed + _speedOffset.y)));
     }
 
     private void EndLaser()
     {
+        /*
         _isEnabled = false;
         ResetProjectile();
         PoolSelf();
+        */
+
+        Destroy(gameObject);
     }
 
     private void ResetProjectile()
     {
         _currentLifetime = 0;
-        _speedOffset = 0;
+        _speedOffset = Vector2.zero;
         _isEnabled = false;
         _isShooterIDSet = false;
         _forceMagnitude = 0;
@@ -89,7 +91,7 @@ public class LaserBehavior : MonoBehaviour
         ObjectPooler.PoolObject(this.gameObject);
     }
 
-    public void SetSpeedOffset(float value)
+    public void SetSpeedOffset(Vector2 value)
     {
         _speedOffset = value;
     }

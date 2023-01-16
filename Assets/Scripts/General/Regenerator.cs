@@ -17,22 +17,20 @@ public class Regenerator : MonoBehaviour
 
 
     [SerializeField] private bool _isRegenerating = false;
+    [SerializeField] private bool _isRegenEnabled = true;
 
     [Space(10)]
     public UnityEvent<float> OnRegenerationTick;
 
 
     //Monobehaviors
-
-
-
-
+    //...
 
 
     //Utilities
     public void StartRegen()
     {
-        if (_isRegenerating == false)
+        if (_isRegenerating == false && _isRegenEnabled)
         {
             _isRegenerating = true;
             InvokeRepeating("TickRegeneration", 0, _regenTickDuration);
@@ -46,6 +44,13 @@ public class Regenerator : MonoBehaviour
             _isRegenerating = false;
             CancelInvoke("TickRegeneration");
         }
+    }
+
+    public void SetRegenEnabled(bool value)
+    {
+        _isRegenEnabled = value;
+        if (_isRegenEnabled == false)
+            StopRegen();
     }
 
     private void TickRegeneration()
@@ -80,6 +85,11 @@ public class Regenerator : MonoBehaviour
     public bool IsRegenerating()
     {
         return _isRegenerating;
+    }
+
+    public bool IsRegenEnabled()
+    {
+        return _isRegenEnabled;
     }
 
     public string GetName()

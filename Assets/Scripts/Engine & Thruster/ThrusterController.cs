@@ -9,9 +9,6 @@ public class ThrusterController : MonoBehaviour
     private Vector2 _moveDirection = Vector2.zero;
 
 
-
-
-
     //Monobehaviors
     private void Awake()
     {
@@ -22,9 +19,6 @@ public class ThrusterController : MonoBehaviour
     {
         FireThrustersBasedOnMoveDirection();
     }
-
-
-
 
 
     //Utilities
