@@ -6,7 +6,7 @@ public class ExplodeBehavior : MonoBehaviour
 {
     //Declarations
     private float _radius = 1;
-    private float _damage = 1;
+    private int _damage = 1;
     private float _pushOffset = 100;
     private float _forceMagnitude = 5;
 
@@ -67,17 +67,16 @@ public class ExplodeBehavior : MonoBehaviour
 
     private void TryDamageObject(GameObject damagableObject)
     {
-        if (damagableObject.GetComponent<OldDamageHandler>() != null)
+        if (damagableObject.GetComponent<DamageHandler>() != null)
         {
-            
-            damagableObject.GetComponent<OldDamageHandler>().DelegateDamage( _damage);
+            damagableObject.GetComponent<DamageHandler>().ProcessDamage( _damage);
         }
     }
 
 
     public void FlashLight()
     {
-        LightController flashLightRef = GetComponent<LightController>();
+        LightFlasher flashLightRef = GetComponent<LightFlasher>();
         if (flashLightRef != null)
             flashLightRef.FlashLight();
     }
@@ -88,7 +87,7 @@ public class ExplodeBehavior : MonoBehaviour
             _radius = value;
     }
 
-    public void SetDamage(float value)
+    public void SetDamage(int value)
     {
         _damage = value;
     }

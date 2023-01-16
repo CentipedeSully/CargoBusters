@@ -6,7 +6,7 @@ using UnityEngine.Events;
 public class OldHealthBehavior : MonoBehaviour
 {
     //Declarations
-    [SerializeField] private float _maxHealth;
+    [SerializeField] private int _maxHealth;
     [SerializeField] private float _currentHealth;
     [SerializeField] private bool _isDead = false;
     private OldDamageHandler _damageHandlerRef;
@@ -22,12 +22,12 @@ public class OldHealthBehavior : MonoBehaviour
 
     private void OnEnable()
     {
-        _damageHandlerRef.OnHealthDamaged.AddListener(DamageHealth);
+       // _damageHandlerRef.OnHealthDamaged.AddListener(DamageHealth);
     }
 
     private void OnDisable()
     {
-        _damageHandlerRef.OnHealthDamaged.RemoveListener(DamageHealth);
+        //_damageHandlerRef.OnHealthDamaged.RemoveListener(DamageHealth);
     }
 
     private void Start()
@@ -38,7 +38,7 @@ public class OldHealthBehavior : MonoBehaviour
 
 
     //Utilities
-    public void SetMaxHealth(float value)
+    public void SetMaxHealth(int value)
     {
         if (value > 0)
         {
@@ -50,13 +50,13 @@ public class OldHealthBehavior : MonoBehaviour
            
     }
 
-    public void SetCurrentHealth(float value)
+    public void SetCurrentHealth(int value)
     {
         if (value > 0)
             _currentHealth = value;
     }
 
-    public void ModifyCurrentHealth(float valueToAdd)
+    public void ModifyCurrentHealth(int valueToAdd)
     {
         //Debug.Log($"{gameObject.name} Sustained Damage: {valueToAdd}");
         _currentHealth += valueToAdd;
@@ -69,7 +69,7 @@ public class OldHealthBehavior : MonoBehaviour
         }
     }
 
-    public void DamageHealth(float value)
+    public void DamageHealth(int value)
     {
         _currentHealth -= value;
         Mathf.Clamp(_currentHealth, 0, _maxHealth);

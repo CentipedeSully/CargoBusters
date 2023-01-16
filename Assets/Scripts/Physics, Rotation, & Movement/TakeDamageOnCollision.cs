@@ -15,13 +15,13 @@ public class TakeDamageOnCollision : MonoBehaviour
         }
     }
 
-    private void TryDamageObject(GameObject damagableObject, float damage)
+    private void TryDamageObject(GameObject damagableObject, int damage)
     {
         if (damagableObject.GetComponent<OldHealthBehavior>() != null)
             damagableObject.GetComponent<OldHealthBehavior>().ModifyCurrentHealth(-damage);
     }
 
-    private float CalculateCollisionDamage()
+    private int CalculateCollisionDamage()
     {
         //if (GetComponent<Rigidbody2D>().velocity.magnitude > _damagingVelocityThreshold)
             return 1;

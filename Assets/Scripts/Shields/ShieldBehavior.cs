@@ -9,7 +9,7 @@ public class ShieldBehavior : MonoBehaviour
     [SerializeField] float _shieldIntegrity = 0;
     [SerializeField] float _maxShieldIntegrity = 5;
     [SerializeField] float _regenDelay = 5;
-    [SerializeField] float _regenRate = .5f;
+    [SerializeField] int _regenRate = 1;
     [SerializeField] bool _shieldsReadyOnStart = false;
     [SerializeField] bool _isShieldsDisabled = false;
 
@@ -36,7 +36,7 @@ public class ShieldBehavior : MonoBehaviour
 
     private void OnEnable()
     {
-        _shieldRegeneratorRef.OnRegenerationTick.AddListener(IncreaseIntegrity);
+        //_shieldRegeneratorRef.OnRegenerationTick.AddListener(IncreaseIntegrity);
         _damageHandlerRef.OnShieldDamaged.AddListener(DecreaseIntegrity);
         _damageHandlerRef.OnHealthDamaged.AddListener(InterruptRegenDelay);
         _damageHandlerRef.OnHealthDamaged.AddListener(ForceShieldDeplete);
@@ -44,7 +44,7 @@ public class ShieldBehavior : MonoBehaviour
 
     private void OnDisable()
     {
-        _shieldRegeneratorRef.OnRegenerationTick.RemoveListener(IncreaseIntegrity);
+        //_shieldRegeneratorRef.OnRegenerationTick.RemoveListener(IncreaseIntegrity);
         _damageHandlerRef.OnShieldDamaged.RemoveListener(DecreaseIntegrity);
         _damageHandlerRef.OnHealthDamaged.RemoveListener(InterruptRegenDelay);
         _damageHandlerRef.OnHealthDamaged.RemoveListener(ForceShieldDeplete);
@@ -87,7 +87,7 @@ public class ShieldBehavior : MonoBehaviour
             
     }
 
-    public void SetRegenRate(float value)
+    public void SetRegenRate(int value)
     {
         if (value >= 0)
         {

@@ -20,7 +20,7 @@ public class EnginesSystemController : MonoBehaviour
         if (_isEngineOnline)
         {
             OnMoveSignal?.Invoke(_moveInput);
-            OnTurnSignal?.Invoke(new Vector3(0,0,1));
+            OnTurnSignal?.Invoke(new Vector3(0,0,_turnInput));
         }
             
         else

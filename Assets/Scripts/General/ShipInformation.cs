@@ -43,13 +43,38 @@ public class ShipInformation : MonoBehaviour
         return _isPlayer;
     }
 
-    public void DisableShip()
+    public void SetShipDisabled(bool value)
     {
-        _isDisabled = true;
+        _isDisabled = value;
+    }
+
+    public void SetPlayerFlag(bool value)
+    {
+        _isPlayer = value;
     }
 
     public int GetShipID()
     {
         return _shipID;
+    }
+
+    public string GetShipName()
+    {
+        return _shipName;
+    }
+
+    public void SetShipName(string name)
+    {
+        _shipName = name;
+    }
+
+    public string GetFaction()
+    {
+        return _faction;
+    }
+
+    public void SetFaction(string newFaction)
+    {
+        _faction = newFaction;
     }
 }

@@ -12,7 +12,7 @@ public class LaserBehavior : MonoBehaviour
     [SerializeField] private Vector2 _speedOffset;
     [SerializeField] private float _forceMagnitude = 5;
     [SerializeField] private GameObject _explosionPrefab;
-    [SerializeField] private float _damage = 0;
+    [SerializeField] private int _damage = 0;
     private float _shooterID;
     private bool _isShooterIDSet = false;
     private bool _isEnabled = false;
@@ -116,7 +116,7 @@ public class LaserBehavior : MonoBehaviour
         _forceMagnitude = value;
     }
 
-    public void SetDamage(float value)
+    public void SetDamage(int value)
     {
         _damage = value;
     }

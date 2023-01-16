@@ -9,38 +9,12 @@ public class ShipSystemReferencer : MonoBehaviour
     private CompositeCollider2D _compositeColliderRef;
     private Rigidbody2D _rigidbodyRef;
 
-    [Tooltip("This is used onAwake to find the gameObject in question and to fill its reference")]
-    [SerializeField] private string _weaponsObjectName = "Weapon Systems";
-    private GameObject _weaponsSystems;
-
-    [Tooltip("This is used onAwake to find the gameObject in question and to fill its reference")]
-    [SerializeField] private string _shieldsObjectName = "Shield Systems";
-    private GameObject _shieldsSystems;
-
-
-    [Tooltip("This is used onAwake to find the gameObject in question and to fill its reference")]
-    [SerializeField] private string _enginesObjectName = "Engine Systems";
-    private GameObject _enginesSystems;
- 
-
-    [Tooltip("This is used onAwake to find the gameObject in question and to fill its reference")]
-    [SerializeField] private string _hullObjectName = "Hull Systems";
-    private GameObject _hullSystems;
- 
-
-    [Tooltip("This is used onAwake to find the gameObject in question and to fill its reference")]
-    [SerializeField] private string _crewObjectName = "Crew Systems";
-    private GameObject _crewSystems;
-
-
-    [Tooltip("This is used onAwake to find the gameObject in question and to fill its reference")]
-    [SerializeField] private string _auxSystemsObjectName = "Auxillary Systems";
-    private GameObject _auxillarySystems;
-
-
-
-
-
+    [SerializeField] private GameObject _weaponsSystems;
+    [SerializeField] private GameObject _shieldsSystems;
+    [SerializeField] private GameObject _enginesSystems;
+    [SerializeField] private GameObject _hullSystems;
+    [SerializeField] private GameObject _crewSystems;
+    [SerializeField] private GameObject _auxillarySystems;
 
 
     //Monobehaviors
@@ -48,9 +22,6 @@ public class ShipSystemReferencer : MonoBehaviour
     {
         FillReferences();
     }
-
-
-
 
 
     //Utilities
@@ -106,13 +77,6 @@ public class ShipSystemReferencer : MonoBehaviour
         _shipInfoRef = GetComponent<ShipInformation>();
         _rigidbodyRef = GetComponent<Rigidbody2D>();
         _compositeColliderRef = GetComponent<CompositeCollider2D>();
-
-        _weaponsSystems = transform.Find(_weaponsObjectName).gameObject;
-        _shieldsSystems = transform.Find(_shieldsObjectName).gameObject;
-        _enginesSystems = transform.Find(_enginesObjectName).gameObject;
-        _hullSystems = transform.Find(_hullObjectName).gameObject;
-        _crewSystems = transform.Find(_crewObjectName).gameObject;
-        _auxillarySystems = transform.Find(_auxSystemsObjectName).gameObject;
     }
 
 }

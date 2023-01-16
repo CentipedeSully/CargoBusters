@@ -6,7 +6,7 @@ public class FlashBarrelOnFire : MonoBehaviour
 {
     //Decalrations
     private BarrelFlashController _barrelFlashControllerRef;
-    private LightController _lightControllerRef;
+    private LightFlasher _lightControllerRef;
     [SerializeField] private float _flashDuration = .1f;
     private bool _isShooting = false;
     private float _timePassed = 0;
@@ -17,7 +17,7 @@ public class FlashBarrelOnFire : MonoBehaviour
     private void Awake()
     {
         _barrelFlashControllerRef = GetComponent<BarrelFlashController>();
-        _lightControllerRef = GetComponent<LightController>();
+        _lightControllerRef = GetComponent<LightFlasher>();
     }
 
     private void Update()

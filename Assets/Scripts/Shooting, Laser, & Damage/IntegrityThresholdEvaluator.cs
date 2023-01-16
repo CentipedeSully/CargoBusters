@@ -48,7 +48,7 @@ public class IntegrityThresholdEvaluator : MonoBehaviour
         else _currentIntegrityPercentage = _integrityBehaviorRef.GetCurrentIntegrity() / _integrityBehaviorRef.GetMaxIntegrity();
     }
 
-    public void RecalculateIntegrityValuesOnChange(float value)
+    public void RecalculateIntegrityValuesOnChange(int value)
     {
         CalculateIntegrityPercentage();
         UpdateIntegrityState();

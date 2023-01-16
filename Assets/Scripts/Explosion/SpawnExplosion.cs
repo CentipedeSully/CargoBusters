@@ -7,7 +7,7 @@ public class SpawnExplosion : MonoBehaviour
     [SerializeField] private GameObject _explosionPrefab;
     [SerializeField] private float _forceMagnitude = 5;
     [SerializeField] private float _radius = 1;
-    [SerializeField] private float _damage = 1;
+    [SerializeField] private int _damage = 1;
 
 
 

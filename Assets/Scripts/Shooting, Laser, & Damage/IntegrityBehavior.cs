@@ -8,13 +8,13 @@ public class IntegrityBehavior : MonoBehaviour
 {
     //Declarations
     [SerializeField] private string _name;
-    [SerializeField] private float _maxIntegrity = 10;
-    [SerializeField] private float _currentIntegrity = 10;
+    [SerializeField] private int _maxIntegrity = 10;
+    [SerializeField] private int _currentIntegrity = 10;
     [SerializeField] private bool _startWithFullIntegrity = true;
 
     [Header("Events")]
-    public UnityEvent<float> OnIntegrityDecreased;
-    public UnityEvent<float> OnIntegrityIncreased;
+    public UnityEvent<int> OnIntegrityDecreased;
+    public UnityEvent<int> OnIntegrityIncreased;
     public UnityEvent OnIntegrityMaxed;
 
 
@@ -45,7 +45,7 @@ public class IntegrityBehavior : MonoBehaviour
         return _currentIntegrity;
     }
 
-    private void SetMaxIntegrity(float value)
+    private void SetMaxIntegrity(int value)
     {
         if (value > 0)
             _maxIntegrity = value;
@@ -53,7 +53,7 @@ public class IntegrityBehavior : MonoBehaviour
         _currentIntegrity = Mathf.Clamp(_currentIntegrity, 0, _maxIntegrity);
     }
 
-    private void SetCurrentIntegrity(float value)
+    private void SetCurrentIntegrity(int value)
     {
         if (value > 0)
             _currentIntegrity = value;
@@ -61,7 +61,7 @@ public class IntegrityBehavior : MonoBehaviour
         _currentIntegrity = Mathf.Clamp(_currentIntegrity, 0, _maxIntegrity);
     }
 
-    public void DecreaseIntegrity(float value)
+    public void DecreaseIntegrity(int value)
     {
         if (_currentIntegrity > 0)
         {
@@ -73,7 +73,7 @@ public class IntegrityBehavior : MonoBehaviour
         }
     }
 
-    public void IncreaseIntegrity(float value)
+    public void IncreaseIntegrity(int value)
     {
         if (_currentIntegrity < _maxIntegrity)
         {

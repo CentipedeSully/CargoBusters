@@ -10,7 +10,7 @@ public class Regenerator : MonoBehaviour
     [SerializeField] private string _regeneratorName;
 
     [Tooltip("The amount to regenerate each tick")]
-    [SerializeField] private float _regenRate = 0;
+    [SerializeField] private int _regenRate = 0;
 
     [Tooltip("The amount of time in seconds btwn ticks. First tick happens once the regenerator activates")]
     [SerializeField] private float _regenTickDuration = 1;
@@ -20,7 +20,7 @@ public class Regenerator : MonoBehaviour
     [SerializeField] private bool _isRegenEnabled = true;
 
     [Space(10)]
-    public UnityEvent<float> OnRegenerationTick;
+    public UnityEvent<int> OnRegenerationTick;
 
 
     //Monobehaviors
@@ -60,7 +60,7 @@ public class Regenerator : MonoBehaviour
     }
 
 
-    public void SetRegenRate(float value)
+    public void SetRegenRate(int value)
     {
         if (value >= 0)
             _regenRate = value;

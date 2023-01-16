@@ -17,7 +17,7 @@ public class SpawnLaserOnCommand : MonoBehaviour
 
     [SerializeField] private float _shotCooldownDuration = .5f;
     [SerializeField] private float _laserPushForce = 5;
-    [SerializeField] private float _laserDamage = 1;
+    [SerializeField] private int _laserDamage = 1;
 
     [Header("Events")]
     public UnityEvent OnFire;

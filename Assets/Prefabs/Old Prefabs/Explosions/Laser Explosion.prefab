@@ -61,8 +61,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac22985ffc109fa4f86e1ca001356a1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxParticleSpawnRate: 48
-  _explosionDuration: 0.25
+  _maxParticleSpawnRate: 70
+  _explosionDuration: 0.35
   _laserExplosionParticleSpawnRateFieldName: Particle Spawn Rate
 --- !u!2083052967 &7502727342642693676
 VisualEffect:
@@ -81,7 +81,7 @@ VisualEffect:
   m_PropertySheet:
     m_Float:
       m_Array:
-      - m_Value: 0.25
+      - m_Value: 0.35
         m_Name: Particle Lifetime
         m_Overridden: 1
     m_Vector2f:
@@ -144,9 +144,9 @@ VFXRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -1127068247
+  m_SortingLayer: 3
+  m_SortingOrder: 2
 --- !u!114 &8333161855406060849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -156,41 +156,32 @@ MonoBehaviour:
   m_GameObject: {fileID: 9000114151373274540}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e26e3b2af1cc186469c67106bfca5fd1, type: 3}
+  m_Script: {fileID: 11500000, guid: 68680df64270284468376af067aab2f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _2dLighRef: {fileID: 4253457632760280382}
   _startingIntensity: 0
-  _transitionDuration: 0.2
+  _transitionDuration: 0.25
   _flashIntensityCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 100.12366
-      outSlope: 100.12366
-      tangentMode: 34
+      time: -0.0008354187
+      value: 1
+      inSlope: -13.801469
+      outSlope: -13.801469
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.33333334
+      outWeight: 0.033403095
     - serializedVersion: 3
-      time: 0.09987649
-      value: 10
-      inSlope: 0.12350845
-      outSlope: 0.12350845
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.2
+      time: 0.25
       value: 0
-      inSlope: -99.87664
-      outSlope: -99.87664
-      tangentMode: 34
+      inSlope: -0.42412972
+      outSlope: -0.42412972
+      tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
+      inWeight: 0.17160292
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -211,8 +202,8 @@ MonoBehaviour:
   m_LightType: 3
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
-  m_Color: {r: 1, g: 0.6933962, b: 0.93336433, a: 1}
-  m_Intensity: 1
+  m_Color: {r: 1, g: 0.03186196, b: 0.5877896, a: 1}
+  m_Intensity: 2
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
   m_ApplyToSortingLayers: 00000000
