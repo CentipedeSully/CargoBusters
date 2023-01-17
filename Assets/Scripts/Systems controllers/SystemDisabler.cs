@@ -12,6 +12,7 @@ public class SystemDisabler : MonoBehaviour
     private ShieldsSystemController _shieldsControllerRef;
     private EnginesSystemController _enginesSystemControllerRef;
     private WeaponsSystemController _weaponsSystemControllerRef;
+    private WarpCoreSystemController _warpCoreSystemControllerRef;
 
 
     //Monos
@@ -35,6 +36,7 @@ public class SystemDisabler : MonoBehaviour
 
         _enginesSystemControllerRef = _systemReferencer.GetEnginesObject().GetComponent<EnginesSystemController>();
         _weaponsSystemControllerRef = _systemReferencer.GetWeaponsObject().GetComponent<WeaponsSystemController>();
+        _warpCoreSystemControllerRef = _systemReferencer.GetWarpCoreObject().GetComponent<WarpCoreSystemController>();
     }
 
     public void DisableAllSystems()
@@ -42,6 +44,7 @@ public class SystemDisabler : MonoBehaviour
         _shipInfoRef.SetShipDisabled(true);
         _weaponsSystemControllerRef.DisableWeapons();
         _enginesSystemControllerRef.DisableEngines();
+        _warpCoreSystemControllerRef.DisableSystem();
         if (_shieldsExist)
             _shieldsControllerRef.DisableShields();
     }
@@ -51,6 +54,7 @@ public class SystemDisabler : MonoBehaviour
         _shipInfoRef.SetShipDisabled(false);
         _weaponsSystemControllerRef.EnableWeapons();
         _enginesSystemControllerRef.EnableEngines();
+        _warpCoreSystemControllerRef.EnableSystem();
         if (_shieldsExist)
             _shieldsControllerRef.EnableShields();
     }

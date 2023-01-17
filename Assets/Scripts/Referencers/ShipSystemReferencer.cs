@@ -15,6 +15,7 @@ public class ShipSystemReferencer : MonoBehaviour
     [SerializeField] private GameObject _hullSystems;
     [SerializeField] private GameObject _crewSystems;
     [SerializeField] private GameObject _auxillarySystems;
+    [SerializeField] private GameObject _warpCoreSystems;
 
 
     //Monobehaviors
@@ -69,6 +70,11 @@ public class ShipSystemReferencer : MonoBehaviour
     public GameObject GetAuxillaryObject()
     {
         return _auxillarySystems;
+    }
+
+    public GameObject GetWarpCoreObject()
+    {
+        return _warpCoreSystems;
     }
 
 

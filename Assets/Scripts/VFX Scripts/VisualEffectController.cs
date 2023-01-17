@@ -23,6 +23,16 @@ public class VisualEffectController : MonoBehaviour, IVisualEffectToggler
 
 
     //Utilities
+    public void SetMaxCount(int Value)
+    {
+        _maxParticleCount = Value;
+    }
+
+    public void SetMinCount(int value)
+    {
+        _minParticleCount = value;
+    }
+
     public void ActivateVisualEffect()
     {
         _vfxReference.SetInt(_vfxFieldName, _maxParticleCount);
