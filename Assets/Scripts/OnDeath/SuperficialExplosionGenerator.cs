@@ -19,8 +19,6 @@ public class SuperficialExplosionGenerator : MonoBehaviour
     [Header("Minor Explosion Settings")]
     [SerializeField] private float _minorExplosionForceMag = .1f;
     [SerializeField] private float _minorExplosionRadius = .15f;
-    [SerializeField] private int _minorExplosionParticles = 8;
-    [SerializeField] private float _minorExplosionDuration = .15f;
     [SerializeField] private float _minPositionX;
     [SerializeField] private float _maxPositionX;
     [SerializeField] private float _minPositionY;
@@ -29,8 +27,6 @@ public class SuperficialExplosionGenerator : MonoBehaviour
     [Header("Maxor Explosion Settings")]
     [SerializeField] private float _majorExplosionForceMag = 1f;
     [SerializeField] private float _majorExplosionRadius = 1f;
-    [SerializeField] private int _majorExplosionParticles = 20;
-    [SerializeField] private float _majorExplosionDuration = .25f;
     [SerializeField] private int _majorExplosionDamage = 1;
 
     [Header("Events")]
@@ -59,10 +55,6 @@ public class SuperficialExplosionGenerator : MonoBehaviour
         explosion.GetComponent<ExplodeBehavior>().SetForceMagnitude(_minorExplosionForceMag);
         explosion.GetComponent<ExplodeBehavior>().SetRadius(_minorExplosionRadius);
 
-        explosion.GetComponent<ExplosionVFXController>().SetVFXRadius(_minorExplosionRadius);
-        explosion.GetComponent<ExplosionVFXController>().SetVFXParticleSpawnRate(_minorExplosionParticles);
-        explosion.GetComponent<ExplosionVFXController>().SetVFXDuration(_minorExplosionDuration);
-
         explosion.GetComponent<ExplodeBehavior>().Explode();
 
     }
@@ -78,10 +70,6 @@ public class SuperficialExplosionGenerator : MonoBehaviour
         explosion.GetComponent<ExplodeBehavior>().SetDamage(_majorExplosionDamage);
         explosion.GetComponent<ExplodeBehavior>().SetForceMagnitude(_majorExplosionForceMag);
         explosion.GetComponent<ExplodeBehavior>().SetRadius(_majorExplosionRadius);
-
-        explosion.GetComponent<ExplosionVFXController>().SetVFXRadius(_majorExplosionRadius);
-        explosion.GetComponent<ExplosionVFXController>().SetVFXParticleSpawnRate(_majorExplosionParticles);
-        explosion.GetComponent<ExplosionVFXController>().SetVFXDuration(_majorExplosionDuration);
 
         explosion.GetComponent<ExplodeBehavior>().Explode();
     }

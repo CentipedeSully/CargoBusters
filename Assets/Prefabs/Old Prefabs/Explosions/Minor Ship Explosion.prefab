@@ -9,12 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6028634349070584020}
-  - component: {fileID: 6028634349070584021}
-  - component: {fileID: 8881883170831241745}
   - component: {fileID: 5139693601090433874}
   - component: {fileID: 3738061549616482767}
-  - component: {fileID: 6695023417127845967}
   - component: {fileID: 1462411983509405760}
+  - component: {fileID: 6028634349070584021}
+  - component: {fileID: 3437476422085076882}
+  - component: {fileID: 1746219735806537874}
   m_Layer: 0
   m_Name: Minor Ship Explosion
   m_TagString: Untagged
@@ -37,35 +37,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6028634349070584021
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6028634349070584018}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00744be8e0c18cb4b99cea28b3d5e9e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &8881883170831241745
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6028634349070584018}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac22985ffc109fa4f86e1ca001356a1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _maxParticleSpawnRate: 15
-  _explosionDuration: 0.35
-  _particleSpawnRateFieldName: Particle Spawn Rate
-  _vfxRadiusFieldName: Radius
-  _radius: 1
 --- !u!2083052967 &5139693601090433874
 VisualEffect:
   m_ObjectHideFlags: 0
@@ -99,7 +70,7 @@ VisualEffect:
       m_Array: []
     m_Int:
       m_Array:
-      - m_Value: 15
+      - m_Value: 0
         m_Name: Particle Spawn Rate
         m_Overridden: 1
     m_Matrix4x4f:
@@ -152,45 +123,6 @@ VFXRenderer:
   m_SortingLayerID: -1127068247
   m_SortingLayer: 3
   m_SortingOrder: 2
---- !u!114 &6695023417127845967
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6028634349070584018}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68680df64270284468376af067aab2f3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _2dLighRef: {fileID: 1462411983509405760}
-  _startingIntensity: 5
-  _transitionDuration: 0.15
-  _flashIntensityCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: -0.0008354187
-      value: 5
-      inSlope: 0.19780666
-      outSlope: 0.19780666
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.23779911
-    - serializedVersion: 3
-      time: 0.25
-      value: 0
-      inSlope: -62.477966
-      outSlope: -62.477966
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.040459733
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!114 &1462411983509405760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -208,7 +140,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
   m_Color: {r: 1, g: 0.3274873, b: 0, a: 1}
-  m_Intensity: 5
+  m_Intensity: 0
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
   m_ApplyToSortingLayers: 00000000
@@ -258,7 +190,7 @@ MonoBehaviour:
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
-  m_PointLightOuterRadius: 1
+  m_PointLightOuterRadius: 0
   m_ShapeLightParametricSides: 5
   m_ShapeLightParametricAngleOffset: 0
   m_ShapeLightParametricRadius: 1
@@ -269,3 +201,50 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!114 &6028634349070584021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6028634349070584018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00744be8e0c18cb4b99cea28b3d5e9e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3437476422085076882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6028634349070584018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82fde779ceaba4c458649baca2e4f054, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _triggerName: OnExplosion
+  _animExplosionStateName: MinorShipExplosion_anim
+  _animationDuration: 1
+--- !u!95 &1746219735806537874
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6028634349070584018}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 01cde049633ee0d44a6fed7bdb1fc26a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

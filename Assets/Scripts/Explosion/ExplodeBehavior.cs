@@ -22,8 +22,8 @@ public class ExplodeBehavior : MonoBehaviour
             PushAwayAllRigidbodiesInRadius();
             _explodeCommand = false;
 
-            GetComponent<IExplosionVFXController>().PlayExplosionVFX();
-            Invoke("DestroySelf", GetComponent<IExplosionVFXController>().GetVFXDuration());
+            GetComponent<ExplosionAnimatorController>().TriggerExplosion();
+            Invoke("DestroySelf", GetComponent<ExplosionAnimatorController>().GetAnimationDuration());
         }
     }
 
