@@ -1,0 +1,148 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1586462805481857479
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1586462805481857476}
+  - component: {fileID: 1586462805481857477}
+  - component: {fileID: 7308546648912729750}
+  - component: {fileID: 5305009366152753438}
+  m_Layer: 0
+  m_Name: Self Destructor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1586462805481857476
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1586462805481857479}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.55, y: -1.37, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1586462805481857477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1586462805481857479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9140525880d01e449873350441ad6d64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnSelfDestruct:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: DisableColliders, Assembly-CSharp
+        m_MethodName: DisableCompositeCollider
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 7308546648912729750}
+        m_TargetAssemblyTypeName: SuperficialExplosionGenerator, Assembly-CSharp
+        m_MethodName: EnterExplosionSequence
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &7308546648912729750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1586462805481857479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83e477b2d0acdb44dba26ebb33523a0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isExploding: 0
+  _minorExplosionPrefab: {fileID: 6028634349070584018, guid: 735c173930ccb72409981a2f4e85961b, type: 3}
+  _majorExplosionPrefab: {fileID: 9213070097323703658, guid: 05b4447a03c2d5d4eb9f9d2ccb0a69ca, type: 3}
+  _explosionContainerName: Explosion Container
+  _maxDuration: 3
+  _currentDuration: 0
+  _delayBetweenMinorExplosionsMin: 0.2
+  _delayBetweenMinorExplosionsMax: 0.5
+  _minorExplosionForceMag: 0.1
+  _minorExplosionRadius: 0.15
+  _minorExplosionParticles: 8
+  _minorExplosionDuration: 0.15
+  _minPositionX: -0.5
+  _maxPositionX: 0.5
+  _minPositionY: -1.35
+  _maxPositionY: 1.35
+  _majorExplosionForceMag: 1
+  _majorExplosionRadius: 1
+  _majorExplosionParticles: 20
+  _majorExplosionDuration: 0.35
+  _majorExplosionDamage: 1
+  OnExplosionsCompleted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: DisableSprite, Assembly-CSharp
+        m_MethodName: DisableSpriteRenderer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 5305009366152753438}
+        m_TargetAssemblyTypeName: DestroyShip, Assembly-CSharp
+        m_MethodName: DestroyShipObject
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &5305009366152753438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1586462805481857479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a0225cd96e655b4990474ffae13ba92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _delay: 0.35

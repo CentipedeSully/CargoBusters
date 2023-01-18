@@ -7,83 +7,57 @@ public class WarpCoreSystemController : MonoBehaviour
 {
     //Declarations
     [SerializeField] private bool _isWarpCoreOnline = true;
-    [SerializeField] private bool _isWarpingInProgress = false;
     [SerializeField] private bool _warpCommand = false;
-    private float _warpCommandInputDelay = .5f;
-    private bool _isWarpInterrupted = true;
-    private float _warpInterruptCooldown = .3f;
-    [SerializeField] private bool _isWarpCommandInputReady = true;
-    [SerializeField] private float _buildDuration = 5;
-    [SerializeField] private float _currentBuildTime = 0;
+    [SerializeField] private float _inputDelay = .5f;
+    private bool _isInputReady = true;
 
     [Header("External Event Handles")]
     public UnityEvent OnWarpCoreDisabled;
     public UnityEvent OnWarpCoreEnabled;
     public UnityEvent onWarpSequenceEntered;
     public UnityEvent OnWarpInterrupted;
-    public UnityEvent OnWarpCompleted;
+
+    //references
+    private WarpCoreBehavior _warpCoreRef;
 
 
     //Monobehaviors
+    private void Awake()
+    {
+        _warpCoreRef = GetComponent<WarpCoreBehavior>();
+    }
+
     private void Update()
     {
-        BuildWarpIfWarpInProgress();
-        ToggleWarpSequenceOnCommandIfPossible();
+        ToggleWarpOnInput();
     }
 
 
     //Utilities
-    private void BuildWarpIfWarpInProgress()
+    public void ToggleWarpOnInput()
     {
-        if (_isWarpCoreOnline && _isWarpingInProgress)
+        if (_isWarpCoreOnline && _warpCommand && _isInputReady)
         {
-            _currentBuildTime += Time.deltaTime;
+            _isInputReady = false;
+            Invoke("ReadyInput", _inputDelay);
 
-            if (_currentBuildTime >= _buildDuration)
-            {
-                ResetWarpUtilities();
-                OnWarpCompleted?.Invoke();
-            }
-        }
-    }
-
-    private void ResetWarpUtilities()
-    {
-        _currentBuildTime = 0;
-        _isWarpingInProgress = false;
-    }
-
-    private void ToggleWarpSequenceOnCommandIfPossible()
-    {
-        if (_isWarpCommandInputReady && _warpCommand && !_isWarpInterrupted)
-        {
-            if (!_isWarpingInProgress)
-            {
-                _isWarpingInProgress = true;
-                _isWarpCommandInputReady = false;
-                Invoke("ReadyWarpCommandInput", _warpCommandInputDelay);
+            if (_warpCoreRef.IsWarpInProgress())
+                InterruptWarp();
+            else
                 onWarpSequenceEntered?.Invoke();
-            }
-
-            else InterruptWarp();
         }
     }
 
-    private void ReadyWarpCommandInput()
+    private void ReadyInput()
     {
-        _isWarpCommandInputReady = true;
+        _isInputReady = true;
     }
 
-    private void EndInterruptCooldown()
-    {
-        _isWarpInterrupted = false;
-    }
 
     //External Control Utils
     public void DisableSystem()
     {
         _isWarpCoreOnline = false;
-        InterruptWarp();
         OnWarpCoreDisabled?.Invoke();
     }
 
@@ -95,14 +69,9 @@ public class WarpCoreSystemController : MonoBehaviour
 
     public void InterruptWarp()
     {
-        if (_isWarpingInProgress)
-        {
-            ResetWarpUtilities();
-            _isWarpInterrupted = true;
-            Invoke("EndInterruptCooldown", _warpInterruptCooldown);
-            OnWarpInterrupted?.Invoke();
-        }
+        OnWarpInterrupted?.Invoke();
     }
+
 
 
     //Basic Getters/Setters
@@ -116,10 +85,7 @@ public class WarpCoreSystemController : MonoBehaviour
         return _isWarpCoreOnline;
     }
 
-    public bool IsWarpInProgress()
-    {
-        return _isWarpingInProgress;
-    }
+
 
 
     //Debugging
