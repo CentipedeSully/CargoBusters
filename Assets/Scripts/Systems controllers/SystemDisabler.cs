@@ -49,7 +49,7 @@ public class SystemDisabler : MonoBehaviour
             _shieldsControllerRef.DisableShields();
     }
 
-    public void EnablesAllSystems()
+    public void EnableAllSystems()
     {
         _shipInfoRef.SetShipDisabled(false);
         _weaponsSystemControllerRef.EnableWeapons();

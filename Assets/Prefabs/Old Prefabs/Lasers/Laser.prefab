@@ -73,6 +73,8 @@ MonoBehaviour:
   _forceMagnitude: 0
   _explosionPrefab: {fileID: 9000114151373274540, guid: 3f05e644e710a6840b1b663524ece7f5, type: 3}
   _damage: 0
+  _shooterID: 0
+  _isShooterIDSet: 0
 --- !u!114 &4665512959951657446
 MonoBehaviour:
   m_ObjectHideFlags: 0

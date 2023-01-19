@@ -13,8 +13,8 @@ public class LaserBehavior : MonoBehaviour
     [SerializeField] private float _forceMagnitude = 5;
     [SerializeField] private GameObject _explosionPrefab;
     [SerializeField] private int _damage = 0;
-    private float _shooterID;
-    private bool _isShooterIDSet = false;
+    [SerializeField]private float _shooterID;
+    [SerializeField] private bool _isShooterIDSet = false;
     private bool _isEnabled = false;
 
 

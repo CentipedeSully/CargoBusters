@@ -4,13 +4,17 @@ using UnityEngine;
 
 public class DisableColliders : MonoBehaviour
 {
+    [SerializeField]private bool _isCollidersEnabled = true;
+    [SerializeField] private GameObject _collidersParentObject;
+
+
     public void DisableCompositeCollider()
     {
-        GetComponent<CompositeCollider2D>().enabled = false;
+        _collidersParentObject.SetActive(false);
     }
 
     public void EnableCompositeCollider()
     {
-        GetComponent<CompositeCollider2D>().enabled = true;
+        _collidersParentObject.SetActive(true);
     }
 }
