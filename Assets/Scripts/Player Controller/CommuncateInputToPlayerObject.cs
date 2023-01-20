@@ -11,11 +11,13 @@ public class CommuncateInputToPlayerObject : MonoBehaviour
     private bool _shootInput = false;
     private bool _boostInput = false;
     private bool _warpInput = false;
+    private bool _bustCargoInput = false;
 
     //References
     private EnginesSystemController _playerEnginesControllerRef;
     private WeaponsSystemController _playerShotCommanderScriptRef;
     private WarpCoreSystemController _playerWarpCoreControllerRef;
+    private CargoBusterBehavior _playerCargoBusterRef;
 
 
     //monos
@@ -31,6 +33,7 @@ public class CommuncateInputToPlayerObject : MonoBehaviour
         ShareMoveInputWithEnginesControllerScript();
         ShareShootInputWithWeaponsControllerScript();
         ShareWarpInputWithWarpControllerScript();
+        ShareBusterInputWithBusterBehavior();
     }
 
 
@@ -41,6 +44,7 @@ public class CommuncateInputToPlayerObject : MonoBehaviour
         _playerEnginesControllerRef = _playerShipObject.GetComponent<ShipSystemReferencer>().GetEnginesObject().GetComponent<EnginesSystemController>();
         _playerShotCommanderScriptRef = _playerShipObject.GetComponent<ShipSystemReferencer>().GetWeaponsObject().GetComponent<WeaponsSystemController>();
         _playerWarpCoreControllerRef = _playerShipObject.GetComponent<ShipSystemReferencer>().GetWarpCoreObject().GetComponent<WarpCoreSystemController>();
+        _playerCargoBusterRef = _playerShipObject.GetComponent<ShipSystemReferencer>().GetCargoBuster();
     }
 
     private void GetInputsFromInputDetector()
@@ -54,6 +58,8 @@ public class CommuncateInputToPlayerObject : MonoBehaviour
         _turnInput = InputDetector.Instance.GetTurnInput();
 
         _warpInput = InputDetector.Instance.GetWarpInput();
+
+        _bustCargoInput = InputDetector.Instance.GetBustCargoInput();
     }
 
     private void ShareMoveInputWithEnginesControllerScript()
@@ -70,6 +76,11 @@ public class CommuncateInputToPlayerObject : MonoBehaviour
     private void ShareWarpInputWithWarpControllerScript()
     {
         _playerWarpCoreControllerRef.SetWarpCommand(_warpInput);
+    }
+
+    private void ShareBusterInputWithBusterBehavior()
+    {
+        _playerCargoBusterRef.SetBustCommand(_bustCargoInput);
     }
 
 }

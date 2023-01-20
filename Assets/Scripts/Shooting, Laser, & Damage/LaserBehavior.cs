@@ -12,6 +12,8 @@ public class LaserBehavior : MonoBehaviour
     [SerializeField] private Vector2 _speedOffset;
     [SerializeField] private float _forceMagnitude = 5;
     [SerializeField] private GameObject _explosionPrefab;
+    [SerializeField] private string _explosionContainerName = "Explosion Container";
+    private GameObject _explosionContainerRef;
     [SerializeField] private int _damage = 0;
     [SerializeField]private float _shooterID;
     [SerializeField] private bool _isShooterIDSet = false;
@@ -20,6 +22,11 @@ public class LaserBehavior : MonoBehaviour
 
 
     //Monobehaviors
+    private void Awake()
+    {
+        _explosionContainerRef = GameObject.Find(_explosionContainerName);
+    }
+
     private void Update()
     {
         TrackLifetime();
@@ -104,7 +111,7 @@ public class LaserBehavior : MonoBehaviour
 
     private void CreateExplosion()
     {
-        GameObject explosion = Instantiate(_explosionPrefab,transform.position,transform.rotation);
+        GameObject explosion = Instantiate(_explosionPrefab,transform.position,transform.rotation, _explosionContainerRef.transform);
 
         explosion.GetComponent<ExplodeBehavior>().SetForceMagnitude(_forceMagnitude);
         explosion.GetComponent<ExplodeBehavior>().SetDamage(_damage);

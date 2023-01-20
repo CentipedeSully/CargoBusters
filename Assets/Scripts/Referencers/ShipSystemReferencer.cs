@@ -14,8 +14,11 @@ public class ShipSystemReferencer : MonoBehaviour
     [SerializeField] private GameObject _enginesSystems;
     [SerializeField] private GameObject _hullSystems;
     [SerializeField] private GameObject _crewSystems;
+    [SerializeField] private GameObject _cargoSystems;
     [SerializeField] private GameObject _auxillarySystems;
     [SerializeField] private GameObject _warpCoreSystems;
+    [SerializeField] private CargoBusterBehavior _cargoBusterRef;
+
 
 
     //Monobehaviors
@@ -65,6 +68,16 @@ public class ShipSystemReferencer : MonoBehaviour
     public GameObject GetCrewObject()
     {
         return _crewSystems;
+    }
+
+    public GameObject GetCargoObject()
+    {
+        return _cargoSystems;
+    }
+
+    public CargoBusterBehavior GetCargoBuster()
+    {
+        return _cargoBusterRef;
     }
 
     public GameObject GetAuxillaryObject()

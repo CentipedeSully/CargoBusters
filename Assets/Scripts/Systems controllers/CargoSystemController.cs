@@ -1,18 +1,57 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
-public class CargoSysytemController : MonoBehaviour
+public class CargoSystemController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    //Declarations
+    [SerializeField] private bool _isCargoSecurityOnline = true;
+    [SerializeField] private bool _isCargoBusted = false;
+
+    [Header("Events")]
+    public UnityEvent OnCargoSecurityDisabled;
+    public UnityEvent OnCargoSecurityEnabled;
+
+    public UnityEvent OnCargoBusted;
+
+
+    //Monos
+    //...
+
+
+
+    //Utilities
+    //...
+
+    //External Control Utils
+    public void DisableCargoSecurity()
     {
-        
+        _isCargoSecurityOnline = false;
+        OnCargoSecurityDisabled?.Invoke();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void EnableCargoSecurity()
     {
-        
+        _isCargoSecurityOnline = true;
+        OnCargoSecurityEnabled?.Invoke();
     }
+
+    public void BustCargo()
+    {
+        _isCargoBusted = true;
+        OnCargoBusted?.Invoke();
+    }
+
+    //Getters & Setters
+    public bool IsCargoSecuritySystemOnline()
+    {
+        return _isCargoSecurityOnline;
+    }
+
+    public bool IsCargoBusted()
+    {
+        return _isCargoBusted;
+    }
+
 }

@@ -7,7 +7,6 @@ public class EnableSystemsOnSpawn : MonoBehaviour
     //Declarations
     [SerializeField] private DisableColliders _colliderDisablerRef;
     [SerializeField] private SystemDisabler _systemDisablerRef;
-    [SerializeField] private bool _isShipReady = false;
     [SerializeField] private string _spawnAnimStateName = "WarpIntro_anim";
     private float _animWaitDuration;
 
@@ -41,7 +40,6 @@ public class EnableSystemsOnSpawn : MonoBehaviour
     private IEnumerator EnableShipBehaviorsAfterSpawn()
     {
         yield return new WaitForSeconds(_animWaitDuration);
-        _isShipReady = true;
         EnableShipBehaviors();
     }
 
