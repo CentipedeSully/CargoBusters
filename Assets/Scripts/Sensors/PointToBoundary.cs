@@ -40,6 +40,7 @@ public class PointToBoundary : MonoBehaviour
 
     public void ShowPointer()
     {
+        _isThisShipPlayer = transform.parent.parent.GetComponent<ShipInformation>().IsPlayer();
         if (_isThisShipPlayer)
         {
             _isPointerVisible = true;

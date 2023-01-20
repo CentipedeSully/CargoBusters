@@ -35,7 +35,8 @@ public class CargoBusterBehavior : MonoBehaviour
             if (collision.gameObject.CompareTag("Ship") && collision.gameObject.GetComponent<ShipInformation>().GetShipID() != _shipID)
             {
                 //If the target's cargo is offline
-                if (collision.gameObject.GetComponent<ShipSystemReferencer>().GetCargoObject().GetComponent<CargoSystemController>().IsCargoSecuritySystemOnline() == false)
+                CargoSystemController targetsCargoSystems = collision.gameObject.GetComponent<ShipSystemReferencer>().GetCargoObject().GetComponent<CargoSystemController>();
+                if (targetsCargoSystems.IsCargoSecuritySystemOnline() == false && targetsCargoSystems.IsCargoBusted() == false)
                 {
                     _targetShipID = collision.gameObject.GetComponent<ShipInformation>().GetShipID();
                     _targetShip = collision.gameObject;

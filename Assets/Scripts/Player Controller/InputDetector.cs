@@ -13,6 +13,7 @@ public class InputDetector : MonoSingleton<InputDetector>
     [SerializeField] private bool _boostInput;
     [SerializeField] private bool _warpInput;
     [SerializeField] private bool _bustCargoInput;
+    [SerializeField] private bool _spawnPlayerInput;
 
     //Read inputs from the Input Action via UnityEvents assigned from the Inspector
     public void ReadMoveInput(InputAction.CallbackContext context)
@@ -57,6 +58,13 @@ public class InputDetector : MonoSingleton<InputDetector>
         else _bustCargoInput = false;
     }
 
+    public void ReadSpawnPlayerInput(InputAction.CallbackContext context)
+    {
+        if (context.started || context.performed)
+            _spawnPlayerInput = true;
+        else _spawnPlayerInput = false;
+    }
+
 
     //Getters
     public Vector2 GetMoveInput()
@@ -87,5 +95,10 @@ public class InputDetector : MonoSingleton<InputDetector>
     public bool GetBustCargoInput()
     {
         return _bustCargoInput;
+    }
+
+    public bool GetPlayerSpawnInput()
+    {
+        return _spawnPlayerInput;
     }
 }

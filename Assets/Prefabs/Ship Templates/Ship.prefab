@@ -3052,30 +3052,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1197598115963883055}
-        m_TargetAssemblyTypeName: SpawnLaserOnCommand, Assembly-CSharp
-        m_MethodName: SetShootInput
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 8786178936273411122}
-        m_TargetAssemblyTypeName: SpawnLaserOnCommand, Assembly-CSharp
-        m_MethodName: SetShootInput
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &2655467518765335414
 GameObject:
   m_ObjectHideFlags: 0
@@ -3506,7 +3482,7 @@ MonoBehaviour:
   _name: Shield Regen Delay Timer
   _isTicking: 0
   _timePassed: 0
-  _duration: 4
+  _duration: 7
   OnTimerExpired:
     m_PersistentCalls:
       m_Calls:

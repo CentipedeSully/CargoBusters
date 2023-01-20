@@ -14,6 +14,7 @@ public class CommuncateInputToPlayerObject : MonoSingleton<CommuncateInputToPlay
     private bool _boostInput = false;
     private bool _warpInput = false;
     private bool _bustCargoInput = false;
+    private bool _spawnPlayerInput = false;
 
     //References
     private EnginesSystemController _playerEnginesControllerRef;
@@ -26,6 +27,7 @@ public class CommuncateInputToPlayerObject : MonoSingleton<CommuncateInputToPlay
     private void Update()
     {
         GetInputsFromInputDetector();
+        SpawnPlayerOnInput();
         if (_isPlayerReferencesInitialized)
         {
             ShareMoveInputWithEnginesControllerScript();
@@ -51,6 +53,14 @@ public class CommuncateInputToPlayerObject : MonoSingleton<CommuncateInputToPlay
         _warpInput = InputDetector.Instance.GetWarpInput();
 
         _bustCargoInput = InputDetector.Instance.GetBustCargoInput();
+
+        _spawnPlayerInput = InputDetector.Instance.GetPlayerSpawnInput();
+    }
+
+    private void SpawnPlayerOnInput()
+    {
+        if (PlayerObjectManager.Instance.IsPlayerAlive() == false && _spawnPlayerInput)
+            PlayerObjectManager.Instance.SpawnPlayer();
     }
 
     private void ShareMoveInputWithEnginesControllerScript()

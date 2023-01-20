@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using SullysToolkit;
 using UnityEngine.Events;
+using Cinemachine;
 
 public class PlayerObjectManager : MonoSingleton<PlayerObjectManager>
 {
     //Declarations
     [SerializeField] private GameObject _playerShipPreference;
+    [SerializeField] private CinemachineVirtualCamera _cinemachineVirtualCameraObject;
     private GameObject _playerObjectRef;
     [SerializeField] private bool _isPlayerAlive = false;
 
@@ -25,13 +27,15 @@ public class PlayerObjectManager : MonoSingleton<PlayerObjectManager>
 
 
     //Utilities
-    public void SpawnPlayer(Transform position)
+    public void SpawnPlayer()
     {
         if (_isPlayerAlive == false)
         {
-            _playerObjectRef = Instantiate(_playerShipPreference, position.position, Quaternion.identity, ContainersManager.Instance.GetShipsContainer().transform);
+            _playerObjectRef = Instantiate(_playerShipPreference, Vector3.zero, Quaternion.identity, ContainersManager.Instance.GetShipsContainer().transform);
             _playerObjectRef.GetComponent<ShipInformation>().SetPlayerFlag(true);
             _isPlayerAlive = true;
+            _cinemachineVirtualCameraObject.Follow = _playerObjectRef.transform;
+            GetComponent<SimulateStarMovementFromPlayerMovement>().SetPlayerObject(_playerObjectRef);
             OnPlayerSpawned?.Invoke();
         }
             
@@ -51,6 +55,11 @@ public class PlayerObjectManager : MonoSingleton<PlayerObjectManager>
     public GameObject GetPlayerObject()
     {
         return _playerObjectRef;
+    }
+
+    public bool IsPlayerAlive()
+    {
+        return _isPlayerAlive;
     }
 
 }

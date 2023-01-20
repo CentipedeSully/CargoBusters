@@ -7,11 +7,11 @@ public class SimulateStarMovementFromPlayerMovement : MonoBehaviour
 {
     //Declarations
     [SerializeField] private GameObject _player;
+    [SerializeField] private bool _isPlayerSet = false;
     [SerializeField] private Vector3 _simulatedVelocity;
     [SerializeField] private string _VfxVelocityFieldName;
     private VisualEffect _VFXReference;
-    [SerializeField] private Rigidbody2D _playerRB;
-
+    private Rigidbody2D _playerRB;
 
 
 
@@ -19,13 +19,16 @@ public class SimulateStarMovementFromPlayerMovement : MonoBehaviour
     private void Awake()
     {
         _VFXReference = GetComponent<VisualEffect>();
-        _playerRB = _player.GetComponent<Rigidbody2D>();
+        
     }
 
     private void Update()
     {
-        CalculateParticleMovementVelocity();
-        SetVFXPositionToPlayerPosition();
+        if (_isPlayerSet)
+        {
+            CalculateParticleMovementVelocity();
+            SetVFXPositionToPlayerPosition();
+        }
     }
 
 
@@ -47,9 +50,14 @@ public class SimulateStarMovementFromPlayerMovement : MonoBehaviour
             transform.position = _player.transform.position;
     }
 
+    public void SetPlayerObject(GameObject player)
+    {
+        if (player != null)
+        {
+            _player = player;
+            _isPlayerSet = true;
 
-
-
-
-
+            _playerRB = _player.GetComponent<Rigidbody2D>();
+        }
+    }
 }
