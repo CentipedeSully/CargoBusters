@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SullysToolkit;
 
-public class CommuncateInputToPlayerObject : MonoBehaviour
+public class CommuncateInputToPlayerObject : MonoSingleton<CommuncateInputToPlayerObject>
 {
     //Declarations
-    [SerializeField] private GameObject _playerShipObject;
+    private GameObject _playerShipObject;
+    private bool _isPlayerReferencesInitialized = false;
     private Vector2 _moveDirection = Vector2.zero;
     private float _turnInput = 0;
     private bool _shootInput = false;
@@ -21,32 +23,21 @@ public class CommuncateInputToPlayerObject : MonoBehaviour
 
 
     //monos
-    private void Start()
-    {
-        InitializeReferences();
-    }
-
-
     private void Update()
     {
         GetInputsFromInputDetector();
-        ShareMoveInputWithEnginesControllerScript();
-        ShareShootInputWithWeaponsControllerScript();
-        ShareWarpInputWithWarpControllerScript();
-        ShareBusterInputWithBusterBehavior();
+        if (_isPlayerReferencesInitialized)
+        {
+            ShareMoveInputWithEnginesControllerScript();
+            ShareShootInputWithWeaponsControllerScript();
+            ShareWarpInputWithWarpControllerScript();
+            ShareBusterInputWithBusterBehavior();
+        }
+        
     }
 
 
     //Utils
-    private void InitializeReferences()
-    {
-        //Establish Refererences
-        _playerEnginesControllerRef = _playerShipObject.GetComponent<ShipSystemReferencer>().GetEnginesObject().GetComponent<EnginesSystemController>();
-        _playerShotCommanderScriptRef = _playerShipObject.GetComponent<ShipSystemReferencer>().GetWeaponsObject().GetComponent<WeaponsSystemController>();
-        _playerWarpCoreControllerRef = _playerShipObject.GetComponent<ShipSystemReferencer>().GetWarpCoreObject().GetComponent<WarpCoreSystemController>();
-        _playerCargoBusterRef = _playerShipObject.GetComponent<ShipSystemReferencer>().GetCargoBuster();
-    }
-
     private void GetInputsFromInputDetector()
     {
         _moveDirection = InputDetector.Instance.GetMoveInput();
@@ -81,6 +72,28 @@ public class CommuncateInputToPlayerObject : MonoBehaviour
     private void ShareBusterInputWithBusterBehavior()
     {
         _playerCargoBusterRef.SetBustCommand(_bustCargoInput);
+    }
+
+    //External Control Utils
+    public void InitializePlayerObjectReferences()
+    {
+        //Establish Refererences to the player
+        _playerShipObject = PlayerObjectManager.Instance.GetPlayerObject();
+        if (_playerShipObject != null)
+            _isPlayerReferencesInitialized = true;
+
+        if (_isPlayerReferencesInitialized)
+        {
+            _playerEnginesControllerRef = _playerShipObject.GetComponent<ShipSystemReferencer>().GetEnginesObject().GetComponent<EnginesSystemController>();
+            _playerShotCommanderScriptRef = _playerShipObject.GetComponent<ShipSystemReferencer>().GetWeaponsObject().GetComponent<WeaponsSystemController>();
+            _playerWarpCoreControllerRef = _playerShipObject.GetComponent<ShipSystemReferencer>().GetWarpCoreObject().GetComponent<WarpCoreSystemController>();
+            _playerCargoBusterRef = _playerShipObject.GetComponent<ShipSystemReferencer>().GetCargoBuster();
+        }
+    }
+
+    public void DereferencePlayer()
+    {
+        _isPlayerReferencesInitialized = false;
     }
 
 }

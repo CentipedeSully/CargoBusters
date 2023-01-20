@@ -2293,6 +2293,15 @@ MonoBehaviour:
   _bustDurationMax: 5
   _currentBustProgress: 0
   _bustCommand: 0
+  OnBustStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnBustInterrupted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnBustCompleted:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!58 &6129799750097929426
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -6948,13 +6957,7 @@ MonoBehaviour:
   OnCargoSecurityEnabled:
     m_PersistentCalls:
       m_Calls: []
-  OnCargoBustStarted:
-    m_PersistentCalls:
-      m_Calls: []
-  OnCargoBustInterrupted:
-    m_PersistentCalls:
-      m_Calls: []
-  OnCargoBustCompleted:
+  OnCargoBusted:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &7169830865923600743

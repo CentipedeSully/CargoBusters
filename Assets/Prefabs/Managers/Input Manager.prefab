@@ -139,6 +139,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 0603e25f-7893-4557-b704-2492e5ea6f95
     m_ActionName: Player/Toggle Warp Sequence[/Keyboard/z]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7335180680816529135}
+        m_TargetAssemblyTypeName: InputDetector, Assembly-CSharp
+        m_MethodName: ReadBustCargoInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 3782310f-cb50-482f-ad2c-f6977e4c111f
+    m_ActionName: Player/Bust Cargo[/Keyboard/f]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -161,6 +177,7 @@ MonoBehaviour:
   _shootInput: 0
   _boostInput: 0
   _warpInput: 0
+  _bustCargoInput: 0
 --- !u!114 &7335180680816529121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,4 +190,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2684bc12598ff4348997b157969b00cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerShipObject: {fileID: 0}

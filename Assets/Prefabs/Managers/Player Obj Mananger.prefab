@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6872647270389647130}
+  - component: {fileID: 7114995937327015987}
+  - component: {fileID: 5529592172153825451}
   - component: {fileID: 6872647270389647335}
   - component: {fileID: 6872647270389647332}
   - component: {fileID: 6872647270389647333}
@@ -34,6 +36,78 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7114995937327015987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6872647270389647131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7a4f364c81bf9143b96db3f3ab7f397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerShipPreference: {fileID: 0}
+  _isPlayerAlive: 0
+  OnPlayerSpawned:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: CommuncateInputToPlayerObject, Assembly-CSharp
+        m_MethodName: InitializePlayerObjectReferences
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnPlayerDeath:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: CommuncateInputToPlayerObject, Assembly-CSharp
+        m_MethodName: DereferencePlayer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &5529592172153825451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6872647270389647131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a45cb19528fb9d49a993248d1572990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _currentScrap: 0
+  _scrapTotalCollected: 0
+  _currentEnergyCells: 0
+  _energyCellsTotalCollected: 0
+  _currentWarpCoils: 0
+  _warpCoilsTotoalCollected: 0
+  _currentPlasmaAccelerators: 0
+  _plasmaAcceleratorsTotoalCollected: 0
+  _currentCannonAlloys: 0
+  _cannonAlloysTotalCollected: 0
+  OnItemAmountIncremented:
+    m_PersistentCalls:
+      m_Calls: []
+  OnItemAmountDecremented:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &6872647270389647335
 MonoBehaviour:
   m_ObjectHideFlags: 0
