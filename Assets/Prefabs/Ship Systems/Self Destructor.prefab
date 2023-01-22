@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1586462805481857477}
   - component: {fileID: 7308546648912729750}
   - component: {fileID: 5305009366152753438}
+  - component: {fileID: 7902098905539003264}
   m_Layer: 0
   m_Name: Self Destructor
   m_TagString: Untagged
@@ -95,23 +96,31 @@ MonoBehaviour:
   _delayBetweenMinorExplosionsMax: 0.5
   _minorExplosionForceMag: 0.1
   _minorExplosionRadius: 0.15
-  _minorExplosionParticles: 8
-  _minorExplosionDuration: 0.15
   _minPositionX: -0.5
   _maxPositionX: 0.5
   _minPositionY: -1.35
   _maxPositionY: 1.35
   _majorExplosionForceMag: 1
   _majorExplosionRadius: 1
-  _majorExplosionParticles: 20
-  _majorExplosionDuration: 0.35
   _majorExplosionDamage: 1
   OnExplosionsCompleted:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: DisableSprite, Assembly-CSharp
-        m_MethodName: DisableSpriteRenderer
+        m_TargetAssemblyTypeName: DamageVisualController, Assembly-CSharp
+        m_MethodName: FixAllVisualDamage
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: ExplosionAnimatorController, Assembly-CSharp
+        m_MethodName: TriggerExplosion
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -124,12 +133,12 @@ MonoBehaviour:
       - m_Target: {fileID: 5305009366152753438}
         m_TargetAssemblyTypeName: DestroyShip, Assembly-CSharp
         m_MethodName: DestroyShipObject
-        m_Mode: 1
+        m_Mode: 4
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
-          m_FloatArgument: 0
+          m_FloatArgument: 1
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
@@ -145,4 +154,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a0225cd96e655b4990474ffae13ba92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _delay: 0.35
+  _delay: 1
+--- !u!114 &7902098905539003264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1586462805481857479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1565c9ee6d86e2647bc3adfb3d46dfa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

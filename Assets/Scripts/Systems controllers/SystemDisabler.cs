@@ -23,6 +23,8 @@ public class SystemDisabler : MonoBehaviour
     private CargoSystemController _cargoSystemControllerRef;
     private CargoBusterBehavior _cargoBusterRef;
 
+    [Header("Events")]
+    public UnityEvent OnSystemsDisabled;
     public UnityEvent onBoundaryTimerStarted;
     public UnityEvent onBoundaryTimerInterrupted;
     public UnityEvent OnBoundaryTimerExpired;
@@ -66,6 +68,8 @@ public class SystemDisabler : MonoBehaviour
 
         _cargoSystemControllerRef.DisableCargoSecurity();
         _cargoBusterRef.DisableBuster();
+
+        OnSystemsDisabled?.Invoke();
     }
 
     public void EnableAllSystems()

@@ -4,16 +4,24 @@ using UnityEngine;
 
 public class ReportDeath : MonoBehaviour
 {
-    [SerializeField] private InstanceCounter _instanceCounterRef;
+    //declarations
+    private bool _isDeathAlreadyReported = false;
+
+    //monos
 
 
-    private void Awake()
+    //utils
+    public void ReportShipDeath()
     {
-        _instanceCounterRef = GameObject.Find("Game Management Utilities").GetComponent<InstanceCounter>();
-    }
+        if (_isDeathAlreadyReported == false)
+        {
+            if (transform.parent.GetComponent<ShipInformation>().IsPlayer())
+                PlayerObjectManager.Instance.ReportPlayerDeath();
 
-    public void ReportDeathToCounter()
-    {
-        _instanceCounterRef.DecrementCount();
+            else
+                SpawnController.Instance.ReportEnemyDeath();
+
+            _isDeathAlreadyReported = true;
+        }
     }
 }

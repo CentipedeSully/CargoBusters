@@ -7,6 +7,8 @@ using SullysToolkit;
 public class PlayerInventoryManager : MonoSingleton<PlayerInventoryManager>
 {
     //Declarations
+    [SerializeField] private bool _isDebugEnabled = false;
+
     [Tooltip("ItemCode: 0")]
     [SerializeField] private int _currentScrap = 0;
     [SerializeField] private int _scrapTotalCollected = 0;
@@ -27,7 +29,7 @@ public class PlayerInventoryManager : MonoSingleton<PlayerInventoryManager>
     [SerializeField] private int _currentCannonAlloys = 0;
     [SerializeField] private int _cannonAlloysTotalCollected = 0;
 
-
+    [Header("Events")]
     public UnityEvent<int, int> OnItemAmountIncremented;
     public UnityEvent<int, int> OnItemAmountDecremented;
 
@@ -37,6 +39,18 @@ public class PlayerInventoryManager : MonoSingleton<PlayerInventoryManager>
 
 
     //Utilites
+    private void LogItemAdded(int count, string itemName)
+    {
+        if (_isDebugEnabled)
+            Debug.Log(count + " " + itemName + " added to inventory");
+    }
+
+    private void LogItemRemoved(int count, string itemName)
+    {
+        if (_isDebugEnabled)
+            Debug.Log(count + " " + itemName + " removed to inventory");
+    }
+
     public void IncrementItemCount(int itemCode, int amount)
     {
         if (amount < 0)
@@ -47,26 +61,31 @@ public class PlayerInventoryManager : MonoSingleton<PlayerInventoryManager>
             case 0:
                 _scrapTotalCollected += amount;
                 _currentScrap += amount;
+                LogItemAdded(amount, "scrap");
                 break;
 
             case 1:
                 _energyCellsTotalCollected += amount;
                 _currentEnergyCells += amount;
+                LogItemAdded(amount, "energy cells");
                 break;
 
             case 2:
                 _warpCoilsTotoalCollected += amount;
                 _currentWarpCoils += amount;
+                LogItemAdded(amount, "warp coils");
                 break;
 
             case 3:
                 _plasmaAcceleratorsTotoalCollected += amount;
                 _currentPlasmaAccelerators += amount;
+                LogItemAdded(amount, "plasma accelerators");
                 break;
 
             case 4:
                 _cannonAlloysTotalCollected += amount;
                 _currentCannonAlloys += amount;
+                LogItemAdded(amount, "cannon alloys");
                 break;
         }
 
@@ -84,6 +103,7 @@ public class PlayerInventoryManager : MonoSingleton<PlayerInventoryManager>
                 {
                     _currentScrap -= amount;
                     OnItemAmountDecremented?.Invoke(itemCode, amount);
+                    LogItemRemoved(amount, "scrap");
                 }
                     
                 break;
@@ -93,6 +113,7 @@ public class PlayerInventoryManager : MonoSingleton<PlayerInventoryManager>
                 {
                     _currentEnergyCells -= amount;
                     OnItemAmountDecremented?.Invoke(itemCode, amount);
+                    LogItemRemoved(amount, "energy cells");
                 }
                     
                 break;
@@ -102,6 +123,7 @@ public class PlayerInventoryManager : MonoSingleton<PlayerInventoryManager>
                 {
                     _currentWarpCoils -= amount;
                     OnItemAmountDecremented?.Invoke(itemCode, amount);
+                    LogItemRemoved(amount, "warp coils");
                 }
                     
                 break;
@@ -111,6 +133,7 @@ public class PlayerInventoryManager : MonoSingleton<PlayerInventoryManager>
                 {
                     _currentPlasmaAccelerators -= amount;
                     OnItemAmountDecremented?.Invoke(itemCode, amount);
+                    LogItemRemoved(amount, "plasma accelerators");
                 }
                     
                 break;
@@ -120,6 +143,7 @@ public class PlayerInventoryManager : MonoSingleton<PlayerInventoryManager>
                 {
                     _currentCannonAlloys -= amount;
                     OnItemAmountDecremented?.Invoke(itemCode, amount);
+                    LogItemRemoved(amount, "cannon alloys");
                 }
 
                 break;

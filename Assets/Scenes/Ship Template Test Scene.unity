@@ -153,6 +153,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 835124012}
+  - component: {fileID: 835124013}
   m_Layer: 0
   m_Name: Spawn Manager
   m_TagString: Untagged
@@ -175,6 +176,45 @@ Transform:
   m_Father: {fileID: 1604120785}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &835124013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 835124011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a43a12f1f218cba4282f499eb4e51006, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isDebugEnabled: 1
+  _enemyShipPrefabsList:
+  - {fileID: 2655467519268645366, guid: efdddb2579a20384085064decd6ca8d6, type: 3}
+  _spawnPositionsList: []
+  _enemiesSpawned: 0
+  _totalEnemiesSpawned: 0
+  _enemiesDefeated: 0
+  _totalEnemiesDefeated: 0
+  _maxEnemyCountThisWave: 1
+  _isSpawning: 0
+  _isWaveInProgress: 0
+  _intermissionDuration: 60
+  _extraEnemyModifier: 2
+  _wavesCompletedCount: 0
+  _spawnIntervalDelay: 1
+  OnWaveStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnWaveEnded:
+    m_PersistentCalls:
+      m_Calls: []
+  OnIntermissionStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnIntermissionEnded:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &880052351 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6872647270389647130, guid: 1f51459124f1d424aa5549e891ce14f0, type: 3}
@@ -723,7 +763,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8921061386943977331, guid: 3205ab6ea1f09f54fb427e578232cfa9, type: 3}
       propertyPath: m_Radius
-      value: 5
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 8921061386943977343, guid: 3205ab6ea1f09f54fb427e578232cfa9, type: 3}
       propertyPath: m_Name
