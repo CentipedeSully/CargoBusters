@@ -11,6 +11,8 @@ public class CargoBusterBehavior : MonoBehaviour
     [SerializeField] private bool _isTargetAvailable = false;
     private GameObject _targetShip;
     [SerializeField] private int _targetShipID;
+    [SerializeField] private float _absoluteTargetDistance = Mathf.Infinity;
+    [SerializeField] private float _busterRadius = 2;
     [SerializeField] private float _bustDurationMax = 5;
     [SerializeField] private float _currentBustProgress = 0;
     [SerializeField] private bool _bustCommand = false;
@@ -27,7 +29,7 @@ public class CargoBusterBehavior : MonoBehaviour
     {
         _shipID = transform.parent.parent.GetComponent<ShipInformation>().GetShipID();
     }
-
+    /*
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (_isTargetAvailable == false)
@@ -54,14 +56,79 @@ public class CargoBusterBehavior : MonoBehaviour
                 ResetTargeter();
         }
     }
+    */
 
     private void Update()
     {
+        FindTarget();
         BustTargetCargoSystemOnInput();        
     }
 
 
     //Utilites
+    private void FindTarget()
+    {
+        //OverlapCircle
+        Collider2D[] collidersInRange = Physics2D.OverlapCircleAll(transform.position, _busterRadius);
+
+        //if target NOT set, then Save the first Valid targetShip, if one exists
+        if (_isTargetAvailable == false)
+        {
+            foreach (Collider2D  detectedCollider in collidersInRange)
+            {
+                if (IsObjectTargetable(detectedCollider.gameObject))
+                    SetTarget(detectedCollider.gameObject);
+            }
+        }
+
+        //else if target out of range, reset targeting data
+        else
+        {
+            CalculateAbsoluteDistanceFromTarget();
+            if (_absoluteTargetDistance > _busterRadius)
+                ResetTargeter();
+        }
+    }
+
+    private bool IsObjectTargetable(GameObject possibleTarget)
+    {
+        ShipInformation targetsShipInfoRef = possibleTarget.GetComponent<ShipInformation>();
+        int selfShipID = transform.parent.parent.GetComponent<ShipInformation>().GetShipID();
+
+        //is this object a ship?
+        if (targetsShipInfoRef == null)
+            return false;
+
+        else
+        {
+            CargoSystemController targetsCargoController = possibleTarget.GetComponent<ShipSystemReferencer>().GetCargoObject().GetComponent<CargoSystemController>();
+
+            //if the target isn't the buster's ship itself, and if the cargo sysytem is offline and isn't busted yet
+            if (targetsShipInfoRef.GetShipID() != selfShipID && !targetsCargoController.IsCargoSecuritySystemOnline() && !targetsCargoController.IsCargoBusted())
+                return true;
+
+            else return false;
+        }
+    }
+
+    private void SetTarget(GameObject shipObject)
+    {
+        if (shipObject == null)
+            Debug.LogError("CargoBusterERROR: Tried to set target to null value");
+        else
+        {
+            _isTargetAvailable = true;
+            _targetShip = shipObject;
+            _targetShipID = shipObject.GetComponent<ShipInformation>().GetShipID();
+            CalculateAbsoluteDistanceFromTarget();
+        }
+    }
+
+    private void CalculateAbsoluteDistanceFromTarget()
+    {
+        _absoluteTargetDistance = Mathf.Abs(Vector2.Distance(_targetShip.transform.position, transform.position));
+    }
+
     private void BustTargetCargoSystemOnInput()
     {
         if (_isBusterOnline && _bustCommand && _isTargetAvailable)
@@ -88,11 +155,14 @@ public class CargoBusterBehavior : MonoBehaviour
             InterruptBust();
     }
 
+
+
     private void ResetTargeter()
     {
         _isTargetAvailable = false;
         _targetShip = null;
         _targetShipID = 0;
+        _absoluteTargetDistance = Mathf.Infinity;
     }
 
     private void CompleteBust()

@@ -72,6 +72,19 @@ public class SystemDisabler : MonoBehaviour
         OnSystemsDisabled?.Invoke();
     }
 
+    public void DisableSystemsWithoutReportingDeath()
+    {
+        _shipInfoRef.SetShipDisabled(true);
+        _weaponsSystemControllerRef.DisableWeapons();
+        _enginesSystemControllerRef.DisableEngines();
+        _warpCoreSystemControllerRef.DisableSystem();
+        if (_shieldsExist)
+            _shieldsControllerRef.DisableShields();
+
+        _cargoSystemControllerRef.DisableCargoSecurity();
+        _cargoBusterRef.DisableBuster();
+    }
+
     public void EnableAllSystems()
     {
         _shipInfoRef.SetShipDisabled(false);
@@ -106,7 +119,7 @@ public class SystemDisabler : MonoBehaviour
 
     public void StartBoundaryTimer()
     {
-        if (_isPenalized == false)
+        if (_isPenalized == false && _shipInfoRef.IsPlayer())
         {
             if (_timerReference == null)
             {
@@ -130,5 +143,10 @@ public class SystemDisabler : MonoBehaviour
             _timerReference = null;
         }
        
+    }
+
+    public bool IsDisablerTicking()
+    {
+        return _isDisablerTicking;
     }
 }

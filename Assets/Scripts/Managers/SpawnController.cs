@@ -8,6 +8,7 @@ using UnityEngine.Events;
 public class SpawnController : MonoSingleton<SpawnController>
 {
     //Declaration
+    [SerializeField] private GameObject _enemyDotSensorPrefab;
     [SerializeField] private bool _isDebugEnabled = true;
     [SerializeField] private List<GameObject> _enemyShipPrefabsList;
     [SerializeField] private List<Transform> _spawnPositionsList;
@@ -28,6 +29,8 @@ public class SpawnController : MonoSingleton<SpawnController>
     private WaitForSeconds _cachedSpawnIntervalWaitForSeconds;
     private WaitForSeconds _cachedIntermissionWaitForSeconds;
 
+    private WaitForSeconds _cachedShipSpawnAnimDelayWait;
+
     [Header("Events")]
     public UnityEvent OnWaveStarted;
     public UnityEvent OnWaveEnded;
@@ -36,8 +39,9 @@ public class SpawnController : MonoSingleton<SpawnController>
 
 
     //Monos
-    private void Awake()
+    private void Start()
     {
+        
         _cachedSpawnIntervalWaitForSeconds = new WaitForSeconds(_spawnIntervalDelay);
         _cachedIntermissionWaitForSeconds = new WaitForSeconds(_intermissionDuration);
     }
@@ -60,7 +64,11 @@ public class SpawnController : MonoSingleton<SpawnController>
                 GameObject randomEnemyPrefab = _enemyShipPrefabsList[Random.Range(0, _enemyShipPrefabsList.Count)];
                 Transform randomSpawnPosition = _spawnPositionsList[Random.Range(0, _spawnPositionsList.Count)];
 
-                Instantiate(randomEnemyPrefab, randomSpawnPosition.position, Quaternion.identity, ContainersManager.Instance.GetShipsContainer().transform);
+                //Spawn enemy at random position and dot sensor on player
+                GameObject enemyShip = Instantiate(randomEnemyPrefab, randomSpawnPosition.position, Quaternion.identity, ContainersManager.Instance.GetShipsContainer().transform);
+                SetupPointerToEnemy(enemyShip);
+                SetupEnemyTargetingAI(enemyShip);
+
                 _enemiesSpawned++;
                 _totalEnemiesSpawned++;
 
@@ -96,8 +104,26 @@ public class SpawnController : MonoSingleton<SpawnController>
         }
     }
 
+    private void SetupPointerToEnemy(GameObject enemy)
+    {
+        GameObject enemyDotObj = Instantiate(_enemyDotSensorPrefab, PlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetSensorObject().transform);
+        enemyDotObj.GetComponent<PointToEnemy>().SetEnemyTarget(enemy);
+        enemyDotObj.GetComponent<PointToEnemy>().EnablePointer();
+    }
+
+    private void SetupEnemyTargetingAI(GameObject enemy)
+    {
+        AiController enemyAiController = enemy.GetComponent<ShipSystemReferencer>().GetAiBehaviorObject().GetComponent<AiController>();
+        enemyAiController.EnterPursuit(PlayerObjectManager.Instance.GetPlayerObject());
+    }
 
     //External Control Utils
+    public void StartGameSpawning()
+    {
+        _isGameActive = true;
+        StartCoroutine(SpawnEnemies());
+    }
+
     public void ReportEnemyDeath()
     {
         _enemiesDefeated++;
@@ -108,6 +134,7 @@ public class SpawnController : MonoSingleton<SpawnController>
     public void InterruptGame()
     {
         StopAllCoroutines();
+        _isGameActive = false;
         _isSpawning = false;
         _isWaveInProgress = false;
         LogGameInterrupted();

@@ -46,7 +46,7 @@ public class EnableSystemsOnSpawn : MonoBehaviour
     public void DisableShipBehaviors()
     {
         _colliderDisablerRef.DisableCompositeCollider();
-        _systemDisablerRef.DisableAllSystems();
+        _systemDisablerRef.DisableSystemsWithoutReportingDeath();
     }
 
     public void EnableShipBehaviors()

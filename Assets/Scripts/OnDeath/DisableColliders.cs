@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class DisableColliders : MonoBehaviour
 {
-    [SerializeField]private bool _isCollidersEnabled = true;
     [SerializeField] private GameObject _collidersParentObject;
 
 

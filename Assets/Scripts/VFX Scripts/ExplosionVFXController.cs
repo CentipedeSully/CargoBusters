@@ -10,7 +10,7 @@ public class ExplosionVFXController : MonoBehaviour, IExplosionVFXController
     [SerializeField] private int _maxParticleSpawnRate = 48;
     [SerializeField] private float _explosionDuration = .15f;
     [SerializeField] private string _particleSpawnRateFieldName = "Particle Spawn Rate";
-    [SerializeField] private string _vfxRadiusFieldName = "Radius";
+    //[SerializeField] private string _vfxRadiusFieldName = "Radius";
     [SerializeField] private float _radius = 1;
     private float _timePassed;
     private bool _isExplosionStarted = false;
@@ -90,5 +90,10 @@ public class ExplosionVFXController : MonoBehaviour, IExplosionVFXController
     public void SetVFXRadius(float value)
     {
         _radius = value;
+    }
+
+    public bool IsExplosionOver()
+    {
+        return _isExplosionOver;
     }
 }

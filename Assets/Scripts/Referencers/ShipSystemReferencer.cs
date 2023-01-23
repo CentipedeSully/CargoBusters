@@ -9,6 +9,7 @@ public class ShipSystemReferencer : MonoBehaviour
     private CompositeCollider2D _compositeColliderRef;
     private Rigidbody2D _rigidbodyRef;
 
+    [SerializeField] private GameObject _aiBehaviorObject;
     [SerializeField] private GameObject _weaponsSystems;
     [SerializeField] private GameObject _shieldsSystems;
     [SerializeField] private GameObject _enginesSystems;
@@ -16,6 +17,7 @@ public class ShipSystemReferencer : MonoBehaviour
     [SerializeField] private GameObject _crewSystems;
     [SerializeField] private GameObject _cargoSystems;
     [SerializeField] private GameObject _auxillarySystems;
+    [SerializeField] private GameObject _sensorSystems;
     [SerializeField] private GameObject _warpCoreSystems;
     [SerializeField] private CargoBusterBehavior _cargoBusterRef;
 
@@ -44,6 +46,11 @@ public class ShipSystemReferencer : MonoBehaviour
         return _rigidbodyRef;
     }
 
+
+    public GameObject GetAiBehaviorObject()
+    {
+        return _aiBehaviorObject;
+    }
 
     public GameObject GetWeaponsObject()
     {
@@ -83,6 +90,11 @@ public class ShipSystemReferencer : MonoBehaviour
     public GameObject GetAuxillaryObject()
     {
         return _auxillarySystems;
+    }
+
+    public GameObject GetSensorObject()
+    {
+        return _sensorSystems;
     }
 
     public GameObject GetWarpCoreObject()

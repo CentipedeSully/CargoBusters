@@ -51,8 +51,8 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.15}
-  m_Size: {x: 0.1, y: 0.36}
+  m_Offset: {x: 0.0028348565, y: -0.14998831}
+  m_Size: {x: 0.17382586, y: 0.39401624}
   m_Direction: 0
 --- !u!114 &7179898187681162582
 MonoBehaviour:
@@ -72,6 +72,7 @@ MonoBehaviour:
   _speedOffset: {x: 0, y: 0}
   _forceMagnitude: 0
   _explosionPrefab: {fileID: 9000114151373274540, guid: 3f05e644e710a6840b1b663524ece7f5, type: 3}
+  _explosionContainerName: Explosion Container
   _damage: 0
   _shooterID: 0
   _isShooterIDSet: 0

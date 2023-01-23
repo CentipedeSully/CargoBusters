@@ -12,6 +12,7 @@ public class IntegrityThresholdEvaluator : MonoBehaviour
     [Tooltip("An Integrity percentage at this value or below are considered 'low'. Anything in between this value and the higher value is considered 'moderate'")]
     [SerializeField] [Range(0, 1)] private float _lowThreshold = .3f;
 
+    [SerializeField] private bool _isDebugEnabled = false;
     private float _currentIntegrityPercentage = 1;
     private bool _isIntegrityHigh = false;
     private bool _isIntegrityModerate = false;
@@ -88,17 +89,20 @@ public class IntegrityThresholdEvaluator : MonoBehaviour
 
     public void LogEnteringLowIntegrity()
     {
-        Debug.Log($"=={_integrityBehaviorRef.GetName().ToUpper()} CRITICAL==");
+        if (_isDebugEnabled)
+            Debug.Log($"=={_integrityBehaviorRef.GetName().ToUpper()} CRITICAL==");
     }
 
     public void LogEnteringModerateIntegrity()
     {
-        Debug.Log($"=={_integrityBehaviorRef.GetName().ToUpper()} WARNING==");
+        if (_isDebugEnabled)
+            Debug.Log($"=={_integrityBehaviorRef.GetName().ToUpper()} WARNING==");
     }
 
     public void LogEnteringHighIntegrity()
     {
-        Debug.Log($"=={_integrityBehaviorRef.GetName().ToUpper()} OPTIMAL==");
+        if (_isDebugEnabled)
+            Debug.Log($"=={_integrityBehaviorRef.GetName().ToUpper()} OPTIMAL==");
     }
 
 

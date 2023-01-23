@@ -6,6 +6,7 @@ public class ReportDeath : MonoBehaviour
 {
     //declarations
     private bool _isDeathAlreadyReported = false;
+    [SerializeField] private int _timesReported = 0;
 
     //monos
 
@@ -13,6 +14,7 @@ public class ReportDeath : MonoBehaviour
     //utils
     public void ReportShipDeath()
     {
+        _timesReported++;
         if (_isDeathAlreadyReported == false)
         {
             if (transform.parent.GetComponent<ShipInformation>().IsPlayer())

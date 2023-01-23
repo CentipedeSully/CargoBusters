@@ -9,22 +9,27 @@ public class PlayerInventoryManager : MonoSingleton<PlayerInventoryManager>
     //Declarations
     [SerializeField] private bool _isDebugEnabled = false;
 
+    [Header("Scrap")]
     [Tooltip("ItemCode: 0")]
     [SerializeField] private int _currentScrap = 0;
     [SerializeField] private int _scrapTotalCollected = 0;
 
+    [Header("Energy Cells")]
     [Tooltip("ItemCode: 1")]
     [SerializeField] private int _currentEnergyCells = 0;
     [SerializeField] private int _energyCellsTotalCollected = 0;
 
+    [Header("Warp Coils")]
     [Tooltip("ItemCode: 2")]
     [SerializeField] private int _currentWarpCoils = 0;
     [SerializeField] private int _warpCoilsTotoalCollected = 0;
 
+    [Header("Plasma Accelerators")]
     [Tooltip("ItemCode: 3")]
     [SerializeField] private int _currentPlasmaAccelerators = 0;
     [SerializeField] private int _plasmaAcceleratorsTotoalCollected = 0;
 
+    [Header("Cannon Alloys")]
     [Tooltip("ItemCode: 4")]
     [SerializeField] private int _currentCannonAlloys = 0;
     [SerializeField] private int _cannonAlloysTotalCollected = 0;

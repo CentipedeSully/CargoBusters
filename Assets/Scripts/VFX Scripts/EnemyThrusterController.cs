@@ -4,30 +4,28 @@ using UnityEngine;
 
 public class EnemyThrusterController : MonoBehaviour
 {
-    private ApproachPlayerBehavior _approachPlayerScriptRef;
+    private ApproachTargetBehavior _approachPlayerScriptRef;
     private OldThrusterToggler _thrusterTogglerRef;
 
 
 
     private void Awake()
     {
-        _approachPlayerScriptRef = GetComponent<ApproachPlayerBehavior>();
+        _approachPlayerScriptRef = GetComponent<ApproachTargetBehavior>();
         _thrusterTogglerRef = GetComponent<OldThrusterToggler>();
     }
 
 
     private void Update()
     {
-        ControlThrusters();
+        //ControlThrusters();
     }
 
 
-
-
-    private void ControlThrusters()
-    {
-        if (_approachPlayerScriptRef.GetShipInput().y > 0)
-            _thrusterTogglerRef.ActivateForwardsThrusters();
-        else _thrusterTogglerRef.DeactivateForwardsThrusters();
-    }
+    //private void ControlThrusters()
+    //{
+    //    if (_approachPlayerScriptRef.GetShipInput().y > 0)
+    //        _thrusterTogglerRef.ActivateForwardsThrusters();
+    //    else _thrusterTogglerRef.DeactivateForwardsThrusters();
+    //}
 }

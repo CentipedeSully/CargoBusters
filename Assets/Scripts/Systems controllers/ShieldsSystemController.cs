@@ -23,6 +23,11 @@ public class ShieldsSystemController : MonoBehaviour
         _shieldIntegrityRef = GetComponent<IntegrityBehavior>();
     }
 
+    private void Start()
+    {
+        UpdateShieldsStatus();
+    }
+
 
     //Utilites
     public bool IsShieldsOnline()

@@ -23,6 +23,7 @@ public class ExplodeBehavior : MonoBehaviour
             _explodeCommand = false;
 
             GetComponent<ExplosionAnimatorController>().TriggerExplosion();
+            GetComponent<AudioSource>().Play();
             Invoke("DestroySelf", GetComponent<ExplosionAnimatorController>().GetAnimationDuration());
         }
     }
@@ -31,6 +32,7 @@ public class ExplodeBehavior : MonoBehaviour
     //Utilities
     private void PushAwayAllRigidbodiesInRadius()
     {
+        
         //Collect all colliders within the radius
         Collider2D[] allCollidersWithinArea = Physics2D.OverlapCircleAll(transform.position, _radius);
 
@@ -38,15 +40,13 @@ public class ExplodeBehavior : MonoBehaviour
         for (int i = 0; i < allCollidersWithinArea.Length; i++)
         {
             //Debug.Log($"{allCollidersWithinArea[i].gameObject.name} Rigidbody Detected: {allCollidersWithinArea[i].gameObject.GetComponent<Rigidbody2D>() != null}");
+            
             if (allCollidersWithinArea[i].gameObject.GetComponent<Rigidbody2D>() != null)
             {
                 PushRigidbodyAway(allCollidersWithinArea[i].gameObject.GetComponent<Rigidbody2D>());
                 TryDamageObject(allCollidersWithinArea[i].gameObject);
             }
-                
         }
-
-
         
     }
 
@@ -67,9 +67,11 @@ public class ExplodeBehavior : MonoBehaviour
 
     private void TryDamageObject(GameObject damagableObject)
     {
-        if (damagableObject.GetComponent<DamageHandler>() != null)
+        if (damagableObject != null)
         {
-            damagableObject.GetComponent<DamageHandler>().ProcessDamage( _damage);
+            if (damagableObject.GetComponent<DamageHandler>() != null)
+                damagableObject.GetComponent<DamageHandler>().ProcessDamage(_damage);
+            else Debug.Log("No Damage Handler Detected on Object (" + damagableObject.name + "). Ignoring damage");
         }
     }
 

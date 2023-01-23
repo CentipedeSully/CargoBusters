@@ -48,7 +48,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7a4f364c81bf9143b96db3f3ab7f397, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerShipPreference: {fileID: 0}
+  _playerShipPreference: {fileID: 2655467519268645366, guid: efdddb2579a20384085064decd6ca8d6, type: 3}
+  _cinemachineVirtualCameraObject: {fileID: 0}
   _isPlayerAlive: 0
   OnPlayerSpawned:
     m_PersistentCalls:
@@ -56,6 +57,30 @@ MonoBehaviour:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: CommuncateInputToPlayerObject, Assembly-CSharp
         m_MethodName: InitializePlayerObjectReferences
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: SpawnController, Assembly-CSharp
+        m_MethodName: StartGameSpawning
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: BoundaryInhibitorBehavior, Assembly-CSharp
+        m_MethodName: SetPlayer
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -80,6 +105,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: SpawnController, Assembly-CSharp
+        m_MethodName: InterruptGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &5529592172153825451
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,6 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a45cb19528fb9d49a993248d1572990, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isDebugEnabled: 0
   _currentScrap: 0
   _scrapTotalCollected: 0
   _currentEnergyCells: 0
@@ -121,9 +159,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 0}
+  _isPlayerSet: 0
   _simulatedVelocity: {x: 0, y: 0, z: 0}
   _VfxVelocityFieldName: Simulated Velocity
-  _playerRB: {fileID: 0}
 --- !u!2083052967 &6872647270389647332
 VisualEffect:
   m_ObjectHideFlags: 0

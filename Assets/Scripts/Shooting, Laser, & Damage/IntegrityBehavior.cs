@@ -20,7 +20,7 @@ public class IntegrityBehavior : MonoBehaviour
 
 
     //Monobehaviors
-    private void Start()
+    private void Awake()
     {
         if (_startWithFullIntegrity)
             SetCurrentIntegrity(_maxIntegrity);
