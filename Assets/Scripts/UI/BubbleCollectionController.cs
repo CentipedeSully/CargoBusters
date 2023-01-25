@@ -25,15 +25,15 @@ public class BubbleCollectionController : MonoBehaviour
     private void ChargeLatestEmptyIndex()
     {
         if (_isAnimateRegenEnabled)
-        { 
+        {
+            foreach (BubbleAnimatorController bubbleController in _bubbleUiObjects)
+                bubbleController.StopChargingBubble();
+
             if (_currentFilledIndex == 1)
                 _bubbleUiObjects[0].ChargeBubble();
 
             else if (_currentFilledIndex > 1)
-            {
                 _bubbleUiObjects[_currentFilledIndex - 1].ChargeBubble();
-                _bubbleUiObjects[_currentFilledIndex - 2].StopChargingBubble();
-            }
         }
     }
 

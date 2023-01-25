@@ -33,7 +33,7 @@ public class Regenerator : MonoBehaviour
         if (_isRegenerating == false && _isRegenEnabled)
         {
             _isRegenerating = true;
-            InvokeRepeating("TickRegeneration", 0, _regenTickDuration);
+            InvokeRepeating("TickRegeneration", _regenTickDuration, _regenTickDuration);
         }
     }
 

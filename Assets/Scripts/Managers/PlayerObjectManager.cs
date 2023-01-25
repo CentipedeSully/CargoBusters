@@ -33,6 +33,9 @@ public class PlayerObjectManager : MonoSingleton<PlayerObjectManager>
         {
             _playerObjectRef = Instantiate(_playerShipPreference, Vector3.zero, Quaternion.identity, ContainersManager.Instance.GetShipsContainer().transform);
             _playerObjectRef.GetComponent<ShipInformation>().SetPlayerFlag(true);
+            _playerObjectRef.GetComponent<ShipSystemReferencer>().GetShieldsObject().GetComponent<ShieldUiCommunicator>().SetupIsplayer();
+            _playerObjectRef.GetComponent<ShipSystemReferencer>().GetHullObject().GetComponent<HealthUiCommunicator>().SetupIsplayer();
+            _playerObjectRef.GetComponent<ShipSystemReferencer>().GetCargoBuster().GetComponent<CargoBusterUiController>().SetupIsplayer();
             _isPlayerAlive = true;
             _cinemachineVirtualCameraObject.Follow = _playerObjectRef.transform;
             GetComponent<SimulateStarMovementFromPlayerMovement>().SetPlayerObject(_playerObjectRef);

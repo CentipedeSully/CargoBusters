@@ -18,9 +18,16 @@ public class CargoBusterBehavior : MonoBehaviour
     [SerializeField] private bool _bustCommand = false;
     private int _shipID;
 
+    [SerializeField] private bool _quarterTickReached = false;
+    [SerializeField] private bool _halfTickReached = false;
+    [SerializeField] private bool _threeQuartersTickReached = false;
+    [SerializeField] private bool _finalTickReached = false;
+
+
     [Header("Events")]
     public UnityEvent OnBustStarted;
     public UnityEvent OnBustInterrupted;
+    public UnityEvent OnBustProgressUpdateTick;
     public UnityEvent OnBustCompleted;
 
 
@@ -29,39 +36,17 @@ public class CargoBusterBehavior : MonoBehaviour
     {
         _shipID = transform.parent.parent.GetComponent<ShipInformation>().GetShipID();
     }
-    /*
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (_isTargetAvailable == false)
-        {
-            if (collision.gameObject.CompareTag("Ship") && collision.gameObject.GetComponent<ShipInformation>().GetShipID() != _shipID)
-            {
-                //If the target's cargo is offline
-                CargoSystemController targetsCargoSystems = collision.gameObject.GetComponent<ShipSystemReferencer>().GetCargoObject().GetComponent<CargoSystemController>();
-                if (targetsCargoSystems.IsCargoSecuritySystemOnline() == false && targetsCargoSystems.IsCargoBusted() == false)
-                {
-                    _targetShipID = collision.gameObject.GetComponent<ShipInformation>().GetShipID();
-                    _targetShip = collision.gameObject;
-                    _isTargetAvailable = true;
-                }
-            }
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Ship"))
-        {
-            if (_isTargetAvailable && _targetShipID == collision.gameObject.GetComponent<ShipInformation>().GetShipID())
-                ResetTargeter();
-        }
-    }
-    */
 
     private void Update()
     {
         FindTarget();
         BustTargetCargoSystemOnInput();        
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, _busterRadius);
     }
 
 
@@ -140,6 +125,7 @@ public class CargoBusterBehavior : MonoBehaviour
             }
             else
             {
+                TickProgressOnQuarterlyThresholdReached();
                 _currentBustProgress += Time.deltaTime;
 
                 if (_currentBustProgress >= _bustDurationMax)
@@ -155,7 +141,32 @@ public class CargoBusterBehavior : MonoBehaviour
             InterruptBust();
     }
 
+    private void TickProgressOnQuarterlyThresholdReached()
+    {
+        int normalizedProgress = (int)(_currentBustProgress / _bustDurationMax * 100);
+        //Debug.Log(normalizedProgress);
 
+        if (normalizedProgress == 25 && _quarterTickReached == false)
+        {
+            _quarterTickReached = true;
+            OnBustProgressUpdateTick?.Invoke();
+        }
+        else if (normalizedProgress == 50 && _halfTickReached == false)
+        {
+            _halfTickReached = true;
+            OnBustProgressUpdateTick?.Invoke();
+        }
+        else if (normalizedProgress == 75 && _threeQuartersTickReached == false)
+        {
+            _threeQuartersTickReached = true;
+            OnBustProgressUpdateTick?.Invoke();
+        }
+        else if (normalizedProgress == 100 && _finalTickReached == false)
+        {
+            _finalTickReached = true;
+            OnBustProgressUpdateTick?.Invoke();
+        }
+    }
 
     private void ResetTargeter()
     {
@@ -163,6 +174,8 @@ public class CargoBusterBehavior : MonoBehaviour
         _targetShip = null;
         _targetShipID = 0;
         _absoluteTargetDistance = Mathf.Infinity;
+
+
     }
 
     private void CompleteBust()
@@ -176,6 +189,11 @@ public class CargoBusterBehavior : MonoBehaviour
     {
         _isBustingInProgress = false;
         _currentBustProgress = 0;
+
+        _quarterTickReached = false;
+        _halfTickReached = false;
+        _threeQuartersTickReached = false;
+        _finalTickReached = false;
     }
 
     //Externals
