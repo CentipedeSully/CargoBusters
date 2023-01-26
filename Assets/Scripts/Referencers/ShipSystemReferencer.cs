@@ -20,6 +20,7 @@ public class ShipSystemReferencer : MonoBehaviour
     [SerializeField] private GameObject _sensorSystems;
     [SerializeField] private GameObject _warpCoreSystems;
     [SerializeField] private CargoBusterBehavior _cargoBusterRef;
+    [SerializeField] private BusterReticuleController _busterReticuleControllerRef;
 
 
 
@@ -100,6 +101,11 @@ public class ShipSystemReferencer : MonoBehaviour
     public GameObject GetWarpCoreObject()
     {
         return _warpCoreSystems;
+    }
+
+    public BusterReticuleController GetBusterReticuleController()
+    {
+        return _busterReticuleControllerRef;
     }
 
 

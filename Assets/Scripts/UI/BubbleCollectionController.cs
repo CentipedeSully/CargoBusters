@@ -9,15 +9,21 @@ public class BubbleCollectionController : MonoBehaviour
     [SerializeField] private bool _isAnimateRegenEnabled = false;
     [Tooltip("The last element is treated as the final bubble of the collection: If the first index is filled, then the Ui is displaying all bubbles as filled")]
     [SerializeField] private List<BubbleAnimatorController> _bubbleUiObjects;
-    [SerializeField] private bool _drainCollectionOnStart = false;
+    [SerializeField] private bool _fillCollectionOnStart = false;
     [SerializeField] private int _currentFilledIndex = 0;
 
 
     //Monobehaviors
+    private void Awake()
+    {
+        if (_fillCollectionOnStart == false)
+            _currentFilledIndex = _bubbleUiObjects.Count;
+    }
+
     private void Start()
     {
-        if (_drainCollectionOnStart)
-            DrainAll();
+        if (_fillCollectionOnStart)
+            FillAll();
     }
 
 

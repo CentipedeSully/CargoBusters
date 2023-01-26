@@ -48,13 +48,13 @@ public class CargoBusterUiController : MonoBehaviour
     public void DeactivateUI()
     {
         if (_isPlayer)
-            UiManager.Instance.GetCargoBusterUiController().gameObject.SetActive(false);
+            UiManager.Instance.GetCargoBusterUiController().GetComponent<DisplayAnimController>().HideDisplay();
     }
 
     public void ActivateUI()
     {
         if (_isPlayer)
-            UiManager.Instance.GetCargoBusterUiController().gameObject.SetActive(true);
+            UiManager.Instance.GetCargoBusterUiController().GetComponent<DisplayAnimController>().ShowDisplay();
     }
 
     public void EnterRegen()
@@ -69,5 +69,14 @@ public class CargoBusterUiController : MonoBehaviour
             UiManager.Instance.GetCargoBusterUiController().SetIsRegeneratingState(false);
     }
 
-
+    public void TriggerPositiveEffectAndReset()
+    {
+        if (_isPlayer)
+        {
+            UiManager.Instance.GetCargoBusterUiController().GetComponent<DisplayAnimController>().TriggerPositiveEffect();
+            Invoke("DeactivateUI", .35f);
+            Invoke("ReduceAllUI", .35f);
+        }
+            
+    }
 }

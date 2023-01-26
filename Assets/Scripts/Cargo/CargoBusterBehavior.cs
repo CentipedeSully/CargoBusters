@@ -7,6 +7,8 @@ public class CargoBusterBehavior : MonoBehaviour
 {
     //Delcarations
     [SerializeField] private bool _isBusterOnline = true;
+    [SerializeField] private bool _isBusterReady = true;
+    [SerializeField] private float _busterCooldown = .5f;
     [SerializeField] private bool _isBustingInProgress = false;
     [SerializeField] private bool _isTargetAvailable = false;
     private GameObject _targetShip;
@@ -17,11 +19,8 @@ public class CargoBusterBehavior : MonoBehaviour
     [SerializeField] private float _currentBustProgress = 0;
     [SerializeField] private bool _bustCommand = false;
     private int _shipID;
-
-    [SerializeField] private bool _quarterTickReached = false;
-    [SerializeField] private bool _halfTickReached = false;
-    [SerializeField] private bool _threeQuartersTickReached = false;
-    [SerializeField] private bool _finalTickReached = false;
+    [SerializeField] private int _animationTickThreshold = 8;
+    private int _ticksPassed;
 
 
     [Header("Events")]
@@ -39,7 +38,8 @@ public class CargoBusterBehavior : MonoBehaviour
 
     private void Update()
     {
-        FindTarget();
+        if (_isBusterReady && _isBusterOnline)
+            FindTarget();
         BustTargetCargoSystemOnInput();        
     }
 
@@ -62,7 +62,12 @@ public class CargoBusterBehavior : MonoBehaviour
             foreach (Collider2D  detectedCollider in collidersInRange)
             {
                 if (IsObjectTargetable(detectedCollider.gameObject))
+                {
                     SetTarget(detectedCollider.gameObject);
+                    if (transform.parent.parent.GetComponent<ShipInformation>().IsPlayer())
+                        _targetShip.GetComponent<ShipSystemReferencer>().GetBusterReticuleController().ShowReticule();
+                }
+                    
             }
         }
 
@@ -71,7 +76,12 @@ public class CargoBusterBehavior : MonoBehaviour
         {
             CalculateAbsoluteDistanceFromTarget();
             if (_absoluteTargetDistance > _busterRadius)
+            {
+                if (transform.parent.parent.GetComponent<ShipInformation>().IsPlayer())
+                    _targetShip.GetComponent<ShipSystemReferencer>().GetBusterReticuleController().HideReticule();
                 ResetTargeter();
+            }
+                
         }
     }
 
@@ -116,7 +126,7 @@ public class CargoBusterBehavior : MonoBehaviour
 
     private void BustTargetCargoSystemOnInput()
     {
-        if (_isBusterOnline && _bustCommand && _isTargetAvailable)
+        if (_isBusterOnline && _isBusterReady && _bustCommand && _isTargetAvailable)
         {
             if  (_isBustingInProgress == false)
             {
@@ -125,7 +135,7 @@ public class CargoBusterBehavior : MonoBehaviour
             }
             else
             {
-                TickProgressOnQuarterlyThresholdReached();
+                TickProgressOnThresholdReached();
                 _currentBustProgress += Time.deltaTime;
 
                 if (_currentBustProgress >= _bustDurationMax)
@@ -141,30 +151,15 @@ public class CargoBusterBehavior : MonoBehaviour
             InterruptBust();
     }
 
-    private void TickProgressOnQuarterlyThresholdReached()
+    private void TickProgressOnThresholdReached()
     {
         int normalizedProgress = (int)(_currentBustProgress / _bustDurationMax * 100);
-        //Debug.Log(normalizedProgress);
+        //Debug.Log("Bust Progress: " + normalizedProgress + ", Ticks Passed: " + _ticksPassed);
 
-        if (normalizedProgress == 25 && _quarterTickReached == false)
+        if (normalizedProgress == _animationTickThreshold * _ticksPassed)
         {
-            _quarterTickReached = true;
             OnBustProgressUpdateTick?.Invoke();
-        }
-        else if (normalizedProgress == 50 && _halfTickReached == false)
-        {
-            _halfTickReached = true;
-            OnBustProgressUpdateTick?.Invoke();
-        }
-        else if (normalizedProgress == 75 && _threeQuartersTickReached == false)
-        {
-            _threeQuartersTickReached = true;
-            OnBustProgressUpdateTick?.Invoke();
-        }
-        else if (normalizedProgress == 100 && _finalTickReached == false)
-        {
-            _finalTickReached = true;
-            OnBustProgressUpdateTick?.Invoke();
+            _ticksPassed++;
         }
     }
 
@@ -174,14 +169,20 @@ public class CargoBusterBehavior : MonoBehaviour
         _targetShip = null;
         _targetShipID = 0;
         _absoluteTargetDistance = Mathf.Infinity;
-
-
     }
 
     private void CompleteBust()
     {
+        //bust the target's cargo
         CargoSystemController targetsCargoSystem = _targetShip.GetComponent<ShipSystemReferencer>().GetCargoObject().GetComponent<CargoSystemController>();
         targetsCargoSystem.BustCargo();
+
+        if (transform.parent.parent.GetComponent<ShipInformation>().IsPlayer())
+            _targetShip.GetComponent<ShipSystemReferencer>().GetBusterReticuleController().HideReticule();
+        ResetTargeter();
+
+
+        CooldownBuster();
         OnBustCompleted?.Invoke();
     }
 
@@ -189,11 +190,18 @@ public class CargoBusterBehavior : MonoBehaviour
     {
         _isBustingInProgress = false;
         _currentBustProgress = 0;
+        _ticksPassed = 0;
+    }
 
-        _quarterTickReached = false;
-        _halfTickReached = false;
-        _threeQuartersTickReached = false;
-        _finalTickReached = false;
+    private void CooldownBuster()
+    {
+        _isBusterReady = false;
+        Invoke("ReadyBuster", _busterCooldown);
+    }
+
+    private void ReadyBuster()
+    {
+        _isBusterReady = true;
     }
 
     //Externals

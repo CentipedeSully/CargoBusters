@@ -17,6 +17,7 @@ public class ShieldUiCommunicator : MonoBehaviour
     public void SetupIsplayer()
     {
         _isPlayer = transform.parent.GetComponent<ShipInformation>().IsPlayer();
+        ActivateShieldsUI();
     }
 
     public void ReduceShieldsUI()
@@ -46,13 +47,13 @@ public class ShieldUiCommunicator : MonoBehaviour
     public void DeactivateShieldsUI()
     {
         if (_isPlayer)
-            UiManager.Instance.GetShieldsUiController().gameObject.SetActive(false);
+            UiManager.Instance.GetShieldsUiController().GetComponent<DisplayAnimController>().HideDisplay();
     }
 
     public void ActivateShieldsUI()
     {
         if (_isPlayer)
-            UiManager.Instance.GetShieldsUiController().gameObject.SetActive(true);
+            UiManager.Instance.GetShieldsUiController().GetComponent<DisplayAnimController>().ShowDisplay();
     }
 
     public void EnterRegen()

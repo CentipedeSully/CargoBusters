@@ -17,6 +17,7 @@ public class HealthUiCommunicator : MonoBehaviour
     public void SetupIsplayer()
     {
         _isPlayer = transform.parent.GetComponent<ShipInformation>().IsPlayer();
+        ActivateHealthUI();
         FillAllHealthUI();
     }
 
@@ -47,13 +48,13 @@ public class HealthUiCommunicator : MonoBehaviour
     public void DeactivateHealthUI()
     {
         if (_isPlayer)
-            UiManager.Instance.GetHealthUiController().gameObject.SetActive(false);
+            UiManager.Instance.GetHealthUiController().GetComponent<DisplayAnimController>().HideDisplay();
     }
 
     public void ActivateHealthUI()
     {
         if (_isPlayer)
-            UiManager.Instance.GetHealthUiController().gameObject.SetActive(true);
+            UiManager.Instance.GetHealthUiController().GetComponent<DisplayAnimController>().ShowDisplay();
     }
 
     public void EnterRegen()
