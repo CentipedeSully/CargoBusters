@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SullysToolkit;
+using TMPro;
 
 public class UiManager : MonoSingleton<UiManager>
 {
@@ -9,10 +10,15 @@ public class UiManager : MonoSingleton<UiManager>
     [SerializeField] private BubbleCollectionController _healthControllerRef;
     [SerializeField] private BubbleCollectionController _shieldsControllerRef;
     [SerializeField] private BubbleCollectionController _cargoBusterControllerRef;
+    [SerializeField] private BubbleCollectionController _warpControllerRef;
+    [SerializeField] private DisplayAnimController _intermissionTimerDisplayRef;
+    [SerializeField] private TextMeshProUGUI _intermissionTimeTextRef;
+    [SerializeField] private DisplayAnimController _outOfBoundsTimerDisplayRef;
+    [SerializeField] private TextMeshProUGUI _outOfBoundsTimeTextRef;
 
 
     //monobehaviors
-
+    //...
 
 
     //Utilities
@@ -31,5 +37,30 @@ public class UiManager : MonoSingleton<UiManager>
     public BubbleCollectionController GetCargoBusterUiController()
     {
         return _cargoBusterControllerRef;
+    }
+
+    public BubbleCollectionController GetWarpUiController()
+    {
+        return _warpControllerRef;
+    }
+
+    public DisplayAnimController GetIntermissionTimerDisplay()
+    {
+        return _intermissionTimerDisplayRef;
+    }
+
+    public TextMeshProUGUI GetIntermissionTimerText()
+    {
+        return _intermissionTimeTextRef;
+    }
+
+    public DisplayAnimController GetBoundaryTimerDisplay()
+    {
+        return _outOfBoundsTimerDisplayRef;
+    }
+
+    public TextMeshProUGUI GetBoundaryTimerText()
+    {
+        return _outOfBoundsTimeTextRef;
     }
 }

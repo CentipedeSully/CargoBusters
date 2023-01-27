@@ -19,7 +19,7 @@ public class CargoBusterBehavior : MonoBehaviour
     [SerializeField] private float _currentBustProgress = 0;
     [SerializeField] private bool _bustCommand = false;
     private int _shipID;
-    [SerializeField] private int _animationTickThreshold = 8;
+    [SerializeField] private int _tickPercentThreshold = 8;
     private int _ticksPassed;
 
 
@@ -156,7 +156,7 @@ public class CargoBusterBehavior : MonoBehaviour
         int normalizedProgress = (int)(_currentBustProgress / _bustDurationMax * 100);
         //Debug.Log("Bust Progress: " + normalizedProgress + ", Ticks Passed: " + _ticksPassed);
 
-        if (normalizedProgress == _animationTickThreshold * _ticksPassed)
+        if (normalizedProgress == _tickPercentThreshold * _ticksPassed)
         {
             OnBustProgressUpdateTick?.Invoke();
             _ticksPassed++;

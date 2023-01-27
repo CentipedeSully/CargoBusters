@@ -57,6 +57,11 @@ public class SystemDisabler : MonoBehaviour
         _cargoBusterRef = _systemReferencer.GetCargoBuster();
     }
 
+    private void UpdateBoundaryUiTimer(int timeToDisplay)
+    {
+        UiManager.Instance.GetBoundaryTimerText().text = timeToDisplay.ToString();
+    }
+
     public void DisableAllSystems()
     {
         _shipInfoRef.SetShipDisabled(true);
@@ -101,17 +106,21 @@ public class SystemDisabler : MonoBehaviour
     private IEnumerator TickOutOfBoundsTimer()
     {
         _cachedWaitForSeconds = new WaitForSeconds(1);
-        
+
         //Tick remaining time
         OnBoundaryTimerTick?.Invoke(_boundaryCountdownDurationMax - _currentCountdownDuation);
+        UpdateBoundaryUiTimer(_boundaryCountdownDurationMax - _currentCountdownDuation);
+        UiManager.Instance.GetBoundaryTimerDisplay().ShowDisplay();
 
-        while(_currentCountdownDuation < _boundaryCountdownDurationMax)
+        while (_currentCountdownDuation < _boundaryCountdownDurationMax)
         {
             yield return _cachedWaitForSeconds;
             _currentCountdownDuation += 1;
             OnBoundaryTimerTick?.Invoke(_boundaryCountdownDurationMax - _currentCountdownDuation);
+            UpdateBoundaryUiTimer(_boundaryCountdownDurationMax - _currentCountdownDuation);
         }
 
+        UiManager.Instance.GetBoundaryTimerDisplay().HideDisplay();
         _isPenalized = true;
         _isDisablerTicking = false;
         OnBoundaryTimerExpired?.Invoke();
@@ -137,6 +146,7 @@ public class SystemDisabler : MonoBehaviour
         if (_timerReference != null)
         {
             onBoundaryTimerInterrupted?.Invoke();
+            UiManager.Instance.GetBoundaryTimerDisplay().HideDisplay();
             _isDisablerTicking = false;
             _currentCountdownDuation = 0;
             StopCoroutine(_timerReference);

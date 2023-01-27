@@ -28,7 +28,6 @@ public class SpawnController : MonoSingleton<SpawnController>
     [SerializeField] private float _spawnIntervalDelay = 1;
     private WaitForSeconds _cachedSpawnIntervalWaitForSeconds;
     private WaitForSeconds _cachedIntermissionWaitForSeconds;
-
     private WaitForSeconds _cachedShipSpawnAnimDelayWait;
 
     [Header("Events")]
@@ -41,9 +40,8 @@ public class SpawnController : MonoSingleton<SpawnController>
     //Monos
     private void Start()
     {
-        
         _cachedSpawnIntervalWaitForSeconds = new WaitForSeconds(_spawnIntervalDelay);
-        _cachedIntermissionWaitForSeconds = new WaitForSeconds(_intermissionDuration);
+        _cachedIntermissionWaitForSeconds = new WaitForSeconds(1);
     }
 
 
@@ -90,10 +88,18 @@ public class SpawnController : MonoSingleton<SpawnController>
 
             //Enter Intermission and Wait...
             OnIntermissionStarted?.Invoke();
-            LogIntermissionEntered();
-            yield return _cachedIntermissionWaitForSeconds;
+            UiManager.Instance.GetIntermissionTimerDisplay().ShowDisplay();
+            int timePassed = 0;
+            while(timePassed <= _intermissionDuration) 
+            {
+                UiManager.Instance.GetIntermissionTimerText().text = ((int)_intermissionDuration - timePassed).ToString();
+                yield return _cachedIntermissionWaitForSeconds;
+                timePassed++;
+            }
             OnIntermissionEnded?.Invoke();
-            LogIntermissionEnded();
+            UiManager.Instance.GetIntermissionTimerDisplay().HideDisplay();
+            UiManager.Instance.GetIntermissionTimerText().text = "00:00";
+
 
             //Reset Utilities for next wave
             _enemiesSpawned = 0;

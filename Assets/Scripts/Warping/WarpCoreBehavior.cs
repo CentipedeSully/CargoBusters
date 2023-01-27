@@ -10,8 +10,11 @@ public class WarpCoreBehavior : MonoBehaviour
     [SerializeField] private bool _isWarpingInProgress = false;
     [SerializeField] private float _maxBuildDuration = 5;
     [SerializeField] private float _currentBuildTime = 0;
+    [SerializeField] private int _ticksPassed = 0;
+    [SerializeField] private int _tickPercentThreshold = 8;
 
     [Header("Events")]
+    public UnityEvent OnWarpProgressTick;
     public UnityEvent OnWarpCompleted;
 
 
@@ -27,6 +30,7 @@ public class WarpCoreBehavior : MonoBehaviour
     {
         if (_isWarpingInProgress)
         {
+            TickProgressOnThresholdReached();
             _currentBuildTime += Time.deltaTime;
 
             if (_currentBuildTime >= _maxBuildDuration)
@@ -37,10 +41,24 @@ public class WarpCoreBehavior : MonoBehaviour
         }
     }
 
+    private void TickProgressOnThresholdReached()
+    {
+        int normalizedProgress = (int)(_currentBuildTime / _maxBuildDuration * 100);
+        //Debug.Log("Bust Progress: " + normalizedProgress + ", Ticks Passed: " + _ticksPassed);
+
+        if (normalizedProgress == _tickPercentThreshold * _ticksPassed)
+        {
+            OnWarpProgressTick?.Invoke();
+            _ticksPassed++;
+        }
+    }
+
     private void ResetWarpUtilities()
     {
         _currentBuildTime = 0;
         _isWarpingInProgress = false;
+        _ticksPassed = 0;
+
     }
 
 

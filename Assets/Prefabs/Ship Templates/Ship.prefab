@@ -688,9 +688,9 @@ VFXRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -1127068247
+  m_SortingLayer: 3
+  m_SortingOrder: 3
 --- !u!114 &1257911336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1376,6 +1376,7 @@ GameObject:
   - component: {fileID: 8013795976887761211}
   - component: {fileID: 2423856427584426475}
   - component: {fileID: 5408730444607329147}
+  - component: {fileID: 739931956404088471}
   m_Layer: 0
   m_Name: Warp Core System
   m_TagString: Untagged
@@ -1483,6 +1484,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 739931956404088471}
+        m_TargetAssemblyTypeName: WarpUiCommunicator, Assembly-CSharp
+        m_MethodName: ActivateUI
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnWarpInterrupted:
     m_PersistentCalls:
       m_Calls:
@@ -1534,6 +1547,30 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 739931956404088471}
+        m_TargetAssemblyTypeName: WarpUiCommunicator, Assembly-CSharp
+        m_MethodName: DeactivateUI
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 739931956404088471}
+        m_TargetAssemblyTypeName: WarpUiCommunicator, Assembly-CSharp
+        m_MethodName: ReduceAllUI
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &5408730444607329147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1550,6 +1587,23 @@ MonoBehaviour:
   _isWarpingInProgress: 0
   _maxBuildDuration: 5
   _currentBuildTime: 0
+  _ticksPassed: 0
+  _tickPercentThreshold: 8
+  OnWarpProgressTick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 739931956404088471}
+        m_TargetAssemblyTypeName: WarpUiCommunicator, Assembly-CSharp
+        m_MethodName: FillUI
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnWarpCompleted:
     m_PersistentCalls:
       m_Calls:
@@ -1589,6 +1643,31 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 739931956404088471}
+        m_TargetAssemblyTypeName: WarpUiCommunicator, Assembly-CSharp
+        m_MethodName: TriggerPositiveEffectAndReset
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &739931956404088471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 818025662821544843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de06c3549cf1e3242aa032e236fd3771, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isPlayer: 0
 --- !u!1 &1242081931154889010
 GameObject:
   m_ObjectHideFlags: 0
@@ -2297,7 +2376,7 @@ MonoBehaviour:
   _bustDurationMax: 5
   _currentBustProgress: 0
   _bustCommand: 0
-  _animationTickThreshold: 8
+  _tickPercentThreshold: 8
   OnBustStarted:
     m_PersistentCalls:
       m_Calls:
