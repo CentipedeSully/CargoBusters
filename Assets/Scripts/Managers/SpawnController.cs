@@ -9,6 +9,8 @@ public class SpawnController : MonoSingleton<SpawnController>
 {
     //Declaration
     [SerializeField] private GameObject _enemyDotSensorPrefab;
+    [SerializeField] private GameObject _statusVisualizerPrefab;
+    [SerializeField] private Transform _visualizerContainer;
     [SerializeField] private bool _isDebugEnabled = true;
     [SerializeField] private List<GameObject> _enemyShipPrefabsList;
     [SerializeField] private List<Transform> _spawnPositionsList;
@@ -61,11 +63,13 @@ public class SpawnController : MonoSingleton<SpawnController>
             {
                 GameObject randomEnemyPrefab = _enemyShipPrefabsList[Random.Range(0, _enemyShipPrefabsList.Count)];
                 Transform randomSpawnPosition = _spawnPositionsList[Random.Range(0, _spawnPositionsList.Count)];
+                
 
                 //Spawn enemy at random position and dot sensor on player
                 GameObject enemyShip = Instantiate(randomEnemyPrefab, randomSpawnPosition.position, Quaternion.identity, ContainersManager.Instance.GetShipsContainer().transform);
                 SetupPointerToEnemy(enemyShip);
                 SetupEnemyTargetingAI(enemyShip);
+                SetupStatusVisualizerToEnemy(enemyShip);
 
                 _enemiesSpawned++;
                 _totalEnemiesSpawned++;
@@ -108,6 +112,13 @@ public class SpawnController : MonoSingleton<SpawnController>
 
 
         }
+    }
+
+    private void SetupStatusVisualizerToEnemy(GameObject enemyShip)
+    {
+        GameObject statusVisualizer = Instantiate(_statusVisualizerPrefab, enemyShip.transform.position, Quaternion.identity, ContainersManager.Instance.GetVisualizerContainer().transform);
+        statusVisualizer.GetComponent<StatusVisualController>().SetTarget(enemyShip);
+        statusVisualizer.GetComponent<StatusVisualController>().SetPlayerReference();
     }
 
     private void SetupPointerToEnemy(GameObject enemy)

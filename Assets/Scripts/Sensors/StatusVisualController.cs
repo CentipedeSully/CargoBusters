@@ -11,10 +11,11 @@ public class StatusVisualController : MonoBehaviour
 
     private GameObject _targetShip;
     private GameObject _playerShip;
-    private float _distanceFromPlayer;
+    [SerializeField] private float _distanceFromPlayer;
     [SerializeField] private float _visibleDistanceThreshold = 20;
-    private bool _isStatusVisible = false;
+    [SerializeField] private bool _isStatusVisible = false;
     private bool _isTargetDisabled = false;
+    private bool _isTargetSet = false;
 
     private ShipInformation _shipInfo;
     private IntegrityBehavior _hullIntegrityRef;
@@ -26,12 +27,16 @@ public class StatusVisualController : MonoBehaviour
     {
         if (_targetShip != null && _playerShip != null)
         {
+            MoveToTargetPosition();
             CalculateDistanceFromPlayer();
             ToggleVisiblilityIfPlayerInRange();
             if (_isStatusVisible)
                 UpdateVisuals();
             else HideVisibility();
         }
+
+        else if (_targetShip == null && _isTargetSet)
+            Destroy(gameObject);
     }
 
 
@@ -45,6 +50,11 @@ public class StatusVisualController : MonoBehaviour
     private void CalculateDistanceFromPlayer()
     {
         _distanceFromPlayer = Mathf.Abs(Vector3.Distance(_playerShip.transform.position, _targetShip.transform.position));
+    }
+
+    private void MoveToTargetPosition()
+    {
+        this.transform.position = _targetShip.transform.position;
     }
 
     private void ToggleVisiblilityIfPlayerInRange()
@@ -91,14 +101,14 @@ public class StatusVisualController : MonoBehaviour
     {
         if (newTarget.GetComponent<ShipInformation>() != null)
         {
+            _isTargetSet = true;
             _targetShip = newTarget;
 
             _shipInfo = _targetShip.GetComponent<ShipInformation>();
             _shieldIntegrityRef = _targetShip.GetComponent<ShipSystemReferencer>().GetShieldsObject().GetComponent<IntegrityBehavior>();
             _hullIntegrityRef = _targetShip.GetComponent<ShipSystemReferencer>().GetHullObject().GetComponent<IntegrityBehavior>();
 
-            if (PlayerObjectManager.Instance.GetPlayerObject() != null)
-                _playerShip = PlayerObjectManager.Instance.GetPlayerObject();
+            SetPlayerReference();
         }
     }
 

@@ -10,6 +10,7 @@ public class ContainersManager : MonoSingleton<ContainersManager>
     [SerializeField] private GameObject _explosionsContainer;
     [SerializeField] private GameObject _shipsContainer;
     [SerializeField] private PlayerObjectManager _playerObjectManager;
+    [SerializeField] private GameObject _visualizerContainer;
 
 
     //Monos
@@ -36,4 +37,8 @@ public class ContainersManager : MonoSingleton<ContainersManager>
         return _shipsContainer;
     }
 
+    public GameObject GetVisualizerContainer()
+    {
+        return _visualizerContainer;
+    }
 }

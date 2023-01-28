@@ -107,8 +107,8 @@ VFXRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1127068247
+  m_SortingLayer: 3
   m_SortingOrder: 0
 --- !u!1 &1684711544042153148
 GameObject:
@@ -217,8 +217,8 @@ VFXRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1127068247
+  m_SortingLayer: 3
   m_SortingOrder: 0
 --- !u!1 &3041990587546046545
 GameObject:
@@ -327,8 +327,8 @@ VFXRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1127068247
+  m_SortingLayer: 3
   m_SortingOrder: 0
 --- !u!1 &3194280113567193936
 GameObject:
@@ -437,8 +437,8 @@ VFXRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1127068247
+  m_SortingLayer: 3
   m_SortingOrder: 0
 --- !u!1 &3435946827332248133
 GameObject:
@@ -547,8 +547,8 @@ VFXRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1127068247
+  m_SortingLayer: 3
   m_SortingOrder: 0
 --- !u!1 &3475046050382187869
 GameObject:
@@ -605,6 +605,8 @@ MonoBehaviour:
   - {fileID: 7845658121140515053}
   - {fileID: 5761212428739883244}
   - {fileID: 6033125611932254397}
+  _activeIndex: 0
+  _spawnRateFieldName: Spawn Rate
 --- !u!1 &4278125918873256711
 GameObject:
   m_ObjectHideFlags: 0
@@ -712,8 +714,8 @@ VFXRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1127068247
+  m_SortingLayer: 3
   m_SortingOrder: 0
 --- !u!1 &4495255640438866841
 GameObject:
@@ -770,6 +772,8 @@ MonoBehaviour:
   - {fileID: 3041990587546046545}
   - {fileID: 4995612059835946175}
   - {fileID: 5371064823046880795}
+  _activeIndex: 0
+  _spawnRateFieldName: Spawn Rate
 --- !u!1 &4995612059835946175
 GameObject:
   m_ObjectHideFlags: 0
@@ -877,8 +881,8 @@ VFXRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1127068247
+  m_SortingLayer: 3
   m_SortingOrder: 0
 --- !u!1 &5203820120664343656
 GameObject:
@@ -987,8 +991,8 @@ VFXRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1127068247
+  m_SortingLayer: 3
   m_SortingOrder: 0
 --- !u!1 &5371064823046880795
 GameObject:
@@ -1097,8 +1101,8 @@ VFXRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1127068247
+  m_SortingLayer: 3
   m_SortingOrder: 0
 --- !u!1 &5642458784884032820
 GameObject:
@@ -1207,8 +1211,8 @@ VFXRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1127068247
+  m_SortingLayer: 3
   m_SortingOrder: 0
 --- !u!1 &5761212428739883244
 GameObject:
@@ -1317,8 +1321,8 @@ VFXRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1127068247
+  m_SortingLayer: 3
   m_SortingOrder: 0
 --- !u!1 &5944871457340555563
 GameObject:
@@ -1375,6 +1379,8 @@ MonoBehaviour:
   - {fileID: 7946738326229495345}
   - {fileID: 5642458784884032820}
   - {fileID: 1215645978640601537}
+  _activeIndex: 0
+  _spawnRateFieldName: Spawn Rate
 --- !u!1 &6033125611932254397
 GameObject:
   m_ObjectHideFlags: 0
@@ -1482,8 +1488,8 @@ VFXRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1127068247
+  m_SortingLayer: 3
   m_SortingOrder: 0
 --- !u!1 &6542992901166164825
 GameObject:
@@ -1592,8 +1598,8 @@ VFXRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1127068247
+  m_SortingLayer: 3
   m_SortingOrder: 0
 --- !u!1 &7845658121140515053
 GameObject:
@@ -1702,8 +1708,8 @@ VFXRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1127068247
+  m_SortingLayer: 3
   m_SortingOrder: 0
 --- !u!1 &7946738326229495345
 GameObject:
@@ -1812,8 +1818,8 @@ VFXRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1127068247
+  m_SortingLayer: 3
   m_SortingOrder: 0
 --- !u!1 &8596179338300853834
 GameObject:
@@ -1865,4 +1871,6 @@ MonoBehaviour:
   _healthPointVisualizer: {fileID: 8961501633310593522}
   _shieldPointVisualizer: {fileID: 5876643289785825580}
   _vulnerablePointVisualizer: {fileID: 7718522787802486693}
+  _distanceFromPlayer: 0
   _visibleDistanceThreshold: 20
+  _isStatusVisible: 0
