@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SullysToolkit;
 
-public class CargoLootDropper : MonoBehaviour
+public class CargoLootDropper : MonoSingleton<CargoLootDropper>
 {
     //Declarations
     [Tooltip("0 == Scrap, 1 == EnergyCells, 2 == WarpCoils, 3 == PlasmaAccelerators, 4 == CannonAlloys")]
@@ -50,12 +51,23 @@ public class CargoLootDropper : MonoBehaviour
             PlayerInventoryManager.Instance.IncrementItemCount(4, Random.Range(_cannonAlloyDropMin, _cannonAlloyDropMax + 1));
     }
 
+    public void DropScrapToPlayerInventory(int min, int max)
+    {
+        PlayerInventoryManager.Instance.IncrementItemCount(0, Random.Range(min, max + 1));
+    }
+
     private int RollD100()
     {
         return Random.Range(1, 101);
     }
 
-
+    public void IncreaseDropRate(int chance)
+    {
+        _energyCellDropChance += chance;
+        _warpCoilDropChance += chance;
+        _plasmaAcceleratorDropChance += chance;
+        _cannonAlloyDropChance += chance;
+    }
 
 }
 

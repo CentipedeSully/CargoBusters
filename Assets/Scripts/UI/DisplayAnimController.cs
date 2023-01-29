@@ -8,6 +8,7 @@ public class DisplayAnimController : MonoBehaviour
     [SerializeField] private string _boolVisiblityName = "isVisible";
     [SerializeField] private string _triggerPositiveName = "OnPositive";
     [SerializeField] private bool _doesTriggerExist = false;
+    private bool _isVisible = false;
     private Animator _animatorRef;
 
 
@@ -24,11 +25,13 @@ public class DisplayAnimController : MonoBehaviour
     public void ShowDisplay()
     {
         _animatorRef.SetBool(_boolVisiblityName, true);
+        _isVisible = true;
     }
 
     public void HideDisplay()
     {
         _animatorRef.SetBool(_boolVisiblityName, false);
+        _isVisible = false;
     }
 
     public void TriggerPositiveEffect()
@@ -36,6 +39,20 @@ public class DisplayAnimController : MonoBehaviour
         if (_doesTriggerExist)
             _animatorRef.SetTrigger(_triggerPositiveName);
             
+    }
+
+    public void ToggleDisplay()
+    {
+        if (_isVisible)
+        {
+            HideDisplay();
+            _isVisible = false;
+        }    
+        else
+        {
+            ShowDisplay();
+            _isVisible = true;
+        }
     }
 
 }

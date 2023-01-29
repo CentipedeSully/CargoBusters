@@ -15,7 +15,15 @@ public class UiManager : MonoSingleton<UiManager>
     [SerializeField] private TextMeshProUGUI _intermissionTimeTextRef;
     [SerializeField] private DisplayAnimController _outOfBoundsTimerDisplayRef;
     [SerializeField] private TextMeshProUGUI _outOfBoundsTimeTextRef;
+    
 
+    [Header("Inventory References")]
+    [SerializeField] private DisplayAnimController _inventoryDisplayRef;
+    [SerializeField] private TextMeshProUGUI _eCellsCount;
+    [SerializeField] private TextMeshProUGUI _wCoilsCount;
+    [SerializeField] private TextMeshProUGUI _pAccelsCount;
+    [SerializeField] private TextMeshProUGUI _cAlloysCount;
+    [SerializeField] private TextMeshProUGUI _scrapCount;
 
     //monobehaviors
     //...
@@ -62,5 +70,35 @@ public class UiManager : MonoSingleton<UiManager>
     public TextMeshProUGUI GetBoundaryTimerText()
     {
         return _outOfBoundsTimeTextRef;
+    }
+
+    public DisplayAnimController GetInventoryDisplay()
+    {
+        return _inventoryDisplayRef;
+    }
+
+    public TextMeshProUGUI GetEnergyCellsCountText()
+    {
+        return _eCellsCount;
+    }
+
+    public TextMeshProUGUI GetWarpCoilsCountText()
+    {
+        return _wCoilsCount;
+    }
+
+    public TextMeshProUGUI GetPlasmaAcceleratorsCountText()
+    {
+        return _pAccelsCount;
+    }
+
+    public TextMeshProUGUI GetCannonAlloysCountText()
+    {
+        return _cAlloysCount;
+    }
+
+    public TextMeshProUGUI GetScrapCountText()
+    {
+        return _scrapCount;
     }
 }

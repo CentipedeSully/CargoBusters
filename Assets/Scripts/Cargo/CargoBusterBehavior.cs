@@ -177,6 +177,9 @@ public class CargoBusterBehavior : MonoBehaviour
         CargoSystemController targetsCargoSystem = _targetShip.GetComponent<ShipSystemReferencer>().GetCargoObject().GetComponent<CargoSystemController>();
         targetsCargoSystem.BustCargo();
 
+        //Make Loot drop
+        CargoLootDropper.Instance.DropItemsToPlayerInventory();
+
         if (transform.parent.parent.GetComponent<ShipInformation>().IsPlayer())
             _targetShip.GetComponent<ShipSystemReferencer>().GetBusterReticuleController().HideReticule();
         ResetTargeter();
@@ -225,6 +228,16 @@ public class CargoBusterBehavior : MonoBehaviour
     public void SetBustCommand(bool value)
     {
         _bustCommand = value;
+    }
+
+    public float GetBusterDuration()
+    {
+        return _bustDurationMax;
+    }
+
+    public void SetBusterDuration(float value)
+    {
+        _bustDurationMax = value;
     }
 
 

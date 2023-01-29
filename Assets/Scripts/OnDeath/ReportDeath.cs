@@ -21,7 +21,11 @@ public class ReportDeath : MonoBehaviour
                 PlayerObjectManager.Instance.ReportPlayerDeath();
 
             else
+            {
                 SpawnController.Instance.ReportEnemyDeath();
+                ScrapHarvester.Instance.DropExtraScrapOnEnemyDeath();
+            }
+                
 
             _isDeathAlreadyReported = true;
         }

@@ -48,7 +48,7 @@ public class ShootAtTarget : MonoBehaviour
 
         if (_detectedColliders.Length > 1)
         {
-            Debug.Log(_detectedColliders[1].collider.name);
+            //Debug.Log(_detectedColliders[1].collider.name);
             //First, set the gizmo draw distance to whatever got hit (our own collider doesn't count). Only Draw To the SECOND HIT COLLIDER, the one after US.
             if (_detectedColliders[1].collider.gameObject.GetComponent<ShipInformation>().GetShipID() != transform.parent.GetComponent<ShipInformation>().GetShipID())
                 _gizmoLineDistance = _detectedColliders[1].distance;

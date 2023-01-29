@@ -87,7 +87,15 @@ public class BubbleCollectionController : MonoBehaviour
     public void SetIsRegeneratingState(bool newValue)
     {
         _isAnimateRegenEnabled = newValue;
-        ChargeLatestEmptyIndex();
+
+        if (_isAnimateRegenEnabled)
+            ChargeLatestEmptyIndex();
+
+        else
+        {
+            foreach (BubbleAnimatorController bubbleController in _bubbleUiObjects)
+                bubbleController.StopChargingBubble();
+        }
     }
 
     public bool IsCollectionRegenerating()

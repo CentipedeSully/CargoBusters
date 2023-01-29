@@ -2530,6 +2530,7 @@ MonoBehaviour:
   _angularSpread: 2
   _shootInput: 0
   _isShotReady: 1
+  _isBlasterEnabled: 1
   _shotCooldownDuration: 0.15
   _laserPushForce: 5
   _laserDamage: 1
@@ -3232,8 +3233,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8eeffde678bca1a49b76f0d32d89be86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _highThreshold: 0.7
-  _lowThreshold: 0.41
+  _highThreshold: 0.59
+  _lowThreshold: 0.21
   _isDebugEnabled: 0
   OnIntegrityEnteringHigh:
     m_PersistentCalls:
@@ -3466,6 +3467,30 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 6944908963005113164}
+        m_TargetAssemblyTypeName: SpawnLaserOnCommand, Assembly-CSharp
+        m_MethodName: SetShootInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1197598115963883055}
+        m_TargetAssemblyTypeName: SpawnLaserOnCommand, Assembly-CSharp
+        m_MethodName: SetShootInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 8786178936273411122}
         m_TargetAssemblyTypeName: SpawnLaserOnCommand, Assembly-CSharp
         m_MethodName: SetShootInput
         m_Mode: 0
@@ -3803,7 +3828,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _name: Shields Integrity
-  _maxIntegrity: 5
+  _maxIntegrity: 1
   _currentIntegrity: 10
   _startWithFullIntegrity: 1
   OnIntegrityDecreased:
@@ -6770,6 +6795,7 @@ MonoBehaviour:
   _angularSpread: 2
   _shootInput: 0
   _isShotReady: 1
+  _isBlasterEnabled: 0
   _shotCooldownDuration: 0.15
   _laserPushForce: 5
   _laserDamage: 1
@@ -7732,7 +7758,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7031454038190536570}
   - component: {fileID: 3328821011350096453}
-  - component: {fileID: 7851371191143235024}
   m_Layer: 0
   m_Name: Cargo System
   m_TagString: Untagged
@@ -7777,46 +7802,7 @@ MonoBehaviour:
       m_Calls: []
   OnCargoBusted:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7851371191143235024}
-        m_TargetAssemblyTypeName: CargoLootDropper, Assembly-CSharp
-        m_MethodName: DropItemsToPlayerInventory
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &7851371191143235024
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4875336122843168548}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8403aa034dddd0248a24f70415700e43, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _scrapDropChance: 100
-  _scrapDropMin: 15
-  _scrapDropMax: 35
-  _energyCellDropChance: 25
-  _energyCellDropMin: 1
-  _energyCellDropMax: 2
-  _warpCoilDropChance: 10
-  _warpCoilDropMin: 1
-  _warpCoilDropMax: 1
-  _plasmaAcceleratorDropChance: 15
-  _plasmaAcceleratorDropMin: 1
-  _plasmaAcceleratorDropMax: 1
-  _cannonAlloyDropChance: 15
-  _cannonAlloyDropMin: 1
-  _cannonAlloyDropMax: 1
+      m_Calls: []
 --- !u!1 &7169830865923600743
 GameObject:
   m_ObjectHideFlags: 0
@@ -8047,6 +8033,7 @@ GameObject:
   - component: {fileID: 6212515879291909443}
   - component: {fileID: 5747037840596301472}
   - component: {fileID: 1930248902185352263}
+  - component: {fileID: 6688230973036723681}
   m_Layer: 0
   m_Name: Ai Behavior
   m_TagString: Untagged
@@ -8178,6 +8165,37 @@ MonoBehaviour:
   _shotRangeDistance: 15
   _castRadius: 1
   _weaponsControllerRef: {fileID: 706386522}
+--- !u!114 &6688230973036723681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7898104696110483992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da91d045cee7613459bfeda8ec4604cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _laserDamageMin: 1
+  _laserDamageMax: 1
+  _shotCooldownMin: 0.5
+  _shotCooldownMax: 0.75
+  _blasterCountMin: 1
+  _blasterCountMax: 1
+  _minMoveSpeed: 300
+  _maxMoveSpeed: 600
+  _minRotationSpeed: 50
+  _maxRotationSpeed: 100
+  _hullMin: 3
+  _hullMax: 3
+  _shieldMin: 0
+  _shieldMax: 1
+  _systemReferencer: {fileID: 2655467519268645362}
+  _weaponsSystem: {fileID: 0}
+  _enginesSystem: {fileID: 0}
+  _hullObject: {fileID: 0}
+  _shieldsObject: {fileID: 0}
 --- !u!1 &7964788593451031635
 GameObject:
   m_ObjectHideFlags: 0
@@ -8645,6 +8663,7 @@ MonoBehaviour:
   _angularSpread: 2
   _shootInput: 0
   _isShotReady: 1
+  _isBlasterEnabled: 0
   _shotCooldownDuration: 0.15
   _laserPushForce: 5
   _laserDamage: 1

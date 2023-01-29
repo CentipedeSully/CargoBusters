@@ -47,4 +47,9 @@ public class AddRotationToObject: MonoBehaviour
     {
         _rotationSpeed = value;
     }
+
+    public float GetRotationSpeed()
+    {
+        return _rotationSpeed;
+    }
 }

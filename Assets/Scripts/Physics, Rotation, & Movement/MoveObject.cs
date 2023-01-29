@@ -55,4 +55,9 @@ public class MoveObject : MonoBehaviour
     {
         return _moveDirection;
     }
+
+    public float GetSpeed()
+    {
+        return _moveSpeed;
+    }
 }

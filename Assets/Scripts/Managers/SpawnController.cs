@@ -24,6 +24,7 @@ public class SpawnController : MonoSingleton<SpawnController>
     [SerializeField] private bool _isWaveInProgress = false;
     private bool _isGameActive = false;
     [SerializeField] private float _intermissionDuration = 60;
+    private bool _skipIntermission = false;
 
     [SerializeField] private int _extraEnemyModifier = 2;
     [SerializeField] private int _wavesCompletedCount = 0;
@@ -67,9 +68,11 @@ public class SpawnController : MonoSingleton<SpawnController>
 
                 //Spawn enemy at random position and dot sensor on player
                 GameObject enemyShip = Instantiate(randomEnemyPrefab, randomSpawnPosition.position, Quaternion.identity, ContainersManager.Instance.GetShipsContainer().transform);
+                enemyShip.GetComponent<ShipSystemReferencer>().GetAiBehaviorObject().GetComponent<RandomizeAttributesOnEnable>().RandomizeAttributes();
                 SetupPointerToEnemy(enemyShip);
                 SetupEnemyTargetingAI(enemyShip);
                 SetupStatusVisualizerToEnemy(enemyShip);
+
 
                 _enemiesSpawned++;
                 _totalEnemiesSpawned++;
@@ -94,7 +97,7 @@ public class SpawnController : MonoSingleton<SpawnController>
             OnIntermissionStarted?.Invoke();
             UiManager.Instance.GetIntermissionTimerDisplay().ShowDisplay();
             int timePassed = 0;
-            while(timePassed <= _intermissionDuration) 
+            while(timePassed <= _intermissionDuration && _skipIntermission == false) 
             {
                 UiManager.Instance.GetIntermissionTimerText().text = ((int)_intermissionDuration - timePassed).ToString();
                 yield return _cachedIntermissionWaitForSeconds;
@@ -104,7 +107,7 @@ public class SpawnController : MonoSingleton<SpawnController>
             UiManager.Instance.GetIntermissionTimerDisplay().HideDisplay();
             UiManager.Instance.GetIntermissionTimerText().text = "00:00";
 
-
+            _skipIntermission = false;
             //Reset Utilities for next wave
             _enemiesSpawned = 0;
             _enemiesDefeated = 0;
@@ -171,6 +174,11 @@ public class SpawnController : MonoSingleton<SpawnController>
     public bool IsSpawning()
     {
         return _isSpawning;
+    }
+
+    public void SkipIntermission()
+    {
+        _skipIntermission = true;
     }
 
     public bool IsWaveInProgress()

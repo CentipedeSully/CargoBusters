@@ -14,6 +14,7 @@ public class SpawnLaserOnCommand : MonoBehaviour
 
     [SerializeField] private bool _shootInput = false;
     [SerializeField] private bool _isShotReady = true;
+    [SerializeField] private bool _isBlasterEnabled = false;
 
     [SerializeField] private float _shotCooldownDuration = .5f;
     [SerializeField] private float _laserPushForce = 5;
@@ -40,7 +41,7 @@ public class SpawnLaserOnCommand : MonoBehaviour
     //Utilities
     private void ShootLaser()
     {
-        if (_isShotReady && _shootInput == true)
+        if (_isShotReady && _shootInput == true && _isBlasterEnabled)
         {
             SpawnAndSetupLaser();
 
@@ -101,4 +102,39 @@ public class SpawnLaserOnCommand : MonoBehaviour
         //return offset;
     }
 
+    //Getters and Setters
+    public void SetCooldown(float newCooldown)
+    {
+        _shotCooldownDuration = newCooldown;
+    }
+
+    public float GetCooldown()
+    {
+        return _shotCooldownDuration;
+    }
+
+    public int GetDamage()
+    {
+        return _laserDamage;
+    }
+
+    public void SetDamage(int value)
+    {
+        _laserDamage = value;
+    }
+
+    public void EnableBlaster()
+    {
+        _isBlasterEnabled = true;
+    }
+
+    public void DisableBlaster()
+    {
+        _isBlasterEnabled = false;
+    }
+
+    public bool IsBlasterEnabled()
+    {
+        return _isBlasterEnabled;
+    }
 }

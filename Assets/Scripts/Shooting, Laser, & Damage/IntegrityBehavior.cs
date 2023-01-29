@@ -45,9 +45,9 @@ public class IntegrityBehavior : MonoBehaviour
         return _currentIntegrity;
     }
 
-    private void SetMaxIntegrity(int value)
+    public void SetMaxIntegrity(int value)
     {
-        if (value > 0)
+        if (value >= 0)
             _maxIntegrity = value;
 
         _currentIntegrity = Mathf.Clamp(_currentIntegrity, 0, _maxIntegrity);
@@ -55,7 +55,7 @@ public class IntegrityBehavior : MonoBehaviour
 
     private void SetCurrentIntegrity(int value)
     {
-        if (value > 0)
+        if (value >= 0)
             _currentIntegrity = value;
 
         _currentIntegrity = Mathf.Clamp(_currentIntegrity, 0, _maxIntegrity);
@@ -86,6 +86,9 @@ public class IntegrityBehavior : MonoBehaviour
             if (_currentIntegrity == _maxIntegrity)
                 OnIntegrityMaxed?.Invoke();
         }
+
+        else if (_currentIntegrity == _maxIntegrity)
+            OnIntegrityMaxed?.Invoke();
     }
 
     public void FillIntegrity()

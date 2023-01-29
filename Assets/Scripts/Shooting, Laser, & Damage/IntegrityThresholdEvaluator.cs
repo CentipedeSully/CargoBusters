@@ -85,6 +85,15 @@ public class IntegrityThresholdEvaluator : MonoBehaviour
         }
     }
 
+    public void SetCriticalThreshold(float newThreshold)
+    {
+        _lowThreshold = newThreshold;
+        if (_lowThreshold >= _highThreshold)
+            _highThreshold = _lowThreshold + .01f;
+
+        UpdateIntegrityState();
+    }
+
 
 
     public void LogEnteringLowIntegrity()

@@ -67,30 +67,35 @@ public class PlayerInventoryManager : MonoSingleton<PlayerInventoryManager>
                 _scrapTotalCollected += amount;
                 _currentScrap += amount;
                 LogItemAdded(amount, "scrap");
+                UiManager.Instance.GetScrapCountText().text = _currentScrap.ToString();
                 break;
 
             case 1:
                 _energyCellsTotalCollected += amount;
                 _currentEnergyCells += amount;
                 LogItemAdded(amount, "energy cells");
+                UiManager.Instance.GetEnergyCellsCountText().text = _currentEnergyCells.ToString();
                 break;
 
             case 2:
                 _warpCoilsTotoalCollected += amount;
                 _currentWarpCoils += amount;
                 LogItemAdded(amount, "warp coils");
+                UiManager.Instance.GetWarpCoilsCountText().text = _currentWarpCoils.ToString();
                 break;
 
             case 3:
                 _plasmaAcceleratorsTotoalCollected += amount;
                 _currentPlasmaAccelerators += amount;
                 LogItemAdded(amount, "plasma accelerators");
+                UiManager.Instance.GetPlasmaAcceleratorsCountText().text = _currentPlasmaAccelerators.ToString();
                 break;
 
             case 4:
                 _cannonAlloysTotalCollected += amount;
                 _currentCannonAlloys += amount;
                 LogItemAdded(amount, "cannon alloys");
+                UiManager.Instance.GetCannonAlloysCountText().text = _currentCannonAlloys.ToString();
                 break;
         }
 
@@ -104,51 +109,56 @@ public class PlayerInventoryManager : MonoSingleton<PlayerInventoryManager>
         switch (itemCode)
         {
             case 0:
-                if (_currentScrap <= amount)
+                if (_currentScrap >= amount)
                 {
                     _currentScrap -= amount;
                     OnItemAmountDecremented?.Invoke(itemCode, amount);
                     LogItemRemoved(amount, "scrap");
+                    UiManager.Instance.GetScrapCountText().text = _currentScrap.ToString();
                 }
                     
                 break;
 
             case 1:
-                if (_currentEnergyCells <= amount)
+                if (_currentEnergyCells >= amount)
                 {
                     _currentEnergyCells -= amount;
                     OnItemAmountDecremented?.Invoke(itemCode, amount);
                     LogItemRemoved(amount, "energy cells");
+                    UiManager.Instance.GetEnergyCellsCountText().text = _currentEnergyCells.ToString();
                 }
                     
                 break;
 
             case 2:
-                if (_currentWarpCoils <= amount)
+                if (_currentWarpCoils >= amount)
                 {
                     _currentWarpCoils -= amount;
                     OnItemAmountDecremented?.Invoke(itemCode, amount);
                     LogItemRemoved(amount, "warp coils");
+                    UiManager.Instance.GetWarpCoilsCountText().text = _currentWarpCoils.ToString();
                 }
                     
                 break;
 
             case 3:
-                if (_currentPlasmaAccelerators <= amount)
+                if (_currentPlasmaAccelerators >= amount)
                 {
                     _currentPlasmaAccelerators -= amount;
                     OnItemAmountDecremented?.Invoke(itemCode, amount);
                     LogItemRemoved(amount, "plasma accelerators");
+                    UiManager.Instance.GetPlasmaAcceleratorsCountText().text = _currentPlasmaAccelerators.ToString();
                 }
                     
                 break;
 
             case 4:
-                if (_currentCannonAlloys <= amount)
+                if (_currentCannonAlloys >= amount)
                 {
                     _currentCannonAlloys -= amount;
                     OnItemAmountDecremented?.Invoke(itemCode, amount);
                     LogItemRemoved(amount, "cannon alloys");
+                    UiManager.Instance.GetCannonAlloysCountText().text = _currentCannonAlloys.ToString();
                 }
 
                 break;
