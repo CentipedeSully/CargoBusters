@@ -142,19 +142,9 @@ public class UpgradeManager : MonoBehaviour
     private SpawnLaserOnCommand[] _playerBlastersArray;
 
     //Monobehaviors
-    private void Awake()
+    private void Enable()
     {
-        _inventoryRef = PlayerInventoryManager.Instance;
-        _playerWeaponsObject = PlayerObjectManager.Instance.GetComponent<ShipSystemReferencer>().GetWeaponsObject();
-        _playerEnginesObject = PlayerObjectManager.Instance.GetComponent<ShipSystemReferencer>().GetEnginesObject();
-        _playerHullObject = PlayerObjectManager.Instance.GetComponent<ShipSystemReferencer>().GetHullObject();
-        _playerShieldsObject = PlayerObjectManager.Instance.GetComponent<ShipSystemReferencer>().GetShieldsObject();
-        _playerWarpCoreObject = PlayerObjectManager.Instance.GetComponent<ShipSystemReferencer>().GetWarpCoreObject();
-        _playerBusterObject = PlayerObjectManager.Instance.GetComponent<ShipSystemReferencer>().GetCargoBuster();
 
-        _playerBlastersArray = _playerWeaponsObject.GetComponentsInChildren<SpawnLaserOnCommand>();
-        //Set Current Upgrade Prices to the Initial Prices
-        //...
     }
 
 
@@ -193,10 +183,9 @@ public class UpgradeManager : MonoBehaviour
         _weaponsUpgradesMax++;
     }
 
-    private void UpgradeWeaponsKillNegationChance() //!!!!!!!!!!!!!!!!!!!!!!!!!!
+    private void UpgradeWeaponsKillNegationChance()
     {
-        //Build Damage Negation Mechanic
-        //Upgrade the Negation Chance
+        KillNegater.Instance.IncreaseKillNegationChance((int)(_killNegationChanceModifier * 100));
 
         _killNegationChanceUpgradeCurrent++;
         _weaponsUpgradesCurrent++;
@@ -226,9 +215,9 @@ public class UpgradeManager : MonoBehaviour
         _hullUpgradesCurrent++;
     }
 
-    private void UpgradeHullRegenRate() //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    private void UpgradeHullRegenRate()
     {
-        //Implement Hull Regenerator!
+        _playerHullObject.GetComponent<Regenerator>().SetTickDuration(_playerHullObject.GetComponent<Regenerator>().GetTickDuration() - _hullRegenModifier);
 
         _hullRegenUpgradeCurrent++;
         _hullUpgradesCurrent++;
@@ -289,7 +278,22 @@ public class UpgradeManager : MonoBehaviour
 
 
     //External Control Utils
+    public void InitializeUpgrader()
+    {
+        _inventoryRef = PlayerInventoryManager.Instance;
 
+        _playerWeaponsObject = PlayerObjectManager.Instance.GetComponent<ShipSystemReferencer>().GetWeaponsObject();
+        _playerEnginesObject = PlayerObjectManager.Instance.GetComponent<ShipSystemReferencer>().GetEnginesObject();
+        _playerHullObject = PlayerObjectManager.Instance.GetComponent<ShipSystemReferencer>().GetHullObject();
+        _playerShieldsObject = PlayerObjectManager.Instance.GetComponent<ShipSystemReferencer>().GetShieldsObject();
+        _playerWarpCoreObject = PlayerObjectManager.Instance.GetComponent<ShipSystemReferencer>().GetWarpCoreObject();
+        _playerBusterObject = PlayerObjectManager.Instance.GetComponent<ShipSystemReferencer>().GetCargoBuster();
+
+        _playerBlastersArray = _playerWeaponsObject.GetComponentsInChildren<SpawnLaserOnCommand>();
+
+        //Set Current Upgrade Prices to the Initial Prices
+        //...
+    }
 
     //Getters and Setters
 

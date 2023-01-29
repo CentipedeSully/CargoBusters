@@ -39,10 +39,39 @@ public class DamageHandler: MonoBehaviour
             if (_shieldsSystemControllerRef.IsShieldsOnline())
                 _shieldsSystemControllerRef.DamageShields(value);
 
-            else _hullSystemControllerRef.DamageHull(value);
+            else
+                AttemptToNegateKillIfDamageIsTooMuch(value);
+
         }
 
-        else _hullSystemControllerRef.DamageHull(value);
+        else
+            AttemptToNegateKillIfDamageIsTooMuch(value);
     }
 
+    private void AttemptToNegateKillIfDamageIsTooMuch(int damage)
+    {
+        if (damage >= _hullSystemControllerRef.GetComponent<IntegrityBehavior>().GetCurrentIntegrity() && GetComponent<ShipInformation>().IsPlayer() == false)
+        {
+            if (KillNegater.Instance.IsKillNegatedRollSuccessful())
+            {
+                _hullSystemControllerRef.DamageHull(FindMinimalDamage(damage));
+            }
+            else _hullSystemControllerRef.DamageHull(damage);
+        }
+
+        else _hullSystemControllerRef.DamageHull(damage);
+
+    }
+
+    private int FindMinimalDamage(int damage)
+    {
+        int currentHull = (int)_hullSystemControllerRef.GetComponent<IntegrityBehavior>().GetCurrentIntegrity();
+        int damageMitigationModifier = 0;
+
+        while (currentHull - (damage - damageMitigationModifier) <= 0)
+        {
+            damageMitigationModifier++;
+        }
+        return damage - damageMitigationModifier;
+    }
 }

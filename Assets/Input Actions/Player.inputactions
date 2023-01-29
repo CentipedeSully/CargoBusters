@@ -69,39 +69,12 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "DebugInputT",
+                    "name": "Repair Ship",
                     "type": "Button",
-                    "id": "2027bde0-8c90-4ac1-aa09-247b91aa1a4a",
+                    "id": "1b3280e0-c2af-48af-8dcb-a229f1d28d76",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Press(behavior=2)",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "DebugInputY",
-                    "type": "Button",
-                    "id": "21123de7-a85c-4518-8efd-6a3ef5def1bf",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=1)",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "DebugInputG",
-                    "type": "Button",
-                    "id": "e4017d7c-e05a-43e2-9f99-d46938aad0e4",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=1)",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "DebugInputH",
-                    "type": "Button",
-                    "id": "138996b3-ee54-4b26-acc1-9db78482c445",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=1)",
+                    "interactions": "",
                     "initialStateCheck": false
                 }
             ],
@@ -251,45 +224,12 @@
                 },
                 {
                     "name": "",
-                    "id": "fefa59cc-d82f-4a20-8083-83f0ca38a734",
-                    "path": "<Keyboard>/t",
+                    "id": "83ce1f13-4381-4023-9e49-3624993a207f",
+                    "path": "<Keyboard>/r",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "DebugInputT",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "5163ea78-e504-458e-aff4-9d1d797bf955",
-                    "path": "<Keyboard>/y",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "DebugInputY",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "b8319419-dd5e-40f6-941c-6b3dcb10e903",
-                    "path": "<Keyboard>/g",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "DebugInputG",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "4e558861-c30e-4789-9660-9f1f3dd55895",
-                    "path": "<Keyboard>/h",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "DebugInputH",
+                    "action": "Repair Ship",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

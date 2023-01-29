@@ -2971,6 +2971,7 @@ GameObject:
   - component: {fileID: 2655467518729642870}
   - component: {fileID: 5954513668001521444}
   - component: {fileID: 7101337223988022963}
+  - component: {fileID: 8014109840180267222}
   m_Layer: 0
   m_Name: Hull Systems
   m_TagString: Untagged
@@ -3005,8 +3006,68 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe0b6ca275edcf5459cf36160193a447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _regenCommand: 0
+  _isRegenUnlocked: 0
+  _isRegenerating: 0
+  _isRegenEnabled: 1
+  _isRegenReady: 1
+  _regenCooldown: 0.5
   _isHullCritical: 0
   _isHullDestroyed: 0
+  OnHullRegenStarted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8014109840180267222}
+        m_TargetAssemblyTypeName: Regenerator, Assembly-CSharp
+        m_MethodName: StartRegen
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 5954513668001521444}
+        m_TargetAssemblyTypeName: HealthUiCommunicator, Assembly-CSharp
+        m_MethodName: EnterRegen
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnHullRegenInterrupted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8014109840180267222}
+        m_TargetAssemblyTypeName: Regenerator, Assembly-CSharp
+        m_MethodName: StopRegen
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 5954513668001521444}
+        m_TargetAssemblyTypeName: HealthUiCommunicator, Assembly-CSharp
+        m_MethodName: ExitRegen
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnHullDamaged:
     m_PersistentCalls:
       m_Calls:
@@ -3070,6 +3131,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 5827871365029259009}
+        m_TargetAssemblyTypeName: HullSystemController, Assembly-CSharp
+        m_MethodName: InterruptRegeneration
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnHullDamagedWhileCritical:
     m_PersistentCalls:
       m_Calls:
@@ -3124,6 +3197,39 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnHullRegenDisabled:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHullRegenEnabled:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHullRegenExited:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5954513668001521444}
+        m_TargetAssemblyTypeName: HealthUiCommunicator, Assembly-CSharp
+        m_MethodName: ExitRegen
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 8014109840180267222}
+        m_TargetAssemblyTypeName: Regenerator, Assembly-CSharp
+        m_MethodName: StopRegen
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2655467518729642866
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3137,7 +3243,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _name: Hul Integrity
-  _maxIntegrity: 5
+  _maxIntegrity: 3
   _currentIntegrity: 10
   _startWithFullIntegrity: 1
   OnIntegrityDecreased:
@@ -3218,9 +3324,45 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 5954513668001521444}
+        m_TargetAssemblyTypeName: HealthUiCommunicator, Assembly-CSharp
+        m_MethodName: FillHealthUI
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnIntegrityMaxed:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8014109840180267222}
+        m_TargetAssemblyTypeName: Regenerator, Assembly-CSharp
+        m_MethodName: StopRegen
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 5954513668001521444}
+        m_TargetAssemblyTypeName: HealthUiCommunicator, Assembly-CSharp
+        m_MethodName: ExitRegen
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2655467518729642870
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3414,6 +3556,38 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &8014109840180267222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2655467518729642868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf7b5c73debf3604aa7fd6cdf33fd34f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _regeneratorName: Hull Regenerator
+  _regenRate: 1
+  _regenTickDuration: 10
+  _isRegenerating: 0
+  _isRegenEnabled: 1
+  OnRegenerationTick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2655467518729642866}
+        m_TargetAssemblyTypeName: IntegrityBehavior, Assembly-CSharp
+        m_MethodName: IncreaseIntegrity
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2655467518751628477
 GameObject:
   m_ObjectHideFlags: 0

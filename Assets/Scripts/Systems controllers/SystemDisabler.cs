@@ -73,6 +73,7 @@ public class SystemDisabler : MonoBehaviour
 
         _cargoSystemControllerRef.DisableCargoSecurity();
         _cargoBusterRef.DisableBuster();
+        _systemReferencer.GetHullObject().GetComponent<HullSystemController>().DisableRegeneration();
 
         OnSystemsDisabled?.Invoke();
     }
@@ -88,6 +89,7 @@ public class SystemDisabler : MonoBehaviour
 
         _cargoSystemControllerRef.DisableCargoSecurity();
         _cargoBusterRef.DisableBuster();
+        _systemReferencer.GetHullObject().GetComponent<HullSystemController>().DisableRegeneration();
     }
 
     public void EnableAllSystems()
@@ -101,6 +103,7 @@ public class SystemDisabler : MonoBehaviour
 
         _cargoSystemControllerRef.EnableCargoSecurity();
         _cargoBusterRef.EnableBuster();
+        _systemReferencer.GetHullObject().GetComponent<HullSystemController>().EnableRegeneration();
     }
 
     private IEnumerator TickOutOfBoundsTimer()

@@ -15,8 +15,10 @@ public class CommuncateInputToPlayerObject : MonoSingleton<CommuncateInputToPlay
     private bool _warpInput = false;
     private bool _bustCargoInput = false;
     private bool _spawnPlayerInput = false;
+    private bool _repairPlayerInput = false;
 
     //References
+    private HullSystemController _playerHullSystemControllerRef;
     private EnginesSystemController _playerEnginesControllerRef;
     private WeaponsSystemController _playerShotCommanderScriptRef;
     private WarpCoreSystemController _playerWarpCoreControllerRef;
@@ -34,6 +36,7 @@ public class CommuncateInputToPlayerObject : MonoSingleton<CommuncateInputToPlay
             ShareShootInputWithWeaponsControllerScript();
             ShareWarpInputWithWarpControllerScript();
             ShareBusterInputWithBusterBehavior();
+            ShareRepairInputWithHullControllerScript();
         }
         
     }
@@ -55,6 +58,8 @@ public class CommuncateInputToPlayerObject : MonoSingleton<CommuncateInputToPlay
         _bustCargoInput = InputDetector.Instance.GetBustCargoInput();
 
         _spawnPlayerInput = InputDetector.Instance.GetPlayerSpawnInput();
+
+        _repairPlayerInput = InputDetector.Instance.GetPlayerRepairInput();
     }
 
     private void SpawnPlayerOnInput()
@@ -84,6 +89,11 @@ public class CommuncateInputToPlayerObject : MonoSingleton<CommuncateInputToPlay
         _playerCargoBusterRef.SetBustCommand(_bustCargoInput);
     }
 
+    private void ShareRepairInputWithHullControllerScript()
+    {
+        _playerHullSystemControllerRef.SetRegenCommand(_repairPlayerInput);
+    }
+
     //External Control Utils
     public void InitializePlayerObjectReferences()
     {
@@ -98,6 +108,7 @@ public class CommuncateInputToPlayerObject : MonoSingleton<CommuncateInputToPlay
             _playerShotCommanderScriptRef = _playerShipObject.GetComponent<ShipSystemReferencer>().GetWeaponsObject().GetComponent<WeaponsSystemController>();
             _playerWarpCoreControllerRef = _playerShipObject.GetComponent<ShipSystemReferencer>().GetWarpCoreObject().GetComponent<WarpCoreSystemController>();
             _playerCargoBusterRef = _playerShipObject.GetComponent<ShipSystemReferencer>().GetCargoBuster();
+            _playerHullSystemControllerRef = _playerShipObject.GetComponent<ShipSystemReferencer>().GetHullObject().GetComponent<HullSystemController>();
         }
     }
 

@@ -18,7 +18,9 @@ public class HealthUiCommunicator : MonoBehaviour
     {
         _isPlayer = transform.parent.GetComponent<ShipInformation>().IsPlayer();
         ActivateHealthUI();
-        FillAllHealthUI();
+        int hullCount = (int)GetComponent<IntegrityBehavior>().GetMaxIntegrity();
+        for (int i = 0; i < hullCount; i++)
+            FillHealthUI();
     }
 
     public void ReduceHealthUI()
@@ -30,7 +32,7 @@ public class HealthUiCommunicator : MonoBehaviour
     public void FillHealthUI()
     {
         if (_isPlayer)
-            UiManager.Instance.GetHealthUiController().FillAll();
+            UiManager.Instance.GetHealthUiController().FillSingle();
     }
 
     public void ReduceAllHealthUI()
