@@ -25,7 +25,7 @@ public class UpgradeManager : MonoBehaviour
 
     [Space(20)]
     [SerializeField] private bool _isBlasterCountUpgradeAvailable = false;
-    [SerializeField] private int _blasterCountMax = 2;
+    [SerializeField] private int _blasterCountUpgradeMax = 2;
     [SerializeField] private int _blasterCountUpgradeCurrent = 0;
 
     [Space(20)]
@@ -121,7 +121,7 @@ public class UpgradeManager : MonoBehaviour
 
     [Header("ScrapHarvester")]
     [SerializeField] private bool _isScrapHarvesterUpgradeAvailable = false;
-    [SerializeField] private List<Materials> _ScrapHarvesterUpgradeMaterialsList;
+    [SerializeField] private List<Materials> _scrapHarvesterUpgradeMaterialsList;
     [SerializeField] private List<int> _currentScrapHarvesterUpgradePrice;
     [SerializeField] private bool _isScrapHarvesterPurchased = false;
 
@@ -142,138 +142,180 @@ public class UpgradeManager : MonoBehaviour
     private SpawnLaserOnCommand[] _playerBlastersArray;
 
     //Monobehaviors
-    private void Enable()
-    {
-
-    }
+    //...
 
 
 
     //Utilites
-    private void UpgradeWeaponsCooldown()
+    public void UpdateUpgradeAvailability()
     {
-        foreach (SpawnLaserOnCommand blaster in _playerBlastersArray)
-            blaster.SetCooldown(blaster.GetCooldown() - _cooldownUpgradeModifier);
+        UpdateWeaponUpgradeAvailability();
 
-        _cooldownUpgradeCurrent++;
-        _weaponsUpgradesCurrent++;
+        UpdateEnginesUpgradeAvailability();
+
+        UpdateHullUpgradeAvailability();
+
+        UpdateShieldsUpgradeAvailability();
+
+        UpdateBusterUpgradeAvailability();
+
+        UpdateAuxillaryUpgradesAvailability();
     }
 
-    private void UpgradeWeaponsDamage()
+    private void UpdateWeaponUpgradeAvailability()
     {
-        foreach (SpawnLaserOnCommand blaster in _playerBlastersArray)
-            blaster.SetDamage(blaster.GetDamage() + 1);
-
-        _damageUpgradeCurrent++;
-        _weaponsUpgradesCurrent++;
-    }
-
-    private void UpgradeWeaponsBlasterCount()
-    {
-        foreach (SpawnLaserOnCommand blaster in _playerBlastersArray)
+        if (_weaponsUpgradesCurrent >= _weaponsUpgradesMax)
         {
-            if (blaster.IsBlasterEnabled() == false)
-            {
-                blaster.EnableBlaster();
-                break;
-            }
+            _isBlasterCooldownUpgradeAvailable = false;
+            _isBlasterCountUpgradeAvailable = false;
+            _isBlasterDamageUpgradeAvailable = false;
+            _isBlasterKillNegationChanceUpgradeAvailable = false;
         }
+        else
+        {
+            //cooldown
+            if (_cooldownUpgradeCurrent >= _cooldownUpgradeMax || !IsUpgradePriceAffordable(_weaponsUpgradeMaterialsList, _currentWeaponsUpgradePrice))
+                _isBlasterCooldownUpgradeAvailable = false;
+            else _isBlasterCooldownUpgradeAvailable = true;
 
-        _blasterCountUpgradeCurrent++;
-        _weaponsUpgradesMax++;
+            //Blaster count
+            if (_blasterCountUpgradeCurrent >= _blasterCountUpgradeMax || !IsUpgradePriceAffordable(_weaponsUpgradeMaterialsList, _currentWeaponsUpgradePrice))
+                _isBlasterCountUpgradeAvailable = false;
+            else _isBlasterCountUpgradeAvailable = true;
+
+            //Damage
+            if (_damageUpgradeCurrent >= _damageUpgradeMax || !IsUpgradePriceAffordable(_weaponsUpgradeMaterialsList, _currentWeaponsUpgradePrice))
+                _isBlasterDamageUpgradeAvailable = false;
+            else _isBlasterDamageUpgradeAvailable = true;
+
+            //KillNegation
+            if (_killNegationChanceUpgradeCurrent >= _killNegationChanceUpgradeMax || !IsUpgradePriceAffordable(_weaponsUpgradeMaterialsList, _currentWeaponsUpgradePrice))
+                _isBlasterKillNegationChanceUpgradeAvailable = false;
+            else _isBlasterKillNegationChanceUpgradeAvailable = true;
+        }
     }
 
-    private void UpgradeWeaponsKillNegationChance()
+    private void UpdateEnginesUpgradeAvailability()
     {
-        KillNegater.Instance.IncreaseKillNegationChance((int)(_killNegationChanceModifier * 100));
+        if (_engineUpgradesCurrent >= _engineUpgradesMax)
+        {
+            _isEngineForwardsSpeedUpgradeAvailable = false;
+            _isEngineTurnSpeedUpgradeAvailable = false;
+        }
+        else
+        {
+            if (_forwardSpeedUpgradeCurrent >= _forwardSpeedUpgradeMax || !IsUpgradePriceAffordable(_enginesUpgradeMaterialsList, _currentEnginesUpgradePrice))
+                _isEngineForwardsSpeedUpgradeAvailable = false;
+            else _isEngineForwardsSpeedUpgradeAvailable = true;
 
-        _killNegationChanceUpgradeCurrent++;
-        _weaponsUpgradesCurrent++;
+            if (_turnSpeedUpgradeCurrent >= _turnSpeedUpgradeMax || !IsUpgradePriceAffordable(_enginesUpgradeMaterialsList, _currentEnginesUpgradePrice))
+                _isEngineTurnSpeedUpgradeAvailable = false;
+            else _isEngineTurnSpeedUpgradeAvailable = true;
+        }
     }
 
-    private void UpgradeEngineSpeed()
+    private void UpdateHullUpgradeAvailability()
     {
-        _playerEnginesObject.GetComponent<MoveObject>().SetSpeed(_playerEnginesObject.GetComponent<MoveObject>().GetSpeed() + _forwardSpeedModifier);
-        
-        _forwardSpeedUpgradeCurrent++;
-        _engineUpgradesCurrent++;
+        if (_hullUpgradesCurrent >= _hullUpgradesMax)
+        {
+            _isHullDurabilityUpgradeAvailable = false;
+            _isHullRegenUpgradeAvailable = false;
+        }
+        else
+        {
+            if (_hullDurabilityUpgradeCurrent >= _hullDurabilityUpgradeMax || !IsUpgradePriceAffordable(_hullUpgradeMaterialsList, _currentHullUpgradePrice))
+                _isHullDurabilityUpgradeAvailable = false;
+            else _isHullDurabilityUpgradeAvailable = true;
+
+            if (!IsUpgradePriceAffordable(_hullUpgradeMaterialsList, _currentHullUpgradePrice))
+                _isHullRegenUpgradeAvailable = false;
+            else _isHullRegenUpgradeAvailable = true;
+        }
     }
 
-    private void UpgradeEngineTurn()
+    private void UpdateShieldsUpgradeAvailability()
     {
-        _playerEnginesObject.GetComponent<AddRotationToObject>().SetRotationSpeed(_playerEnginesObject.GetComponent<AddRotationToObject>().GetRotationSpeed() + _turnSpeedModifier);
+        if (_shieldsUpgradesCurrent >= _shieldsUpgradesMax)
+        {
+            _isShieldCapacityUpgradeAvailable = false;
+            _isShieldRegenUpgradeAvailable = false;
+        }
+        else
+        {
+            if (_shieldCapacityUpgradeCurrent >= _shieldCapacityUpgradeMax || !IsUpgradePriceAffordable(_shieldsUpgradeMaterialsList, _currentShieldsUpgradePrice))
+                _isShieldCapacityUpgradeAvailable = false;
+            else _isShieldCapacityUpgradeAvailable = true;
 
-        _turnSpeedUpgradeCurrent++;
-        _engineUpgradesCurrent++;
+            if (!IsUpgradePriceAffordable(_shieldsUpgradeMaterialsList, _currentShieldsUpgradePrice))
+                _isShieldRegenUpgradeAvailable = false;
+            else _isShieldRegenUpgradeAvailable = true;
+        }
     }
 
-    private void UpgradeHullDurability()
+    private void UpdateBusterUpgradeAvailability()
     {
-        _playerHullObject.GetComponent<IntegrityBehavior>().SetMaxIntegrity((int)_playerHullObject.GetComponent<IntegrityBehavior>().GetMaxIntegrity() + 1);
-
-        _hullDurabilityUpgradeCurrent++;
-        _hullUpgradesCurrent++;
+        if (_busterUpgradesCurrent >= _busterUpgradesMax)
+        {
+            _isBusterDropChanceUpgradeAvailable = false;
+            _isBusterTimeUpgradeAvailable = false;
+        }
+        else
+        {
+            if (!IsUpgradePriceAffordable(_busterUpgradeMaterialsList, _currentBusterUpgradePrice))
+            {
+                _isBusterDropChanceUpgradeAvailable = false;
+                _isBusterTimeUpgradeAvailable = false;
+            }
+            else
+            {
+                _isBusterTimeUpgradeAvailable = true;
+                _isBusterDropChanceUpgradeAvailable = true;
+            }
+                
+        }
     }
 
-    private void UpgradeHullRegenRate()
+    private void UpdateAuxillaryUpgradesAvailability()
     {
-        _playerHullObject.GetComponent<Regenerator>().SetTickDuration(_playerHullObject.GetComponent<Regenerator>().GetTickDuration() - _hullRegenModifier);
+        if (_isWarpCoreRepaired || !IsUpgradePriceAffordable(_warpCoreUpgradeMaterialsList, _warpCoreUpgradePrice))
+            _isWarpCoreUpgradeAvailable = false;
+        else _isWarpCoreUpgradeAvailable = true;
 
-        _hullRegenUpgradeCurrent++;
-        _hullUpgradesCurrent++;
-    }
-
-    private void UpgradeShieldsCapacity()
-    {
-        _playerShieldsObject.GetComponent<IntegrityBehavior>().SetMaxIntegrity((int)_playerShieldsObject.GetComponent<IntegrityBehavior>().GetMaxIntegrity() + 1);
-
-        _shieldCapacityUpgradeCurrent++;
-        _shieldsUpgradesCurrent++;
-    }
-
-    private void UpgradeShieldRegenRate()
-    {
-        _playerShieldsObject.GetComponent<Regenerator>().SetTickDuration(_playerShieldsObject.GetComponent<Regenerator>().GetTickDuration() - _shieldRegenModifier);
-
-        _shieldRegenUpgradeCurrent++;
-        _shieldsUpgradesCurrent++;
-    }
-
-    private void FixWarpCore()
-    {
-        _playerWarpCoreObject.GetComponent<WarpCoreSystemController>().EnableSystem();
-        _isWarpCoreRepaired = true;
-    }
-
-    private void UpgradeBusterDuration()
-    {
-        _playerBusterObject.GetComponent<CargoBusterBehavior>().SetBusterDuration(_playerBusterObject.GetComponent<CargoBusterBehavior>().GetBusterDuration() - _busterTimeModifier);
-
-        _busterUpgradesCurrent++;
-    }
-
-    private void UpgradeBusterDropChance()
-    {
-        CargoLootDropper.Instance.IncreaseDropRate((int)(_busterDropChanceModifier * 100));
-        _busterUpgradesCurrent++;
-    }
-
-    private void EnableScrapHarvester()
-    {
-        ScrapHarvester.Instance.EnableHarvesting();
-        _isScrapHarvesterPurchased = true;
+        if (_isScrapHarvesterPurchased || !IsUpgradePriceAffordable(_scrapHarvesterUpgradeMaterialsList, _currentScrapHarvesterUpgradePrice))
+            _isScrapHarvesterUpgradeAvailable = false;
+        else _isScrapHarvesterUpgradeAvailable = true;
     }
 
     private void RemoveMaterialsFromInventory(List<Materials> materialsList, List<int> priceList)
     {
         for (int i = 0; i < materialsList.Count; i++)
-            _inventoryRef.IncrementItemCount((int)materialsList[i], priceList[i]);
+            _inventoryRef.DecrementItemCount((int)materialsList[i], priceList[i]);
     }
 
     private void IncreaseUpgradePrice(ref List<int> currentPriceList, List<int> incrementalPriceList)
     {
         for (int i = 0; i < currentPriceList.Count; i++)
             currentPriceList[i] += incrementalPriceList[i];
+    }
+
+    private bool IsUpgradePriceAffordable(List<Materials> materialsList, List<int> priceList)
+    {
+        for (int i = 0; i < materialsList.Count; i++)
+        {
+            if (PlayerInventoryManager.Instance.GetItemCount((int)materialsList[i]) < priceList[i])
+                return false;
+        }
+
+        return true;
+    }
+
+    private string BuildPriceString(List<Materials> materialsList, List<int> priceList)
+    {
+        string priceString = "";
+        for (int i = 0; i < materialsList.Count; i++)
+            priceString += materialsList[i].ToString() + " : " + priceList[i] + "\n";
+
+        return priceString;
     }
 
 
@@ -291,14 +333,321 @@ public class UpgradeManager : MonoBehaviour
 
         _playerBlastersArray = _playerWeaponsObject.GetComponentsInChildren<SpawnLaserOnCommand>();
 
+
+
         //Set Current Upgrade Prices to the Initial Prices
-        //...
+        _currentWeaponsUpgradePrice = new List<int>(_initialWeaponsMaterialCounts);
+        _currentEnginesUpgradePrice = new List<int>(_initialEnginesMaterialCounts);
+        _currentHullUpgradePrice = new List<int>(_initialHullMaterialCounts);
+        _currentShieldsUpgradePrice = new List<int>(_initialShieldsMaterialCounts);
+        _currentBusterUpgradePrice = new List<int>(_initialBusterMaterialCounts);
+
+        UpdateUpgradeAvailability();
     }
 
+    public void UpgradeWeaponsCooldown()
+    {
+        if (_isBlasterCooldownUpgradeAvailable && IsUpgradePriceAffordable(_weaponsUpgradeMaterialsList, _currentWeaponsUpgradePrice))
+        {
+            //Take Materials from Inventory
+            RemoveMaterialsFromInventory(_weaponsUpgradeMaterialsList, _currentWeaponsUpgradePrice);
+            IncreaseUpgradePrice(ref _currentWeaponsUpgradePrice, _incrementalWeaponsMaterialCounts);
+
+            //Upgrade System
+            foreach (SpawnLaserOnCommand blaster in _playerBlastersArray)
+                blaster.SetCooldown(blaster.GetCooldown() - _cooldownUpgradeModifier);
+
+            //Track Upgrade Progress
+            _cooldownUpgradeCurrent++;
+            _weaponsUpgradesCurrent++;
+
+            UpdateUpgradeAvailability();
+        }
+    }
+
+    public void UpgradeWeaponsDamage()
+    {
+        if (_isBlasterDamageUpgradeAvailable && IsUpgradePriceAffordable(_weaponsUpgradeMaterialsList, _currentWeaponsUpgradePrice))
+        {
+            //remove Materials fom inventory
+            RemoveMaterialsFromInventory(_weaponsUpgradeMaterialsList, _currentWeaponsUpgradePrice);
+            IncreaseUpgradePrice(ref _currentWeaponsUpgradePrice, _incrementalWeaponsMaterialCounts);
+
+            //Upgrade System
+            foreach (SpawnLaserOnCommand blaster in _playerBlastersArray)
+                blaster.SetDamage(blaster.GetDamage() + 1);
+
+            //Track Upgrade Progress
+            _damageUpgradeCurrent++;
+            _weaponsUpgradesCurrent++;
+
+            UpdateUpgradeAvailability();
+        }
+    }
+
+    public void UpgradeWeaponsBlasterCount()
+    {
+        if (_isBlasterCountUpgradeAvailable && IsUpgradePriceAffordable(_weaponsUpgradeMaterialsList, _currentWeaponsUpgradePrice))
+        {
+            //remove Materials fom inventory
+            RemoveMaterialsFromInventory(_weaponsUpgradeMaterialsList, _currentWeaponsUpgradePrice);
+            IncreaseUpgradePrice(ref _currentWeaponsUpgradePrice, _incrementalWeaponsMaterialCounts);
+
+            //Upgrade System
+            foreach (SpawnLaserOnCommand blaster in _playerBlastersArray)
+            {
+                if (blaster.IsBlasterEnabled() == false)
+                {
+                    blaster.EnableBlaster();
+                    break;
+                }
+            }
+
+            //Track Upgrade Progress
+            _blasterCountUpgradeCurrent++;
+            _weaponsUpgradesMax++;
+
+            UpdateUpgradeAvailability();
+        }
+    }
+
+    public void UpgradeWeaponsKillNegationChance()
+    {
+        if (_isBlasterKillNegationChanceUpgradeAvailable && IsUpgradePriceAffordable(_weaponsUpgradeMaterialsList, _currentWeaponsUpgradePrice))
+        {
+            //remove Materials fom inventory
+            RemoveMaterialsFromInventory(_weaponsUpgradeMaterialsList, _currentWeaponsUpgradePrice);
+            IncreaseUpgradePrice(ref _currentWeaponsUpgradePrice, _incrementalWeaponsMaterialCounts);
+
+            //Upgrade System
+            KillNegater.Instance.IncreaseKillNegationChance((int)(_killNegationChanceModifier * 100));
+
+            //Track Upgrade Progress
+            _killNegationChanceUpgradeCurrent++;
+            _weaponsUpgradesCurrent++;
+
+            UpdateUpgradeAvailability();
+        }
+    }
+
+    public void UpgradeEngineSpeed()
+    {
+        if (_isEngineForwardsSpeedUpgradeAvailable && IsUpgradePriceAffordable(_enginesUpgradeMaterialsList, _currentEnginesUpgradePrice))
+        {
+            //remove Materials fom inventory
+            RemoveMaterialsFromInventory(_enginesUpgradeMaterialsList, _currentEnginesUpgradePrice);
+            IncreaseUpgradePrice(ref _currentEnginesUpgradePrice, _incrementalEnginesMaterialCounts);
+
+            //Upgrade system
+            _playerEnginesObject.GetComponent<MoveObject>().SetSpeed(_playerEnginesObject.GetComponent<MoveObject>().GetSpeed() + _forwardSpeedModifier);
+
+            //track progress
+            _forwardSpeedUpgradeCurrent++;
+            _engineUpgradesCurrent++;
+
+            UpdateUpgradeAvailability();
+        }
+    }
+
+    public void UpgradeEngineTurn()
+    {
+        if (_isEngineTurnSpeedUpgradeAvailable && IsUpgradePriceAffordable(_enginesUpgradeMaterialsList, _currentEnginesUpgradePrice))
+        {
+            //remove Materials fom inventory
+            RemoveMaterialsFromInventory(_enginesUpgradeMaterialsList, _currentEnginesUpgradePrice);
+            IncreaseUpgradePrice(ref _currentEnginesUpgradePrice, _incrementalEnginesMaterialCounts);
+
+            //upgrade system
+            _playerEnginesObject.GetComponent<AddRotationToObject>().SetRotationSpeed(_playerEnginesObject.GetComponent<AddRotationToObject>().GetRotationSpeed() + _turnSpeedModifier);
+
+            //track progress
+            _turnSpeedUpgradeCurrent++;
+            _engineUpgradesCurrent++;
+
+            UpdateUpgradeAvailability();
+        }
+    }
+
+    public void UpgradeHullDurability()
+    {
+        if (_isHullDurabilityUpgradeAvailable && IsUpgradePriceAffordable(_hullUpgradeMaterialsList, _currentHullUpgradePrice))
+        {
+            //remove Materials fom inventory
+            RemoveMaterialsFromInventory(_hullUpgradeMaterialsList, _currentHullUpgradePrice);
+            IncreaseUpgradePrice(ref _currentHullUpgradePrice, _incrementalHullMaterialCounts);
+
+            //Upgrade systems
+            _playerHullObject.GetComponent<IntegrityBehavior>().SetMaxIntegrity((int)_playerHullObject.GetComponent<IntegrityBehavior>().GetMaxIntegrity() + 1);
+
+            //track progress
+            _hullDurabilityUpgradeCurrent++;
+            _hullUpgradesCurrent++;
+
+            UpdateUpgradeAvailability();
+        }
+    }
+
+    public void UpgradeHullRegenRate()
+    {
+        if (_isHullRegenUpgradeAvailable && IsUpgradePriceAffordable(_hullUpgradeMaterialsList, _currentHullUpgradePrice))
+        {
+            //remove Materials fom inventory
+            RemoveMaterialsFromInventory(_hullUpgradeMaterialsList, _currentHullUpgradePrice);
+            IncreaseUpgradePrice(ref _currentHullUpgradePrice, _incrementalHullMaterialCounts);
+
+            //upgrade Sysytems
+            _playerHullObject.GetComponent<Regenerator>().SetTickDuration(_playerHullObject.GetComponent<Regenerator>().GetTickDuration() - _hullRegenModifier);
+
+            //track progress
+            _hullRegenUpgradeCurrent++;
+            _hullUpgradesCurrent++;
+
+            UpdateUpgradeAvailability();
+        }
+    }
+
+    public void UpgradeShieldsCapacity()
+    {
+        if (_isShieldCapacityUpgradeAvailable && IsUpgradePriceAffordable(_shieldsUpgradeMaterialsList, _currentShieldsUpgradePrice))
+        {
+            //remove Materials fom inventory
+            RemoveMaterialsFromInventory(_shieldsUpgradeMaterialsList, _currentShieldsUpgradePrice);
+            IncreaseUpgradePrice(ref _currentShieldsUpgradePrice, _incrementalShieldsMaterialCounts);
+
+            //upgrade system
+            _playerShieldsObject.GetComponent<IntegrityBehavior>().SetMaxIntegrity((int)_playerShieldsObject.GetComponent<IntegrityBehavior>().GetMaxIntegrity() + 1);
+
+            //track progress
+            _shieldCapacityUpgradeCurrent++;
+            _shieldsUpgradesCurrent++;
+
+            UpdateUpgradeAvailability();
+        }
+    }
+
+    public void UpgradeShieldRegenRate()
+    {
+        if (_isShieldRegenUpgradeAvailable && IsUpgradePriceAffordable(_shieldsUpgradeMaterialsList, _currentShieldsUpgradePrice))
+        {
+            //remove Materials fom inventory
+            RemoveMaterialsFromInventory(_shieldsUpgradeMaterialsList, _currentShieldsUpgradePrice);
+            IncreaseUpgradePrice(ref _currentShieldsUpgradePrice, _incrementalShieldsMaterialCounts);
+
+            //upgrade systems
+            _playerShieldsObject.GetComponent<Regenerator>().SetTickDuration(_playerShieldsObject.GetComponent<Regenerator>().GetTickDuration() - _shieldRegenModifier);
+
+            //track progress
+            _shieldRegenUpgradeCurrent++;
+            _shieldsUpgradesCurrent++;
+
+            UpdateUpgradeAvailability();
+        }
+    }
+
+    public void FixWarpCore()
+    {
+        if (_isWarpCoreUpgradeAvailable && IsUpgradePriceAffordable(_warpCoreUpgradeMaterialsList, _warpCoreUpgradePrice))
+        {
+            //remove materials from inventory
+            RemoveMaterialsFromInventory(_warpCoreUpgradeMaterialsList, _warpCoreUpgradePrice);
+
+            //fix system
+            _playerWarpCoreObject.GetComponent<WarpCoreSystemController>().EnableSystem();
+
+            //track progress
+            _isWarpCoreRepaired = true;
+
+            UpdateUpgradeAvailability();
+        }
+    }
+
+    public void UpgradeBusterDuration()
+    {
+        if (_isBusterTimeUpgradeAvailable && IsUpgradePriceAffordable(_busterUpgradeMaterialsList, _currentBusterUpgradePrice))
+        {
+            //remove Materials fom inventory
+            RemoveMaterialsFromInventory(_busterUpgradeMaterialsList, _currentBusterUpgradePrice);
+            IncreaseUpgradePrice(ref _currentBusterUpgradePrice, _incrementalBusterMaterialCounts);
+
+            //upgrade system
+            _playerBusterObject.GetComponent<CargoBusterBehavior>().SetBusterDuration(_playerBusterObject.GetComponent<CargoBusterBehavior>().GetBusterDuration() - _busterTimeModifier);
+
+            //track progress
+            _busterUpgradesCurrent++;
+
+            UpdateUpgradeAvailability();
+        }
+    }
+
+    public void UpgradeBusterDropChance()
+    {
+        if (_isBusterDropChanceUpgradeAvailable && IsUpgradePriceAffordable(_busterUpgradeMaterialsList, _currentBusterUpgradePrice))
+        {
+            //remove Materials fom inventory
+            RemoveMaterialsFromInventory(_busterUpgradeMaterialsList, _currentBusterUpgradePrice);
+            IncreaseUpgradePrice(ref _currentBusterUpgradePrice, _incrementalBusterMaterialCounts);
+
+            //upgrade system
+            CargoLootDropper.Instance.IncreaseDropRate((int)(_busterDropChanceModifier * 100));
+
+            //track progress
+            _busterUpgradesCurrent++;
+
+            UpdateUpgradeAvailability();
+        }
+    }
+
+    public void EnableScrapHarvester()
+    {
+        if (_isScrapHarvesterUpgradeAvailable && IsUpgradePriceAffordable(_scrapHarvesterUpgradeMaterialsList, _currentScrapHarvesterUpgradePrice))
+        {
+            //remove materials from inventory
+            RemoveMaterialsFromInventory(_scrapHarvesterUpgradeMaterialsList, _currentScrapHarvesterUpgradePrice);
+
+            //upgrade system
+            ScrapHarvester.Instance.EnableHarvesting();
+
+            //track progress
+            _isScrapHarvesterPurchased = true;
+
+            UpdateUpgradeAvailability();
+        }
+    }
+
+
     //Getters and Setters
+    public string GetWeaponsUpgradePrice()
+    {
+        return BuildPriceString(_weaponsUpgradeMaterialsList, _currentWeaponsUpgradePrice);
+    }
 
+    public string GetEnginesUpgradePrice()
+    {
+        return BuildPriceString(_enginesUpgradeMaterialsList, _currentEnginesUpgradePrice);
+    }
+    
+    public string GetHullUpgradePrice()
+    {
+        return BuildPriceString(_hullUpgradeMaterialsList, _currentHullUpgradePrice);
+    }
 
+    public string GetShieldsUpgradePrice()
+    {
+        return BuildPriceString(_shieldsUpgradeMaterialsList, _currentShieldsUpgradePrice);
+    }
 
+    public string GetBusterUpgradePrice()
+    {
+        return BuildPriceString(_busterUpgradeMaterialsList, _currentBusterUpgradePrice);
+    }
 
+    public string GetWarpCoreUpgradePrice()
+    {
+        return BuildPriceString(_warpCoreUpgradeMaterialsList, _warpCoreUpgradePrice);
+    }
 
+    public string GetScrapHervesterUpgradePrice()
+    {
+        return BuildPriceString(_scrapHarvesterUpgradeMaterialsList, _currentScrapHarvesterUpgradePrice);
+    }
 }
