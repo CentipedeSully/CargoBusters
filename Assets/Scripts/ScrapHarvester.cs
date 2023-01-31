@@ -27,5 +27,10 @@ public class ScrapHarvester : MonoSingleton<ScrapHarvester>
         _isHarvestingEnabled = true;
     }
 
+    public bool IsHarvesterEnabled()
+    {
+        return _isHarvestingEnabled;
+    }
+
 
 }

@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SullysToolkit;
 
-public class UpgradeManager : MonoBehaviour
+public class UpgradeManager : MonoSingleton<UpgradeManager>
 {
     //Declarations
     private enum Materials
@@ -324,12 +325,12 @@ public class UpgradeManager : MonoBehaviour
     {
         _inventoryRef = PlayerInventoryManager.Instance;
 
-        _playerWeaponsObject = PlayerObjectManager.Instance.GetComponent<ShipSystemReferencer>().GetWeaponsObject();
-        _playerEnginesObject = PlayerObjectManager.Instance.GetComponent<ShipSystemReferencer>().GetEnginesObject();
-        _playerHullObject = PlayerObjectManager.Instance.GetComponent<ShipSystemReferencer>().GetHullObject();
-        _playerShieldsObject = PlayerObjectManager.Instance.GetComponent<ShipSystemReferencer>().GetShieldsObject();
-        _playerWarpCoreObject = PlayerObjectManager.Instance.GetComponent<ShipSystemReferencer>().GetWarpCoreObject();
-        _playerBusterObject = PlayerObjectManager.Instance.GetComponent<ShipSystemReferencer>().GetCargoBuster();
+        _playerWeaponsObject = PlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetWeaponsObject();
+        _playerEnginesObject = PlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetEnginesObject();
+        _playerHullObject = PlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetHullObject();
+        _playerShieldsObject = PlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetShieldsObject();
+        _playerWarpCoreObject = PlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetWarpCoreObject();
+        _playerBusterObject = PlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetCargoBuster();
 
         _playerBlastersArray = _playerWeaponsObject.GetComponentsInChildren<SpawnLaserOnCommand>();
 
@@ -343,6 +344,7 @@ public class UpgradeManager : MonoBehaviour
         _currentBusterUpgradePrice = new List<int>(_initialBusterMaterialCounts);
 
         UpdateUpgradeAvailability();
+        UiManager.Instance.GetUpgradeDescController().InitializeReferences();
     }
 
     public void UpgradeWeaponsCooldown()
@@ -616,38 +618,38 @@ public class UpgradeManager : MonoBehaviour
 
 
     //Getters and Setters
-    public string GetWeaponsUpgradePrice()
+    public List<int> GetWeaponsUpgradePrice()
     {
-        return BuildPriceString(_weaponsUpgradeMaterialsList, _currentWeaponsUpgradePrice);
+        return _currentWeaponsUpgradePrice;
     }
 
-    public string GetEnginesUpgradePrice()
+    public List<int> GetEnginesUpgradePrice()
     {
-        return BuildPriceString(_enginesUpgradeMaterialsList, _currentEnginesUpgradePrice);
+        return _currentEnginesUpgradePrice;
     }
     
-    public string GetHullUpgradePrice()
+    public List<int> GetHullUpgradePrice()
     {
-        return BuildPriceString(_hullUpgradeMaterialsList, _currentHullUpgradePrice);
+        return _currentHullUpgradePrice;
     }
 
-    public string GetShieldsUpgradePrice()
+    public List<int> GetShieldsUpgradePrice()
     {
-        return BuildPriceString(_shieldsUpgradeMaterialsList, _currentShieldsUpgradePrice);
+        return _currentShieldsUpgradePrice;
     }
 
-    public string GetBusterUpgradePrice()
+    public List<int> GetBusterUpgradePrice()
     {
-        return BuildPriceString(_busterUpgradeMaterialsList, _currentBusterUpgradePrice);
+        return _currentBusterUpgradePrice;
     }
 
-    public string GetWarpCoreUpgradePrice()
+    public List<int> GetWarpCoreUpgradePrice()
     {
-        return BuildPriceString(_warpCoreUpgradeMaterialsList, _warpCoreUpgradePrice);
+        return _warpCoreUpgradePrice;
     }
 
-    public string GetScrapHervesterUpgradePrice()
+    public List<int> GetScrapHarvesterUpgradePrice()
     {
-        return BuildPriceString(_scrapHarvesterUpgradeMaterialsList, _currentScrapHarvesterUpgradePrice);
+        return _currentScrapHarvesterUpgradePrice;
     }
 }

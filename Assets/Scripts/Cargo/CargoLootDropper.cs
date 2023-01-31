@@ -11,11 +11,11 @@ public class CargoLootDropper : MonoSingleton<CargoLootDropper>
     [SerializeField] [Min (0)] private int _scrapDropMin = 15;
     [SerializeField] [Min (0)] private int _scrapDropMax = 35;
 
-    [SerializeField] [Range(1, 100)] private int _energyCellDropChance = 25;
+    [SerializeField] [Range(1, 100)] private int _energyCellDropChance = 15;
     [SerializeField] [Min(0)] private int _energyCellDropMin = 1;
     [SerializeField] [Min(0)] private int _energyCellDropMax = 3;
 
-    [SerializeField] [Range(1, 100)] private int _warpCoilDropChance = 10;
+    [SerializeField] [Range(1, 100)] private int _warpCoilDropChance = 15;
     [SerializeField] [Min(0)] private int _warpCoilDropMin = 1;
     [SerializeField] [Min(0)] private int _warpCoilDropMax = 1;
 
@@ -67,6 +67,11 @@ public class CargoLootDropper : MonoSingleton<CargoLootDropper>
         _warpCoilDropChance += chance;
         _plasmaAcceleratorDropChance += chance;
         _cannonAlloyDropChance += chance;
+    }
+
+    public int GetDropChance()
+    {
+        return _warpCoilDropChance;
     }
 
 }
