@@ -83,7 +83,7 @@ public class UpgradeManager : MonoBehaviour
     [Space(20)]
     [SerializeField] private bool _isHullRegenUpgradeAvailable = false;
     [SerializeField] private int _hullRegenUpgradeCurrent = 0;
-    [SerializeField] private float _hullRegenModifier = .1f;
+    [SerializeField] private float _hullRegenModifier = 1;
 
     [Header("Shields")]
     [SerializeField] private int _shieldsUpgradesMax = 5;
