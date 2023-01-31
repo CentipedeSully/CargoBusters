@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SullysToolkit;
+using TMPro;
 
 public class UpgradeManager : MonoSingleton<UpgradeManager>
 {
@@ -28,23 +29,27 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
     [SerializeField] private bool _isBlasterCountUpgradeAvailable = false;
     [SerializeField] private int _blasterCountUpgradeMax = 2;
     [SerializeField] private int _blasterCountUpgradeCurrent = 0;
+    [SerializeField] private GameObject _blasterCountUpgradeButton;
 
     [Space(20)]
     [SerializeField] private bool _isBlasterCooldownUpgradeAvailable = false;
     [SerializeField] private int _cooldownUpgradeMax = 2;
     [SerializeField] private int _cooldownUpgradeCurrent = 0;
     [SerializeField] private float _cooldownUpgradeModifier = .15f;
+    [SerializeField] private GameObject _cooldownUpgradeButton;
 
     [Space(20)]
     [SerializeField] private bool _isBlasterDamageUpgradeAvailable = false;
     [SerializeField] private int _damageUpgradeMax = 1;
     [SerializeField] private int _damageUpgradeCurrent = 0;
+    [SerializeField] private GameObject _damageUpgradeButton;
 
     [Space(20)]
     [SerializeField] private bool _isBlasterKillNegationChanceUpgradeAvailable = false;
     [SerializeField] private int _killNegationChanceUpgradeMax = 2;
     [SerializeField] private int _killNegationChanceUpgradeCurrent = 0;
     [SerializeField] private float _killNegationChanceModifier = .44f;
+    [SerializeField] private GameObject _killNegationUpgradeButton;
 
 
     [Header("Engines")]
@@ -60,12 +65,14 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
     [SerializeField] private int _forwardSpeedUpgradeMax = 3;
     [SerializeField] private int _forwardSpeedUpgradeCurrent = 0;
     [SerializeField] private float _forwardSpeedModifier = 250;
+    [SerializeField] private GameObject _engineSpeedUpgradeButton;
 
     [Space(20)]
     [SerializeField] private bool _isEngineTurnSpeedUpgradeAvailable = false;
     [SerializeField] private int _turnSpeedUpgradeMax = 3;
     [SerializeField] private int _turnSpeedUpgradeCurrent = 0;
     [SerializeField] private float _turnSpeedModifier = 60;
+    [SerializeField] private GameObject _engineTurnUpgradeButton;
 
 
     [Header("Hull")]
@@ -80,11 +87,13 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
     [SerializeField] private bool _isHullDurabilityUpgradeAvailable = false;
     [SerializeField] private int _hullDurabilityUpgradeCurrent = 0;
     [SerializeField] private int _hullDurabilityUpgradeMax = 2;
+    [SerializeField] private GameObject _hullDurabilityUpgradeButton;
 
     [Space(20)]
     [SerializeField] private bool _isHullRegenUpgradeAvailable = false;
     [SerializeField] private int _hullRegenUpgradeCurrent = 0;
     [SerializeField] private float _hullRegenModifier = 1;
+    [SerializeField] private GameObject _hullRegenUpgradeButton;
 
     [Header("Shields")]
     [SerializeField] private int _shieldsUpgradesMax = 5;
@@ -98,11 +107,13 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
     [SerializeField] private bool _isShieldCapacityUpgradeAvailable = false;
     [SerializeField] private int _shieldCapacityUpgradeCurrent = 0;
     [SerializeField] private int _shieldCapacityUpgradeMax = 5;
+    [SerializeField] private GameObject _shieldCapacityUpgradeButton;
 
     [Space(20)]
     [SerializeField] private bool _isShieldRegenUpgradeAvailable = false;
     [SerializeField] private int _shieldRegenUpgradeCurrent = 0;
     [SerializeField] private float _shieldRegenModifier = .1f;
+    [SerializeField] private GameObject _shieldRegenUpgradeButton;
 
     [Header("CargoBuster")]
     [SerializeField] private int _busterUpgradesMax = 2;
@@ -115,22 +126,26 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
     [Space(20)]
     [SerializeField] private bool _isBusterTimeUpgradeAvailable = false;
     [SerializeField] private float _busterTimeModifier = 1.5f;
+    [SerializeField] private GameObject _busterTimeUpgradeButton;
 
     [Space(20)]
     [SerializeField] private bool _isBusterDropChanceUpgradeAvailable = false;
     [SerializeField] private float _busterDropChanceModifier = .15f;
+    [SerializeField] private GameObject _dropChanceUpgradeButton;
 
     [Header("ScrapHarvester")]
     [SerializeField] private bool _isScrapHarvesterUpgradeAvailable = false;
     [SerializeField] private List<Materials> _scrapHarvesterUpgradeMaterialsList;
     [SerializeField] private List<int> _currentScrapHarvesterUpgradePrice;
     [SerializeField] private bool _isScrapHarvesterPurchased = false;
+    [SerializeField] private GameObject _HarvesterUpgradeButton;
 
     [Header("WarpCore")]
     [SerializeField] private bool _isWarpCoreUpgradeAvailable = false;
     [SerializeField] private bool _isWarpCoreRepaired = false;
     [SerializeField] private List<Materials> _warpCoreUpgradeMaterialsList;
     [SerializeField] private List<int> _warpCoreUpgradePrice;
+    [SerializeField] private GameObject _fixCoreUpgradeButton;
 
     //references
     private PlayerInventoryManager _inventoryRef;
@@ -194,6 +209,22 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
                 _isBlasterKillNegationChanceUpgradeAvailable = false;
             else _isBlasterKillNegationChanceUpgradeAvailable = true;
         }
+
+        if (_isBlasterCooldownUpgradeAvailable)
+            _cooldownUpgradeButton.gameObject.SetActive(true);
+        else _cooldownUpgradeButton.gameObject.SetActive(false);
+
+        if (_isBlasterDamageUpgradeAvailable)
+            _damageUpgradeButton.gameObject.SetActive(true);
+        else _damageUpgradeButton.gameObject.SetActive(false);
+
+        if (_isBlasterKillNegationChanceUpgradeAvailable)
+            _killNegationUpgradeButton.gameObject.SetActive(true);
+        else _killNegationUpgradeButton.gameObject.SetActive(false);
+
+        if (_isBlasterCountUpgradeAvailable)
+            _blasterCountUpgradeButton.gameObject.SetActive(true);
+        else _blasterCountUpgradeButton.gameObject.SetActive(false);
     }
 
     private void UpdateEnginesUpgradeAvailability()
@@ -213,6 +244,14 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
                 _isEngineTurnSpeedUpgradeAvailable = false;
             else _isEngineTurnSpeedUpgradeAvailable = true;
         }
+
+        if (_isEngineForwardsSpeedUpgradeAvailable)
+            _engineSpeedUpgradeButton.gameObject.SetActive(true);
+        else _engineSpeedUpgradeButton.gameObject.SetActive(false);
+
+        if (_isEngineTurnSpeedUpgradeAvailable)
+            _engineTurnUpgradeButton.gameObject.SetActive(true);
+        else _engineTurnUpgradeButton.gameObject.SetActive(false);
     }
 
     private void UpdateHullUpgradeAvailability()
@@ -232,6 +271,14 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
                 _isHullRegenUpgradeAvailable = false;
             else _isHullRegenUpgradeAvailable = true;
         }
+
+        if (_isHullDurabilityUpgradeAvailable)
+            _hullDurabilityUpgradeButton.gameObject.SetActive(true);
+        else _hullDurabilityUpgradeButton.gameObject.SetActive(false);
+
+        if (_isHullRegenUpgradeAvailable)
+            _hullRegenUpgradeButton.gameObject.SetActive(true);
+        else _hullRegenUpgradeButton.gameObject.SetActive(false);
     }
 
     private void UpdateShieldsUpgradeAvailability()
@@ -251,6 +298,15 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
                 _isShieldRegenUpgradeAvailable = false;
             else _isShieldRegenUpgradeAvailable = true;
         }
+
+        if (_isShieldCapacityUpgradeAvailable)
+            _shieldCapacityUpgradeButton.gameObject.SetActive(true);
+        else _shieldCapacityUpgradeButton.gameObject.SetActive(false);
+
+        if (_isShieldRegenUpgradeAvailable)
+            _shieldRegenUpgradeButton.gameObject.SetActive(true);
+        else _shieldRegenUpgradeButton.gameObject.SetActive(false);
+
     }
 
     private void UpdateBusterUpgradeAvailability()
@@ -274,6 +330,15 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
             }
                 
         }
+
+        if (_isBusterTimeUpgradeAvailable)
+            _busterTimeUpgradeButton.gameObject.SetActive(true);
+        else _busterTimeUpgradeButton.gameObject.SetActive(false);
+
+        if (_isBusterDropChanceUpgradeAvailable)
+            _dropChanceUpgradeButton.gameObject.SetActive(true);
+        else _dropChanceUpgradeButton.gameObject.SetActive(false);
+
     }
 
     private void UpdateAuxillaryUpgradesAvailability()
@@ -285,6 +350,14 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
         if (_isScrapHarvesterPurchased || !IsUpgradePriceAffordable(_scrapHarvesterUpgradeMaterialsList, _currentScrapHarvesterUpgradePrice))
             _isScrapHarvesterUpgradeAvailable = false;
         else _isScrapHarvesterUpgradeAvailable = true;
+
+        if (_isWarpCoreUpgradeAvailable)
+            _fixCoreUpgradeButton.gameObject.SetActive(true);
+        else _fixCoreUpgradeButton.gameObject.SetActive(false);
+
+        if (_isScrapHarvesterUpgradeAvailable)
+            _HarvesterUpgradeButton.gameObject.SetActive(true);
+        else _HarvesterUpgradeButton.gameObject.SetActive(false);
     }
 
     private void RemoveMaterialsFromInventory(List<Materials> materialsList, List<int> priceList)
@@ -364,6 +437,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
             _weaponsUpgradesCurrent++;
 
             UpdateUpgradeAvailability();
+            UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
     }
 
@@ -384,6 +458,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
             _weaponsUpgradesCurrent++;
 
             UpdateUpgradeAvailability();
+            UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
     }
 
@@ -410,6 +485,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
             _weaponsUpgradesMax++;
 
             UpdateUpgradeAvailability();
+            UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
     }
 
@@ -429,6 +505,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
             _weaponsUpgradesCurrent++;
 
             UpdateUpgradeAvailability();
+            UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
     }
 
@@ -448,6 +525,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
             _engineUpgradesCurrent++;
 
             UpdateUpgradeAvailability();
+            UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
     }
 
@@ -467,6 +545,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
             _engineUpgradesCurrent++;
 
             UpdateUpgradeAvailability();
+            UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
     }
 
@@ -486,6 +565,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
             _hullUpgradesCurrent++;
 
             UpdateUpgradeAvailability();
+            UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
     }
 
@@ -505,6 +585,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
             _hullUpgradesCurrent++;
 
             UpdateUpgradeAvailability();
+            UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
     }
 
@@ -524,6 +605,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
             _shieldsUpgradesCurrent++;
 
             UpdateUpgradeAvailability();
+            UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
     }
 
@@ -543,6 +625,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
             _shieldsUpgradesCurrent++;
 
             UpdateUpgradeAvailability();
+            UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
     }
 
@@ -560,6 +643,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
             _isWarpCoreRepaired = true;
 
             UpdateUpgradeAvailability();
+            UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
     }
 
@@ -578,6 +662,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
             _busterUpgradesCurrent++;
 
             UpdateUpgradeAvailability();
+            UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
     }
 
@@ -596,6 +681,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
             _busterUpgradesCurrent++;
 
             UpdateUpgradeAvailability();
+            UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
     }
 
@@ -613,6 +699,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
             _isScrapHarvesterPurchased = true;
 
             UpdateUpgradeAvailability();
+            UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
     }
 

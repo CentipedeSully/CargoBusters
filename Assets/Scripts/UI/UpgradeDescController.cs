@@ -249,6 +249,19 @@ public class UpgradeDescController : MonoBehaviour
         }
     }
 
+    private int CountEnabledBlasters()
+    {
+        int enabledBlasters = 0;
+        SpawnLaserOnCommand[] blastersCollection = _weaponsControllerRef.gameObject.GetComponentsInChildren<SpawnLaserOnCommand>();
+        foreach (SpawnLaserOnCommand Blaster in blastersCollection)
+        {
+            if (Blaster.IsBlasterEnabled())
+                enabledBlasters++;
+        }
+
+        return enabledBlasters;
+    }
+
     //externals
     public void  InitializeReferences()
     {
@@ -262,18 +275,18 @@ public class UpgradeDescController : MonoBehaviour
             _warpCoreRef = PlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetWarpCoreObject().GetComponent<WarpCoreBehavior>();
             _busterRef = PlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetCargoBuster();
 
-            UpdateDescriptionValues();
-            UpdatePrices();
+            UpdateDescriptionValuesAndCosts();
+            
         }
     }
 
-    public void UpdateDescriptionValues()
+    public void UpdateDescriptionValuesAndCosts()
     {
         if (PlayerObjectManager.Instance.GetPlayerObject() != null)
         {
             _damageValue.text = _weaponsControllerRef.gameObject.GetComponentInChildren<SpawnLaserOnCommand>().GetDamage().ToString();
             _cooldownValue.text = _weaponsControllerRef.gameObject.GetComponentInChildren<SpawnLaserOnCommand>().GetCooldown().ToString();
-            _blasterCountValue.text = _weaponsControllerRef.gameObject.GetComponentsInChildren<SpawnLaserOnCommand>().Length.ToString();
+            _blasterCountValue.text = CountEnabledBlasters().ToString();
             _negateKillValue.text = KillNegater.Instance.GetKilNegationChance().ToString();
 
             _engineSpeedValue.text = _enginesMoveRef.GetSpeed().ToString();
@@ -295,6 +308,8 @@ public class UpgradeDescController : MonoBehaviour
             if (ScrapHarvester.Instance.IsHarvesterEnabled())
                 _harvesterValue.text = "Online";
             else _harvesterValue.text = "Offline";
+
+            UpdatePrices();
         }
     }
 

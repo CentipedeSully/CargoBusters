@@ -552,7 +552,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 11032749}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 880052362}
+        m_TargetAssemblyTypeName: UpgradeManager, Assembly-CSharp
+        m_MethodName: UpgradeWeaponsCooldown
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &11032749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3365,7 +3377,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 89932449}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 880052362}
+        m_TargetAssemblyTypeName: UpgradeManager, Assembly-CSharp
+        m_MethodName: UpgradeShieldsCapacity
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &89932449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9955,7 +9979,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 316056799}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 880052362}
+        m_TargetAssemblyTypeName: UpgradeManager, Assembly-CSharp
+        m_MethodName: UpgradeHullDurability
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &316056799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11207,7 +11243,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 369433682}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 880052362}
+        m_TargetAssemblyTypeName: UpgradeManager, Assembly-CSharp
+        m_MethodName: UpgradeEngineSpeed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &369433682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13266,7 +13314,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 451947709}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 880052362}
+        m_TargetAssemblyTypeName: UpgradeManager, Assembly-CSharp
+        m_MethodName: UpgradeWeaponsBlasterCount
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &451947709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13533,7 +13593,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 475477499}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 880052362}
+        m_TargetAssemblyTypeName: UpgradeManager, Assembly-CSharp
+        m_MethodName: UpgradeShieldRegenRate
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &475477499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14960,7 +15032,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 543615386}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 880052362}
+        m_TargetAssemblyTypeName: UpgradeManager, Assembly-CSharp
+        m_MethodName: UpgradeEngineTurn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &543615386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18522,7 +18606,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 681137358}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 880052362}
+        m_TargetAssemblyTypeName: UpgradeManager, Assembly-CSharp
+        m_MethodName: FixWarpCore
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &681137358
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20179,7 +20275,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 746638280}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 880052362}
+        m_TargetAssemblyTypeName: UpgradeManager, Assembly-CSharp
+        m_MethodName: UpgradeHullRegenRate
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &746638280
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23459,7 +23567,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 859085966}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 880052362}
+        m_TargetAssemblyTypeName: UpgradeManager, Assembly-CSharp
+        m_MethodName: UpgradeBusterDuration
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &859085966
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24102,17 +24222,21 @@ MonoBehaviour:
   _isBlasterCountUpgradeAvailable: 0
   _blasterCountUpgradeMax: 2
   _blasterCountUpgradeCurrent: 0
+  _blasterCountUpgradeButton: {fileID: 451947706}
   _isBlasterCooldownUpgradeAvailable: 0
   _cooldownUpgradeMax: 2
   _cooldownUpgradeCurrent: 0
   _cooldownUpgradeModifier: 0.15
+  _cooldownUpgradeButton: {fileID: 11032746}
   _isBlasterDamageUpgradeAvailable: 0
   _damageUpgradeMax: 1
   _damageUpgradeCurrent: 0
+  _damageUpgradeButton: {fileID: 2084223140}
   _isBlasterKillNegationChanceUpgradeAvailable: 0
   _killNegationChanceUpgradeMax: 2
   _killNegationChanceUpgradeCurrent: 0
   _killNegationChanceModifier: 0.44
+  _killNegationUpgradeButton: {fileID: 2131597366}
   _engineUpgradesMax: 4
   _engineUpgradesCurrent: 0
   _enginesUpgradeMaterialsList: 0000000001000000020000000300000004000000
@@ -24123,10 +24247,12 @@ MonoBehaviour:
   _forwardSpeedUpgradeMax: 3
   _forwardSpeedUpgradeCurrent: 0
   _forwardSpeedModifier: 250
+  _engineSpeedUpgradeButton: {fileID: 369433679}
   _isEngineTurnSpeedUpgradeAvailable: 0
   _turnSpeedUpgradeMax: 3
   _turnSpeedUpgradeCurrent: 0
   _turnSpeedModifier: 60
+  _engineTurnUpgradeButton: {fileID: 543615383}
   _hullUpgradesMax: 5
   _hullUpgradesCurrent: 0
   _hullUpgradeMaterialsList: 0000000001000000020000000300000004000000
@@ -24136,9 +24262,11 @@ MonoBehaviour:
   _isHullDurabilityUpgradeAvailable: 0
   _hullDurabilityUpgradeCurrent: 0
   _hullDurabilityUpgradeMax: 2
+  _hullDurabilityUpgradeButton: {fileID: 316056796}
   _isHullRegenUpgradeAvailable: 0
   _hullRegenUpgradeCurrent: 0
   _hullRegenModifier: 1
+  _hullRegenUpgradeButton: {fileID: 746638277}
   _shieldsUpgradesMax: 5
   _shieldsUpgradesCurrent: 0
   _shieldsUpgradeMaterialsList: 0000000001000000020000000300000004000000
@@ -24148,9 +24276,11 @@ MonoBehaviour:
   _isShieldCapacityUpgradeAvailable: 0
   _shieldCapacityUpgradeCurrent: 0
   _shieldCapacityUpgradeMax: 5
+  _shieldCapacityUpgradeButton: {fileID: 89932446}
   _isShieldRegenUpgradeAvailable: 0
   _shieldRegenUpgradeCurrent: 0
-  _shieldRegenModifier: 0.1
+  _shieldRegenModifier: 1
+  _shieldRegenUpgradeButton: {fileID: 475477496}
   _busterUpgradesMax: 2
   _busterUpgradesCurrent: 0
   _busterUpgradeMaterialsList: 0000000001000000020000000300000004000000
@@ -24159,16 +24289,20 @@ MonoBehaviour:
   _currentBusterUpgradePrice: 
   _isBusterTimeUpgradeAvailable: 0
   _busterTimeModifier: 1.5
+  _busterTimeUpgradeButton: {fileID: 859085963}
   _isBusterDropChanceUpgradeAvailable: 0
   _busterDropChanceModifier: 0.35
+  _dropChanceUpgradeButton: {fileID: 1699589504}
   _isScrapHarvesterUpgradeAvailable: 0
   _scrapHarvesterUpgradeMaterialsList: 0000000001000000020000000300000004000000
   _currentScrapHarvesterUpgradePrice: 3200000001000000010000000000000001000000
   _isScrapHarvesterPurchased: 0
+  _HarvesterUpgradeButton: {fileID: 1574766534}
   _isWarpCoreUpgradeAvailable: 0
   _isWarpCoreRepaired: 0
   _warpCoreUpgradeMaterialsList: 0000000001000000020000000300000004000000
   _warpCoreUpgradePrice: 9600000000000000050000000000000000000000
+  _fixCoreUpgradeButton: {fileID: 681137355}
 --- !u!114 &880052363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24197,6 +24331,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _negateKillChance: 0
+--- !u!114 &880052368 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5529592172153825451, guid: 1f51459124f1d424aa5549e891ce14f0, type: 3}
+  m_PrefabInstance: {fileID: 6872647270728634213}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 442993646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a45cb19528fb9d49a993248d1572990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &883910807
 GameObject:
   m_ObjectHideFlags: 0
@@ -37507,7 +37652,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1574766537}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 880052362}
+        m_TargetAssemblyTypeName: UpgradeManager, Assembly-CSharp
+        m_MethodName: EnableScrapHarvester
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1574766537
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38383,9 +38540,9 @@ Transform:
   - {fileID: 598626191}
   - {fileID: 113941079}
   - {fileID: 1938079606}
-  - {fileID: 880052351}
   - {fileID: 835124012}
   - {fileID: 2125167400}
+  - {fileID: 880052351}
   - {fileID: 1149066333}
   - {fileID: 230406168}
   m_Father: {fileID: 0}
@@ -40538,7 +40695,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1699589507}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 880052362}
+        m_TargetAssemblyTypeName: UpgradeManager, Assembly-CSharp
+        m_MethodName: UpgradeBusterDropChance
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1699589507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46172,6 +46341,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2684bc12598ff4348997b157969b00cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1938079610 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7335180680816529135, guid: 43aafd60ba7be5c40a559564fa56920c, type: 3}
+  m_PrefabInstance: {fileID: 7335180681043259800}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e9be9cd17b2bb147bad09427ee199bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1947475708
 GameObject:
   m_ObjectHideFlags: 0
@@ -50765,7 +50945,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2084223143}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 880052362}
+        m_TargetAssemblyTypeName: UpgradeManager, Assembly-CSharp
+        m_MethodName: UpgradeWeaponsDamage
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2084223143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -51629,7 +51821,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2131597369}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 880052362}
+        m_TargetAssemblyTypeName: UpgradeManager, Assembly-CSharp
+        m_MethodName: UpgradeWeaponsKillNegationChance
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2131597369
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52083,7 +52287,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6872647270389647130, guid: 1f51459124f1d424aa5549e891ce14f0, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6872647270389647130, guid: 1f51459124f1d424aa5549e891ce14f0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -52276,7 +52480,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7119820603063752740, guid: 18ab41552af765b4b9b3261f3ae26d0e, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7119820603063752740, guid: 18ab41552af765b4b9b3261f3ae26d0e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -52343,6 +52547,58 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1604120785}
     m_Modifications:
+    - target: {fileID: 7335180680816529120, guid: 43aafd60ba7be5c40a559564fa56920c, type: 3}
+      propertyPath: m_ActionEvents.Array.size
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7335180680816529120, guid: 43aafd60ba7be5c40a559564fa56920c, type: 3}
+      propertyPath: m_ActionEvents.Array.data[7].m_ActionId
+      value: 1b3280e0-c2af-48af-8dcb-a229f1d28d76
+      objectReference: {fileID: 0}
+    - target: {fileID: 7335180680816529120, guid: 43aafd60ba7be5c40a559564fa56920c, type: 3}
+      propertyPath: m_ActionEvents.Array.data[8].m_ActionId
+      value: 8d77f87d-460e-414b-9d10-53dde6cf4e8b
+      objectReference: {fileID: 0}
+    - target: {fileID: 7335180680816529120, guid: 43aafd60ba7be5c40a559564fa56920c, type: 3}
+      propertyPath: m_ActionEvents.Array.data[7].m_ActionName
+      value: Player/Repair Ship[/Keyboard/r]
+      objectReference: {fileID: 0}
+    - target: {fileID: 7335180680816529120, guid: 43aafd60ba7be5c40a559564fa56920c, type: 3}
+      propertyPath: m_ActionEvents.Array.data[8].m_ActionName
+      value: Player/Debug[/Keyboard/t]
+      objectReference: {fileID: 0}
+    - target: {fileID: 7335180680816529120, guid: 43aafd60ba7be5c40a559564fa56920c, type: 3}
+      propertyPath: m_ActionEvents.Array.data[7].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7335180680816529120, guid: 43aafd60ba7be5c40a559564fa56920c, type: 3}
+      propertyPath: m_ActionEvents.Array.data[7].m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1938079610}
+    - target: {fileID: 7335180680816529120, guid: 43aafd60ba7be5c40a559564fa56920c, type: 3}
+      propertyPath: m_ActionEvents.Array.data[8].m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 880052368}
+    - target: {fileID: 7335180680816529120, guid: 43aafd60ba7be5c40a559564fa56920c, type: 3}
+      propertyPath: m_ActionEvents.Array.data[7].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ReadRepairInput
+      objectReference: {fileID: 0}
+    - target: {fileID: 7335180680816529120, guid: 43aafd60ba7be5c40a559564fa56920c, type: 3}
+      propertyPath: m_ActionEvents.Array.data[8].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: DebugAddAll
+      objectReference: {fileID: 0}
+    - target: {fileID: 7335180680816529120, guid: 43aafd60ba7be5c40a559564fa56920c, type: 3}
+      propertyPath: m_ActionEvents.Array.data[7].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: InputDetector, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7335180680816529120, guid: 43aafd60ba7be5c40a559564fa56920c, type: 3}
+      propertyPath: m_ActionEvents.Array.data[8].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PlayerInventoryManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7335180680816529120, guid: 43aafd60ba7be5c40a559564fa56920c, type: 3}
+      propertyPath: m_ActionEvents.Array.data[8].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 7335180680816529133, guid: 43aafd60ba7be5c40a559564fa56920c, type: 3}
       propertyPath: m_Name
       value: Input Manager
@@ -52528,7 +52784,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8921061386943977328, guid: 3205ab6ea1f09f54fb427e578232cfa9, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8921061386943977328, guid: 3205ab6ea1f09f54fb427e578232cfa9, type: 3}
       propertyPath: m_LocalPosition.x

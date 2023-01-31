@@ -189,4 +189,14 @@ public class PlayerInventoryManager : MonoSingleton<PlayerInventoryManager>
         }
     }
 
+    public void DebugAddAll()
+    {
+        IncrementItemCount(0, 500);
+        IncrementItemCount(1, 10);
+        IncrementItemCount(2, 10);
+        IncrementItemCount(3, 10);
+        IncrementItemCount(4, 10);
+
+    }
+
 }
