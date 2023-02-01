@@ -5,6 +5,7 @@ using UnityEngine;
 public class DisplayAnimController : MonoBehaviour
 {
     //Declarations
+    [SerializeField] private bool _isEnabled = true;
     [SerializeField] private string _boolVisiblityName = "isVisible";
     [SerializeField] private string _triggerPositiveName = "OnPositive";
     [SerializeField] private bool _doesTriggerExist = false;
@@ -22,37 +23,60 @@ public class DisplayAnimController : MonoBehaviour
 
 
     //Utilies
+    public void EnableDisplay()
+    {
+        _isEnabled = true;
+    }
+
+    public void DisableDisplay()
+    {
+        _isEnabled = false;
+    }
+
     public void ShowDisplay()
     {
-        _animatorRef.SetBool(_boolVisiblityName, true);
-        _isVisible = true;
+        if (_isEnabled)
+        {
+            _animatorRef.SetBool(_boolVisiblityName, true);
+            _isVisible = true;
+        }
     }
 
     public void HideDisplay()
     {
-        _animatorRef.SetBool(_boolVisiblityName, false);
-        _isVisible = false;
+        if (_isEnabled)
+        {
+            _animatorRef.SetBool(_boolVisiblityName, false);
+            _isVisible = false;
+        }
     }
 
     public void TriggerPositiveEffect()
     {
-        if (_doesTriggerExist)
-            _animatorRef.SetTrigger(_triggerPositiveName);
-            
+        if (_isEnabled)
+        {
+            if (_doesTriggerExist)
+                _animatorRef.SetTrigger(_triggerPositiveName);
+
+        }
     }
 
     public void ToggleDisplay()
     {
-        if (_isVisible)
+        if (_isEnabled)
         {
-            HideDisplay();
-            _isVisible = false;
-        }    
-        else
-        {
-            ShowDisplay();
-            _isVisible = true;
+            if (_isVisible)
+            {
+                HideDisplay();
+                _isVisible = false;
+            }
+            else
+            {
+                ShowDisplay();
+                _isVisible = true;
+            }
         }
+     
     }
 
 }

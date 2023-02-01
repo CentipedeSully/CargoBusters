@@ -52,6 +52,8 @@ public class HullSystemController : MonoBehaviour
             {
                 _isRegenerating = true;
                 OnHullRegenStarted?.Invoke();
+                transform.parent.GetComponent<ShipSystemReferencer>().GetEnginesObject().GetComponent<EnginesSystemController>().DisableEngines();
+                transform.parent.GetComponent<ShipSystemReferencer>().GetWeaponsObject().GetComponent<WeaponsSystemController>().DisableWeapons();
             }
                 
 
@@ -60,6 +62,9 @@ public class HullSystemController : MonoBehaviour
             {
                 _isRegenReady = false;
                 Invoke("ReadyRegen",_regenCooldown);
+
+                transform.parent.GetComponent<ShipSystemReferencer>().GetEnginesObject().GetComponent<EnginesSystemController>().EnableEngines();
+                transform.parent.GetComponent<ShipSystemReferencer>().GetWeaponsObject().GetComponent<WeaponsSystemController>().EnableWeapons();
                 InterruptRegeneration();
             }
                 
@@ -68,6 +73,8 @@ public class HullSystemController : MonoBehaviour
             {
                 _isRegenReady = false;
                 Invoke("ReadyRegen", _regenCooldown);
+                transform.parent.GetComponent<ShipSystemReferencer>().GetEnginesObject().GetComponent<EnginesSystemController>().EnableEngines();
+                transform.parent.GetComponent<ShipSystemReferencer>().GetWeaponsObject().GetComponent<WeaponsSystemController>().EnableWeapons();
                 ExitRegen();
 
             }

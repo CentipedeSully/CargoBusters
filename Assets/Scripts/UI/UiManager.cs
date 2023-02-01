@@ -15,7 +15,7 @@ public class UiManager : MonoSingleton<UiManager>
     [SerializeField] private TextMeshProUGUI _intermissionTimeTextRef;
     [SerializeField] private DisplayAnimController _outOfBoundsTimerDisplayRef;
     [SerializeField] private TextMeshProUGUI _outOfBoundsTimeTextRef;
-
+    [SerializeField] private GameObject _controlsDisplayRef;
 
     [Header("Inventory References")]
     [SerializeField] private DisplayAnimController _inventoryDisplayRef;
@@ -25,7 +25,7 @@ public class UiManager : MonoSingleton<UiManager>
     [SerializeField] private TextMeshProUGUI _cAlloysCount;
     [SerializeField] private TextMeshProUGUI _scrapCount;
 
-    [Header("Upgradeer Reference")]
+    [Header("Upgrader Reference")]
     [SerializeField] private UpgradeDescController _descriptionController;
     
     //monobehaviors
@@ -108,5 +108,10 @@ public class UiManager : MonoSingleton<UiManager>
     public UpgradeDescController GetUpgradeDescController()
     {
         return _descriptionController;
+    }
+
+    public GameObject GetControlsDisplay()
+    {
+        return _controlsDisplayRef;
     }
 }

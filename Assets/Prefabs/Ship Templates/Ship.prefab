@@ -1412,6 +1412,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d320b88096f70974aa1b55d993de8d47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isWarpCoreRepaired: 0
   _isWarpCoreOnline: 1
   _warpCommand: 0
   _inputDelay: 0.5
@@ -2531,7 +2532,7 @@ MonoBehaviour:
   _shootInput: 0
   _isShotReady: 1
   _isBlasterEnabled: 1
-  _shotCooldownDuration: 0.15
+  _shotCooldownDuration: 0.45
   _laserPushForce: 5
   _laserDamage: 1
   OnFire:
@@ -6413,7 +6414,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidbody2DReference: {fileID: 2655467519268645361}
-  _moveSpeed: 1200
+  _moveSpeed: 600
   _moveDirection: {x: 0, y: 0}
 --- !u!114 &3497513571382989001
 MonoBehaviour:
@@ -6429,7 +6430,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _targetObject: {fileID: 2655467519268645367}
   _rotation: {x: 0, y: 0, z: 0}
-  _rotationSpeed: 150
+  _rotationSpeed: 80
 --- !u!114 &2655467520094325681
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6970,7 +6971,7 @@ MonoBehaviour:
   _shootInput: 0
   _isShotReady: 1
   _isBlasterEnabled: 0
-  _shotCooldownDuration: 0.15
+  _shotCooldownDuration: 0.45
   _laserPushForce: 5
   _laserDamage: 1
   OnFire:
@@ -8838,7 +8839,7 @@ MonoBehaviour:
   _shootInput: 0
   _isShotReady: 1
   _isBlasterEnabled: 0
-  _shotCooldownDuration: 0.15
+  _shotCooldownDuration: 0.45
   _laserPushForce: 5
   _laserDamage: 1
   OnFire:

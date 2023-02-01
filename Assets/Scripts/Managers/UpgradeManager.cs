@@ -663,7 +663,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
             RemoveMaterialsFromInventory(_warpCoreUpgradeMaterialsList, _warpCoreUpgradePrice);
 
             //fix system
-            _playerWarpCoreObject.GetComponent<WarpCoreSystemController>().EnableSystem();
+            _playerWarpCoreObject.GetComponent<WarpCoreSystemController>().RepairWarpCore();
 
             //track progress
             _isWarpCoreRepaired = true;

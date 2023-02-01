@@ -6,6 +6,7 @@ using UnityEngine.Events;
 public class WarpCoreSystemController : MonoBehaviour
 {
     //Declarations
+    [SerializeField] private bool _isWarpCoreRepaired = false;
     [SerializeField] private bool _isWarpCoreOnline = true;
     [SerializeField] private bool _warpCommand = false;
     [SerializeField] private float _inputDelay = .5f;
@@ -36,7 +37,7 @@ public class WarpCoreSystemController : MonoBehaviour
     //Utilities
     public void ToggleWarpOnInput()
     {
-        if (_isWarpCoreOnline && _warpCommand && _isInputReady)
+        if (_isWarpCoreOnline && _warpCommand && _isInputReady && _isWarpCoreRepaired)
         {
             _isInputReady = false;
             Invoke("ReadyInput", _inputDelay);
@@ -72,7 +73,10 @@ public class WarpCoreSystemController : MonoBehaviour
         OnWarpInterrupted?.Invoke();
     }
 
-
+    public void RepairWarpCore()
+    {
+        _isWarpCoreRepaired = true;
+    }
 
     //Basic Getters/Setters
     public void SetWarpCommand(bool value)
@@ -85,7 +89,10 @@ public class WarpCoreSystemController : MonoBehaviour
         return _isWarpCoreOnline;
     }
 
-
+    public bool IsWarpCoreRepaired()
+    {
+        return _isWarpCoreRepaired;
+    }
 
 
     //Debugging

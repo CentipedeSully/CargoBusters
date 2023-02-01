@@ -304,7 +304,7 @@ public class UpgradeDescController : MonoBehaviour
             _busterTimeValue.text = _busterRef.GetBusterDuration().ToString();
             _busterDropChanceValue.text = CargoLootDropper.Instance.GetDropChance().ToString();
 
-            if (_warpCoreRef.GetComponent<WarpCoreSystemController>().IsWarpCoreOnline())
+            if (_warpCoreRef.GetComponent<WarpCoreSystemController>().IsWarpCoreRepaired())
                 _fixWarpCoreValue.text = "Online";
             else _fixWarpCoreValue.text = "Offline";
 
