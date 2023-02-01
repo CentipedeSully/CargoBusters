@@ -293,7 +293,10 @@ public class UpgradeDescController : MonoBehaviour
             _engineTurnValue.text = _enginesRotateRef.GetRotationSpeed().ToString();
 
             _hullDurabilityValue.text = _hullIntergityRef.GetMaxIntegrity().ToString();
-            _hullRegenValue.text = _hullIntergityRef.GetComponent<Regenerator>().GetTickDuration().ToString();
+
+            if (_hullIntergityRef.gameObject.GetComponent<HullSystemController>().IsRegenUnlocked())
+                _hullRegenValue.text = _hullIntergityRef.GetComponent<Regenerator>().GetTickDuration().ToString();
+            else _hullRegenValue.text = "Offline";
 
             _shieldCapacityValue.text = _shieldIntegrityRef.GetMaxIntegrity().ToString();
             _shieldRegenValue.text = _shieldIntegrityRef.GetComponent<Regenerator>().GetTickDuration().ToString();

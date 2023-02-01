@@ -152,4 +152,19 @@ public class HullSystemController : MonoBehaviour
     {
         _regenCommand = value;
     }
+
+    public bool IsRegenEnabled()
+    {
+        return _isRegenEnabled;
+    }
+
+    public bool IsRegenUnlocked()
+    {
+        return _isRegenUnlocked;
+    }
+
+    public void UnlockHullRegeneration()
+    {
+        _isRegenUnlocked = true;
+    }
 }

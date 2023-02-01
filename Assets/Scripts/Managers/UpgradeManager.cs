@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SullysToolkit;
 using TMPro;
+using UnityEngine.Events;
 
 public class UpgradeManager : MonoSingleton<UpgradeManager>
 {
@@ -23,6 +24,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
     [SerializeField] private List<int> _initialWeaponsMaterialCounts;
     [SerializeField] private List<int> _incrementalWeaponsMaterialCounts;
     [SerializeField] private List<int> _currentWeaponsUpgradePrice;
+    [SerializeField] private BubbleCollectionController _weaponsBubbleController;
 
 
     [Space(20)]
@@ -59,6 +61,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
     [SerializeField] private List<int> _initialEnginesMaterialCounts;
     [SerializeField] private List<int> _incrementalEnginesMaterialCounts;
     [SerializeField] private List<int> _currentEnginesUpgradePrice;
+    [SerializeField] private BubbleCollectionController _enginesBubbleController;
 
     [Space(20)]
     [SerializeField] private bool _isEngineForwardsSpeedUpgradeAvailable = false;
@@ -82,6 +85,9 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
     [SerializeField] private List<int> _initialHullMaterialCounts;
     [SerializeField] private List<int> _incrementalHullMaterialCounts;
     [SerializeField] private List<int> _currentHullUpgradePrice;
+    [SerializeField] private BubbleCollectionController _hullBubbleController;
+    [Space(20)]
+    public UnityEvent OnHullDurabilityIncreased;
 
     [Space(20)]
     [SerializeField] private bool _isHullDurabilityUpgradeAvailable = false;
@@ -102,6 +108,9 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
     [SerializeField] private List<int> _initialShieldsMaterialCounts;
     [SerializeField] private List<int> _incrementalShieldsMaterialCounts;
     [SerializeField] private List<int> _currentShieldsUpgradePrice;
+    [SerializeField] private BubbleCollectionController _shieldsBubbleController;
+    [Space(20)]
+    public UnityEvent OnShieldsCapacityIncreased;
 
     [Space(20)]
     [SerializeField] private bool _isShieldCapacityUpgradeAvailable = false;
@@ -122,6 +131,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
     [SerializeField] private List<int> _initialBusterMaterialCounts;
     [SerializeField] private List<int> _incrementalBusterMaterialCounts;
     [SerializeField] private List<int> _currentBusterUpgradePrice;
+    [SerializeField] private BubbleCollectionController _AuxBubbleController;
 
     [Space(20)]
     [SerializeField] private bool _isBusterTimeUpgradeAvailable = false;
@@ -436,6 +446,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
             _cooldownUpgradeCurrent++;
             _weaponsUpgradesCurrent++;
 
+            _weaponsBubbleController.FillSingle();
             UpdateUpgradeAvailability();
             UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
@@ -457,6 +468,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
             _damageUpgradeCurrent++;
             _weaponsUpgradesCurrent++;
 
+            _weaponsBubbleController.FillSingle();
             UpdateUpgradeAvailability();
             UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
@@ -484,6 +496,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
             _blasterCountUpgradeCurrent++;
             _weaponsUpgradesMax++;
 
+            _weaponsBubbleController.FillSingle();
             UpdateUpgradeAvailability();
             UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
@@ -504,6 +517,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
             _killNegationChanceUpgradeCurrent++;
             _weaponsUpgradesCurrent++;
 
+            _weaponsBubbleController.FillSingle();
             UpdateUpgradeAvailability();
             UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
@@ -524,6 +538,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
             _forwardSpeedUpgradeCurrent++;
             _engineUpgradesCurrent++;
 
+            _enginesBubbleController.FillSingle();
             UpdateUpgradeAvailability();
             UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
@@ -544,6 +559,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
             _turnSpeedUpgradeCurrent++;
             _engineUpgradesCurrent++;
 
+            _enginesBubbleController.FillSingle();
             UpdateUpgradeAvailability();
             UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
@@ -559,11 +575,13 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
 
             //Upgrade systems
             _playerHullObject.GetComponent<IntegrityBehavior>().SetMaxIntegrity((int)_playerHullObject.GetComponent<IntegrityBehavior>().GetMaxIntegrity() + 1);
+            OnHullDurabilityIncreased?.Invoke();
 
             //track progress
             _hullDurabilityUpgradeCurrent++;
             _hullUpgradesCurrent++;
 
+            _hullBubbleController.FillSingle();
             UpdateUpgradeAvailability();
             UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
@@ -578,12 +596,16 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
             IncreaseUpgradePrice(ref _currentHullUpgradePrice, _incrementalHullMaterialCounts);
 
             //upgrade Sysytems
-            _playerHullObject.GetComponent<Regenerator>().SetTickDuration(_playerHullObject.GetComponent<Regenerator>().GetTickDuration() - _hullRegenModifier);
+            if (_playerHullObject.GetComponent<HullSystemController>().IsRegenUnlocked() == false)
+                _playerHullObject.GetComponent<HullSystemController>().UnlockHullRegeneration();
+            else 
+                _playerHullObject.GetComponent<Regenerator>().SetTickDuration(_playerHullObject.GetComponent<Regenerator>().GetTickDuration() - _hullRegenModifier);
 
             //track progress
             _hullRegenUpgradeCurrent++;
             _hullUpgradesCurrent++;
 
+            _hullBubbleController.FillSingle();
             UpdateUpgradeAvailability();
             UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
@@ -599,11 +621,14 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
 
             //upgrade system
             _playerShieldsObject.GetComponent<IntegrityBehavior>().SetMaxIntegrity((int)_playerShieldsObject.GetComponent<IntegrityBehavior>().GetMaxIntegrity() + 1);
+            OnShieldsCapacityIncreased?.Invoke();
+
 
             //track progress
             _shieldCapacityUpgradeCurrent++;
             _shieldsUpgradesCurrent++;
 
+            _shieldsBubbleController.FillSingle();
             UpdateUpgradeAvailability();
             UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
@@ -624,6 +649,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
             _shieldRegenUpgradeCurrent++;
             _shieldsUpgradesCurrent++;
 
+            _shieldsBubbleController.FillSingle();
             UpdateUpgradeAvailability();
             UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
@@ -661,6 +687,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
             //track progress
             _busterUpgradesCurrent++;
 
+            _AuxBubbleController.FillSingle();
             UpdateUpgradeAvailability();
             UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
@@ -680,6 +707,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
             //track progress
             _busterUpgradesCurrent++;
 
+            _AuxBubbleController.FillSingle();
             UpdateUpgradeAvailability();
             UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
