@@ -40,7 +40,15 @@ public class PlayerInventoryManager : MonoSingleton<PlayerInventoryManager>
 
 
     //Monobehaviors
-    //...
+    private void Start()
+    {
+        UiManager.Instance.GetScrapCountText().text = _currentScrap.ToString();
+        UiManager.Instance.GetEnergyCellsCountText().text = _currentEnergyCells.ToString();
+        UiManager.Instance.GetWarpCoilsCountText().text = _currentWarpCoils.ToString();
+        UiManager.Instance.GetPlasmaAcceleratorsCountText().text = _currentPlasmaAccelerators.ToString();
+        UiManager.Instance.GetCannonAlloysCountText().text = _currentCannonAlloys.ToString();
+
+    }
 
 
     //Utilites
