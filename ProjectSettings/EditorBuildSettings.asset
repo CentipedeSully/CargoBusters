@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Ship Template Test Scene.unity
+    guid: ec45168b2586ec94e9e1188e125c9166
   m_configObjects: {}
