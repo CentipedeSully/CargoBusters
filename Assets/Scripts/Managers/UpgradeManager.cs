@@ -621,6 +621,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
 
             //upgrade system
             _playerShieldsObject.GetComponent<IntegrityBehavior>().SetMaxIntegrity((int)_playerShieldsObject.GetComponent<IntegrityBehavior>().GetMaxIntegrity() + 1);
+            _playerShieldsObject.GetComponent<Regenerator>().StartRegen();
             OnShieldsCapacityIncreased?.Invoke();
 
 
