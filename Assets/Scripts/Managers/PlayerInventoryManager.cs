@@ -68,6 +68,7 @@ public class PlayerInventoryManager : MonoSingleton<PlayerInventoryManager>
                 _currentScrap += amount;
                 LogItemAdded(amount, "scrap");
                 UiManager.Instance.GetScrapCountText().text = _currentScrap.ToString();
+                UiManager.Instance.GetScrapCollectedText().text = _scrapTotalCollected.ToString();
                 break;
 
             case 1:

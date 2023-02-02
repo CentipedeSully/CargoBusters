@@ -36,6 +36,8 @@ public class WarpCoreBehavior : MonoBehaviour
             if (_currentBuildTime >= _maxBuildDuration)
             {
                 ResetWarpUtilities();
+                UiManager.Instance.EnableEscaped();
+                UiManager.Instance.ShowGameOverScreen(2.5f);
                 OnWarpCompleted?.Invoke();
             }
         }

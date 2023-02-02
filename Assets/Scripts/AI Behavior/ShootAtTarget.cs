@@ -32,6 +32,9 @@ public class ShootAtTarget : MonoBehaviour
     {
         if (_isEngagingTarget && _target != null)
             ShootIfTargetInRange();
+        else if (_target == null && _isEngagingTarget)
+            DisengageTarget();
+
     }
 
     private void OnDrawGizmos()

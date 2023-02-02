@@ -89,6 +89,7 @@ public class SpawnController : MonoSingleton<SpawnController>
             //update wave utilities
             _isWaveInProgress = false;
             _wavesCompletedCount++;
+            UiManager.Instance.GetWavesCompletedText().text = _wavesCompletedCount.ToString();
             OnWaveEnded?.Invoke();
             LogWaveEnded();
 
@@ -148,6 +149,7 @@ public class SpawnController : MonoSingleton<SpawnController>
     {
         _enemiesDefeated++;
         _totalEnemiesDefeated++;
+        UiManager.Instance.GetShipsDestroyedText().text = _totalEnemiesDefeated.ToString();
         LogEnemyReportedDefeated();
     }
 

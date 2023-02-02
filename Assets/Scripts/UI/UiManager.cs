@@ -16,6 +16,12 @@ public class UiManager : MonoSingleton<UiManager>
     [SerializeField] private DisplayAnimController _outOfBoundsTimerDisplayRef;
     [SerializeField] private TextMeshProUGUI _outOfBoundsTimeTextRef;
     [SerializeField] private GameObject _controlsDisplayRef;
+    [SerializeField] private GameObject _gameOverDisplay;
+    [SerializeField] private GameObject _terminatedObject;
+    [SerializeField] private GameObject _escapedObject;
+    [SerializeField] private TextMeshProUGUI _shipsDestroyedText;
+    [SerializeField] private TextMeshProUGUI _wavesCompletedText;
+    [SerializeField] private TextMeshProUGUI _scrapCollectedText;
 
     [Header("Inventory References")]
     [SerializeField] private DisplayAnimController _inventoryDisplayRef;
@@ -114,4 +120,55 @@ public class UiManager : MonoSingleton<UiManager>
     {
         return _controlsDisplayRef;
     }
+
+    public GameObject GetGameOverDisplay()
+    {
+        return _gameOverDisplay;
+    }
+
+    public GameObject GetTerminatedObject()
+    {
+        return _terminatedObject;
+    }
+
+    public GameObject GetEscapedObject()
+    {
+        return _escapedObject;
+    }
+
+    public TextMeshProUGUI GetShipsDestroyedText()
+    {
+        return _shipsDestroyedText;
+    }
+
+    public TextMeshProUGUI GetScrapCollectedText()
+    {
+        return _scrapCollectedText;
+    }
+
+    public TextMeshProUGUI GetWavesCompletedText()
+    {
+        return _wavesCompletedText;
+    }
+
+    public void EnableTerminated()
+    {
+        _terminatedObject.SetActive(true);
+    }
+
+    public void EnableEscaped()
+    {
+        _escapedObject.SetActive(true);
+    }
+
+    public void ShowGameOverScreen(float waitValue = 0)
+    {
+        Invoke("ShowGameOverNow", waitValue);
+    }
+
+    private void ShowGameOverNow()
+    {
+        _gameOverDisplay.SetActive(true);
+    }
+
 }

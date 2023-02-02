@@ -32,6 +32,8 @@ public class ApproachTargetBehavior : MonoBehaviour
             CalculateEnemyInputBasedOnRelativePlayerLocation();
             UpdateEnginesController();
         }
+        else if (_isEngagingTarget && _target == null)
+            DisengageTarget();
     }
 
     private void CalculateEnemyInputBasedOnRelativePlayerLocation()
@@ -89,7 +91,9 @@ public class ApproachTargetBehavior : MonoBehaviour
     public void DisengageTarget()
     {
         _isEngagingTarget = false;
-        _target = null;                 
+        _target = null;
+        _engineControllerRef.SetMoveInput(Vector2.zero);
+        _engineControllerRef.SetTurnInput(0);
     }
 
 
