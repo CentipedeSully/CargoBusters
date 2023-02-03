@@ -154,11 +154,13 @@ public class UiManager : MonoSingleton<UiManager>
     public void EnableTerminated()
     {
         _terminatedObject.SetActive(true);
+        _escapedObject.SetActive(false);
     }
 
     public void EnableEscaped()
     {
         _escapedObject.SetActive(true);
+        _terminatedObject.SetActive(false);
     }
 
     public void ShowGameOverScreen(float waitValue = 0)

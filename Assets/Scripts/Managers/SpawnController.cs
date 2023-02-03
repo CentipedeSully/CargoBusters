@@ -27,7 +27,10 @@ public class SpawnController : MonoSingleton<SpawnController>
     private bool _skipIntermission = false;
 
     [SerializeField] private int _extraEnemyModifier = 2;
-    [SerializeField] private int _wavesCompletedCount = 0;
+    [SerializeField] private int _totalWavesCompleted = 0;
+    [SerializeField] private int _wavesCompletedThisRound = 0;
+    [SerializeField] private int _roundsCompleted = 0;
+    [SerializeField] private int _wavesPerRound = 5;
     [SerializeField] private float _spawnIntervalDelay = 1;
     private WaitForSeconds _cachedSpawnIntervalWaitForSeconds;
     private WaitForSeconds _cachedIntermissionWaitForSeconds;
@@ -36,6 +39,7 @@ public class SpawnController : MonoSingleton<SpawnController>
     [Header("Events")]
     public UnityEvent OnWaveStarted;
     public UnityEvent OnWaveEnded;
+    public UnityEvent OnRoundCompleted;
     public UnityEvent OnIntermissionStarted;
     public UnityEvent OnIntermissionEnded;
 
@@ -66,8 +70,9 @@ public class SpawnController : MonoSingleton<SpawnController>
                 Transform randomSpawnPosition = _spawnPositionsList[Random.Range(0, _spawnPositionsList.Count)];
                 
 
-                //Spawn enemy at random position and dot sensor on player
+                //Spawn enemy at random position and dot sensor on player, also set up enemy strength based on rounds completed
                 GameObject enemyShip = Instantiate(randomEnemyPrefab, randomSpawnPosition.position, Quaternion.identity, ContainersManager.Instance.GetShipsContainer().transform);
+                enemyShip.GetComponent<ShipSystemReferencer>().GetAiBehaviorObject().GetComponent<RandomizeAttributesOnEnable>().SetStrength(_roundsCompleted);
                 enemyShip.GetComponent<ShipSystemReferencer>().GetAiBehaviorObject().GetComponent<RandomizeAttributesOnEnable>().RandomizeAttributes();
                 SetupPointerToEnemy(enemyShip);
                 SetupEnemyTargetingAI(enemyShip);
@@ -88,8 +93,25 @@ public class SpawnController : MonoSingleton<SpawnController>
 
             //update wave utilities
             _isWaveInProgress = false;
-            _wavesCompletedCount++;
-            UiManager.Instance.GetWavesCompletedText().text = _wavesCompletedCount.ToString();
+            _totalWavesCompleted++;
+            _wavesCompletedThisRound++;
+
+            //if round completed, reset current wave count and wave intensity, and then increase round count
+            if (_wavesCompletedThisRound == _wavesPerRound)
+            {
+                _roundsCompleted++;
+                _wavesCompletedThisRound = 0;
+                _maxEnemyCountThisWave = 1;
+                //Increase Enemy Value
+                OnRoundCompleted?.Invoke();
+            }
+            else _maxEnemyCountThisWave += _extraEnemyModifier + _totalWavesCompleted;
+
+            //Reset Utilities for next wave
+            _enemiesSpawned = 0;
+            _enemiesDefeated = 0;
+
+            UiManager.Instance.GetWavesCompletedText().text = _totalWavesCompleted.ToString();
             OnWaveEnded?.Invoke();
             LogWaveEnded();
 
@@ -109,10 +131,7 @@ public class SpawnController : MonoSingleton<SpawnController>
             UiManager.Instance.GetIntermissionTimerText().text = "00:00";
 
             _skipIntermission = false;
-            //Reset Utilities for next wave
-            _enemiesSpawned = 0;
-            _enemiesDefeated = 0;
-            _maxEnemyCountThisWave += _extraEnemyModifier + _wavesCompletedCount;
+
 
 
         }
@@ -170,7 +189,7 @@ public class SpawnController : MonoSingleton<SpawnController>
 
     public int GetWavesCompleted()
     {
-        return _wavesCompletedCount;
+        return _totalWavesCompleted;
     }
 
     public bool IsSpawning()
@@ -186,6 +205,11 @@ public class SpawnController : MonoSingleton<SpawnController>
     public bool IsWaveInProgress()
     {
         return _isWaveInProgress;
+    }
+
+    public int GetRoundCount()
+    {
+        return _roundsCompleted;
     }
        
     //Debugging
@@ -210,7 +234,7 @@ public class SpawnController : MonoSingleton<SpawnController>
     public void LogWaveEnded()
     {
         if (_isDebugEnabled)
-            Debug.Log("Wave Ended. Waves Completed: " + _wavesCompletedCount);
+            Debug.Log("Wave Ended. Waves Completed: " + _totalWavesCompleted);
     }
 
     public void LogIntermissionEntered()

@@ -780,7 +780,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 8445502751522775354}
         m_TargetAssemblyTypeName: SystemDisabler, Assembly-CSharp
-        m_MethodName: DisableAllSystems
+        m_MethodName: DisableSystemsWithoutReportingDeath
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1412,6 +1412,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d320b88096f70974aa1b55d993de8d47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isDebugEnabled: 0
   _isWarpCoreRepaired: 0
   _isWarpCoreOnline: 1
   _warpCommand: 0
@@ -1622,7 +1623,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 8445502751522775354}
         m_TargetAssemblyTypeName: SystemDisabler, Assembly-CSharp
-        m_MethodName: DisableAllSystems
+        m_MethodName: DisableSystemsWithoutReportingDeath
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8366,18 +8367,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _laserDamageMin: 1
   _laserDamageMax: 1
+  _laserUpgradeMax: 1
+  _laserUpgradeModifierMin: 0
+  _laserUpgradeModifierMax: 1
   _shotCooldownMin: 0.5
   _shotCooldownMax: 0.75
+  _cooldownMaxUpgrades: 2
+  _cooldownUpgradeModifierMin: 0.15
+  _cooldownUpgradeModifierMax: 0.15
   _blasterCountMin: 1
   _blasterCountMax: 1
+  _blasterUpgradesMax: 1
+  _blasterUpgradeModifierMin: 0
+  _blasterUpgradeModifierMax: 1
   _minMoveSpeed: 300
   _maxMoveSpeed: 600
+  _moveSpeedUpgradesMax: 3
+  _moveModifierMin: 300
+  _moveModifierMax: 300
   _minRotationSpeed: 50
   _maxRotationSpeed: 100
+  _rotationUpgradesMax: 2
+  _rotationModifierMin: 20
+  _rotationModifierMax: 20
   _hullMin: 3
   _hullMax: 3
+  _hullUpgradesMax: 2
+  _hullModifierMin: 0
+  _hullModifierMax: 1
   _shieldMin: 0
   _shieldMax: 1
+  _shieldUpgradesMax: 4
+  _shieldsModifierMin: 0
+  _shieldsModifierMax: 1
   _systemReferencer: {fileID: 2655467519268645362}
   _weaponsSystem: {fileID: 0}
   _enginesSystem: {fileID: 0}

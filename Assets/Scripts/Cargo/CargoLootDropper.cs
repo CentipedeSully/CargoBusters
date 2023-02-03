@@ -35,8 +35,10 @@ public class CargoLootDropper : MonoSingleton<CargoLootDropper>
     //Utilities
     public void DropItemsToPlayerInventory()
     {
+        int scrapMultiplier = SpawnController.Instance.GetRoundCount() + 1;
+
         if (_scrapDropChance >= RollD100())
-            PlayerInventoryManager.Instance.IncrementItemCount(0, Random.Range(_scrapDropMin, _scrapDropMax + 1));
+            PlayerInventoryManager.Instance.IncrementItemCount(0, Random.Range(_scrapDropMin * scrapMultiplier, (_scrapDropMax * scrapMultiplier) + 1));
 
         if (_energyCellDropChance >= RollD100())
             PlayerInventoryManager.Instance.IncrementItemCount(1, Random.Range(_energyCellDropMin, _energyCellDropMax + 1));

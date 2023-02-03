@@ -6,6 +6,7 @@ using UnityEngine.Events;
 public class WarpCoreSystemController : MonoBehaviour
 {
     //Declarations
+    [SerializeField] private bool _isDebugEnabled = false;
     [SerializeField] private bool _isWarpCoreRepaired = false;
     [SerializeField] private bool _isWarpCoreOnline = true;
     [SerializeField] private bool _warpCommand = false;
@@ -98,16 +99,19 @@ public class WarpCoreSystemController : MonoBehaviour
     //Debugging
     public void LogCompletion()
     {
-        Debug.Log("Warp Completed");
+        if (_isDebugEnabled)
+            Debug.Log("Warp Completed");
     }
 
     public void LogInterruption()
     {
-        Debug.Log("Interruption Successful");
+        if (_isDebugEnabled)
+            Debug.Log("Interruption Successful");
     }
 
     public void LogWarpStart()
     {
-        Debug.Log("Warp Sequence Intialized");
+        if (_isDebugEnabled)
+            Debug.Log("Warp Sequence Intialized");
     }
 }

@@ -57601,6 +57601,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7119820603063752741, guid: 18ab41552af765b4b9b3261f3ae26d0e, type: 3}
+      propertyPath: _wavesPerRound
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7119820603063752741, guid: 18ab41552af765b4b9b3261f3ae26d0e, type: 3}
       propertyPath: _extraEnemyModifier
       value: 0
       objectReference: {fileID: 0}

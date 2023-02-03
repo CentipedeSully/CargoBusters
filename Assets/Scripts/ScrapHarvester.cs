@@ -7,8 +7,8 @@ public class ScrapHarvester : MonoSingleton<ScrapHarvester>
 {
     //Delcarations
     [SerializeField] private bool _isHarvestingEnabled = false;
-    [SerializeField] private int _minScrapDrop = 5;
-    [SerializeField] private int _maxScrapDrop = 25;
+    [SerializeField] private int _minScrapDrop = 15;
+    [SerializeField] private int _maxScrapDrop = 35;
 
 
     //Monobehaviors
@@ -19,7 +19,11 @@ public class ScrapHarvester : MonoSingleton<ScrapHarvester>
     public void DropExtraScrapOnEnemyDeath()
     {
         if (_isHarvestingEnabled)
-            CargoLootDropper.Instance.DropScrapToPlayerInventory(_minScrapDrop,_maxScrapDrop);
+        {
+            int scrapMultiplier = SpawnController.Instance.GetRoundCount() + 1;
+            CargoLootDropper.Instance.DropScrapToPlayerInventory(_minScrapDrop * scrapMultiplier, _maxScrapDrop * scrapMultiplier);
+        }
+            
     }
 
     public void EnableHarvesting()
