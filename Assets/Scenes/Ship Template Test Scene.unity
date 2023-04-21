@@ -57355,6 +57355,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player Obj Manager
       objectReference: {fileID: 0}
+    - target: {fileID: 6872647270389647333, guid: 1f51459124f1d424aa5549e891ce14f0, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7114995937327015987, guid: 1f51459124f1d424aa5549e891ce14f0, type: 3}
       propertyPath: _cinemachineVirtualCameraObject
       value: 
@@ -58019,6 +58023,10 @@ PrefabInstance:
     - target: {fileID: 8921061386943977328, guid: 3205ab6ea1f09f54fb427e578232cfa9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8921061386943977329, guid: 3205ab6ea1f09f54fb427e578232cfa9, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8921061386943977343, guid: 3205ab6ea1f09f54fb427e578232cfa9, type: 3}
       propertyPath: m_Name
