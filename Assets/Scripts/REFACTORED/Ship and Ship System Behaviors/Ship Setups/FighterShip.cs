@@ -4,5 +4,18 @@ using UnityEngine;
 
 public class FighterShip : Ship
 {
-    
+    //Declarations
+    //...
+
+
+    //Monobehaviors
+    //...
+
+
+    //Utils
+    //...
+
+
+
+
 }

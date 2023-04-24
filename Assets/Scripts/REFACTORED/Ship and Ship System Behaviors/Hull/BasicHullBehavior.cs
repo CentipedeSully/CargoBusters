@@ -2,83 +2,108 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasicHullBehavior : IHullBehavior
+public class BasicHullBehavior : ShipSubsystem, IHullBehavior
 {
     //Declarations
-    Ship _parent;
-    int _currentValue;
-    int _maxValue;
-    float _remainingIntegrityPercentage;
-    float _criticalThresholdPercentage;
-    bool _isDebugActive;
+    [Header("Hull Attributes")]
+    [SerializeField] [Min(0)] int _currentValue;
+    [SerializeField] [Min(1)] int _maxValue;
+    [SerializeField] [Range(0, 1)] float _remainingIntegrityPercentage;
+    [SerializeField] [Range(0, 1)] float _criticalThresholdPercentage;
+    [SerializeField] bool _isHullCritical;
+
+    [Header("Debugging Commands")]
+    [SerializeField] [Min(0)] int _modificationFactor = 1;
+    [SerializeField] [Range(0, 1)] float _percentModifier;
+    [SerializeField] bool _decreaseHull;
+    [SerializeField] bool _increaseHull;
+    [SerializeField] bool _decreaseToNearDeath;
+    [SerializeField] bool _disableShip;
+    [SerializeField] bool _enableShip;
+    [SerializeField] bool _changeMaxHull;
+    [SerializeField] bool _changeCritThreshold;
+    [SerializeField] bool _damageToCritical;
+
+    //events
+    public delegate void BasicHullBehaviorEvent();
+    public event BasicHullBehaviorEvent OnHullDestroyed;
 
 
-    //Constructors
-    public BasicHullBehavior(Ship parent, int maxHull, int currentHull, float hullCriticalPercent, bool showDebug = false)
+
+    //Monobehaviours
+    private void Start()
     {
-        //accept data
-        this._parent = parent;
-        this._maxValue = maxHull;
-        this._currentValue = currentHull;
-        this._criticalThresholdPercentage = hullCriticalPercent;
-        this._isDebugActive = showDebug;
-
-
-        //check data
-        if (_parent == null)
-            Debug.LogError("Parent field of BasicHullBehavior is null. BasicHullBehavior will not reference '_parent' Ship without error");
-
-        if (_maxValue <= 0)
-            _maxValue = 1;
-
-        if (_currentValue > _maxValue)
-            _currentValue = _maxValue;
-        else if (_currentValue <= 0)
-            _currentValue = 1;
-
-        if (_criticalThresholdPercentage > 1 || _criticalThresholdPercentage < 0)
-            _criticalThresholdPercentage = .4f;
-
-
-        //calculate current integrity
         RecalculateHullIntegrity();
-            
+        UpdateHullState();
     }
 
+    private void Update()
+    {
+        if (_showDebug)
+            RunDebugCommands();
+    }
 
 
 
     //Interface Utils
+    public void SetParent(Ship parent)
+    {
+        _parentShip = parent;
+    }
 
     public void DamageHull(int damage)
     {
-        throw new System.NotImplementedException();
+        if (IsDebugActive())
+            LogResponse($"recieved Damage: {damage}");
+
+        if (_isHullCritical)
+            DisableShipFromCriticalDamage();
+
+        SetCurrentValue(_currentValue - damage);
+        if (_currentValue == 0)
+        {
+            if (_showDebug)
+                LogResponse("hull Destroyed.");
+            OnHullDestroyed?.Invoke();
+            _parentShip.Die();
+        }
+            
+
     }
 
     public void DamageHullToNearDeath()
     {
-        throw new System.NotImplementedException();
+        if (_currentValue > 1 && _maxValue > 1)
+        {
+            _currentValue = 1;
+            RecalculateHullIntegrity();
+            UpdateHullState();
+
+            if (_showDebug)
+                LogResponse("damaged to Near Death");
+
+            DisableShipFromCriticalDamage();
+        }
+
+
     }
 
     public void DisableShipFromCriticalDamage()
     {
         //play disabledFromDamage Feedback
-        _parent.DisableShip();
+
+        if (_showDebug)
+            LogResponse("has been disabled via suffering critical damage");
+        DisableSubsystem();
+        _parentShip.DisableShip();
     }
 
     public void EnableShip()
     {
-        throw new System.NotImplementedException();
-    }
+        //play enabled Feedback
 
-    public void EnterDebug()
-    {
-        _isDebugActive = true;
-    }
-
-    public void ExitDebug()
-    {
-        _isDebugActive = false;
+        EnableSubsystem();
+        _parentShip.EnableShip();
     }
 
     public float GetCriticalThresholdPercent()
@@ -101,26 +126,41 @@ public class BasicHullBehavior : IHullBehavior
         return _maxValue;
     }
 
-    public bool IsDebugActive()
-    {
-        return _isDebugActive;
-    }
-
     public void SetCriticalThresholdPercent(float newThreshold)
     {
-        throw new System.NotImplementedException();
+        if (newThreshold > 0 && newThreshold < 1)
+        {
+            _criticalThresholdPercentage = newThreshold;
+            UpdateHullState();
+        }
     }
 
     public void SetCurrentValue(int newValue)
     {
-        _currentValue = Mathf.Clamp(newValue, 1, _maxValue);
+        _currentValue = Mathf.Clamp(newValue, 0, _maxValue);
 
         RecalculateHullIntegrity();
+        UpdateHullState();
     }
 
     public void SetCurrentValueToCritical()
     {
-        throw new System.NotImplementedException();
+        if (_criticalThresholdPercentage > 0 && _remainingIntegrityPercentage > _criticalThresholdPercentage)
+        {
+            Debug.Log( "Checking Critical Hull Calculation: " + Mathf.FloorToInt((float)_maxValue * _criticalThresholdPercentage));
+            if (Mathf.FloorToInt((float)_maxValue * _criticalThresholdPercentage) > 0)
+            {
+                _remainingIntegrityPercentage = _criticalThresholdPercentage;
+                _currentValue = Mathf.FloorToInt((float)_maxValue * _remainingIntegrityPercentage);
+                if (IsDebugActive())
+                    LogResponse($"Hull set to critical. New Hull: {_currentValue}");
+
+                UpdateHullState();
+            }
+            else
+                Debug.Log("Ignoring SetHullToCritical command: Crit Threshold or MaxHull too low to damage critically without being fatal damage");
+           
+        }
     }
 
     public void SetMaxValue(int newValue)
@@ -132,27 +172,113 @@ public class BasicHullBehavior : IHullBehavior
                 _currentValue = _maxValue;
 
             RecalculateHullIntegrity();
+            UpdateHullState();
         }
            
     }
 
-
-    //Utils
-    private void RecalculateHullIntegrity() //ALSO CHECK IF THE INTEGRITY IS CRITICAL
+    public void RepairHull(int value)
     {
-        _remainingIntegrityPercentage = Mathf.FloorToInt((_currentValue / _maxValue) * 100) / 100;
-        if (_isDebugActive)
+        if (value >= 0)
         {
-            if (_parent != null)
-                Debug.Log($"{_parent.name} Initialized Hull Percentage: {_remainingIntegrityPercentage}");
-            else
-            {
-                Debug.Log($"NULL_SHIP Initialized Hull Percentage: {_remainingIntegrityPercentage}");
-                Debug.LogError("Parent field of BasicHullBehavior is null.");
-            }
+            SetCurrentValue(_currentValue + value);
+
+            if (_isDisabled)
+                EnableShip();
         }
     }
 
 
+
+    //Utils
+    private void RecalculateHullIntegrity()
+    {
+        //Recalculate integrity
+        _remainingIntegrityPercentage = (float)_currentValue/_maxValue;
+        if (IsDebugActive())
+            LogResponse($"current Hull Percentage: {_remainingIntegrityPercentage}");
+    }
+
+    private void UpdateHullState()
+    {
+        if (_remainingIntegrityPercentage <= _criticalThresholdPercentage && _isHullCritical == false)
+        {
+            _isHullCritical = true;
+            if (IsDebugActive())
+                LogResponse(" HULL CRITICAL");
+        }
+        else if (_remainingIntegrityPercentage > _criticalThresholdPercentage && _isHullCritical == true)
+        {
+            _isHullCritical = false;
+            if (IsDebugActive())
+                LogResponse(" HULL STABILIZED");
+        }
+    }
+
+
+
+    //Debugging
+    private void LogResponse(string response)
+    {
+        if (_parentShip != null)
+            Debug.Log(_parentShip.GetName() + " " + response);
+        else
+        {
+            Debug.LogError($"NULL_PARENT_SHIP on obejct: {this.gameObject}, system: {_name}");
+            Debug.Log("NULL_SHIP " + response);
+        }
+    }
+
+    private void RunDebugCommands()
+    {
+        if (_decreaseHull)
+        {
+            DamageHull(_modificationFactor);
+            _decreaseHull = false;
+        }
+
+        if (_increaseHull)
+        {
+            RepairHull(_modificationFactor);
+            _increaseHull = false;
+        }
+
+        if (_decreaseToNearDeath)
+        {
+            DamageHullToNearDeath();
+            _decreaseToNearDeath = false;
+        }
+
+        if (_disableShip)
+        {
+            DisableShipFromCriticalDamage();
+            _disableShip = false;
+        }
+
+        if (_enableShip)
+        {
+            EnableShip();
+            _enableShip = false;
+        }
+
+        if (_changeMaxHull)
+        {
+            SetMaxValue(_modificationFactor);
+            _changeMaxHull = false;
+        }
+
+        if (_changeCritThreshold)
+        {
+            SetCriticalThresholdPercent(_percentModifier);
+            _changeCritThreshold = false;
+        }
+
+        if (_damageToCritical)
+        {
+            SetCurrentValueToCritical();
+            _damageToCritical = false;
+        }
+
+    }
 
 }

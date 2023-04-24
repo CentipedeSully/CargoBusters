@@ -4,6 +4,8 @@ using UnityEngine;
 
 public interface IHullBehavior
 {
+    void SetParent(Ship parent);
+
     void DisableShipFromCriticalDamage();
 
     void EnableShip();
@@ -30,38 +32,43 @@ public interface IHullBehavior
 
 
     //Debugging
-    void EnterDebug();
-
-    void ExitDebug();
+    void ToggleDebugMode();
 
     bool IsDebugActive();
 }
 
 public interface IEngineBehavior
 {
+    void SetParent(Ship parent);
     bool IsEngineDisabled();
 
     void DisableEngines();
 
     void EnableEngines();
 
-    int GetTurnSpeed();
+    void MoveIfEnginesEnabled();
 
-    int GetForwardsSpeed();
+    void SetTurnInput(float newValue);
 
-    void Turn(int lateralDirection);
+    void SetThrustInput(float newValue);
 
-    void MoveForwards(int magnitude);
+    void SetStrafeInput(float newValue);
 
-    void SetTurnSpeed(int newValue);
+    float GetTurnSpeed();
 
-    void SetForwardsSpeed(int newValue);
+    float GetThrustForce();
+
+    float GetStrafeForce();
+
+    void SetThustForce(float newValue);
+
+    void SetStrafeForce(float newValue);
+
+    void SetTurnSpeed(float newValue);
 
 
     //Debugging
-    void EnterDebug();
-
-    void ExitDebug();
+    void ToggleDebugMode();
 
     bool IsDebugActive();
 
@@ -94,6 +101,8 @@ public interface IShieldBehavior
     void ExitDebug();
 
     bool IsDebugActive();
+
+    void LogAllData();
 }
 
 public interface IWeaponsBehavior
@@ -128,6 +137,8 @@ public interface IWeaponsBehavior
     void ExitDebug();
 
     bool IsDebugActive();
+
+    void LogAllData();
 }
 
 public interface ICargoBehavior
@@ -146,6 +157,8 @@ public interface ICargoBehavior
     void ExitDebug();
 
     bool IsDebugActive();
+
+    void LogAllData();
 }
 
 public interface IWarpBehavior
@@ -168,6 +181,8 @@ public interface IWarpBehavior
     void ExitDebug();
 
     bool IsDebugActive();
+
+    void LogAllData();
 }
 
 public interface IBusterBehavior
@@ -190,10 +205,14 @@ public interface IBusterBehavior
     void ExitDebug();
 
     bool IsDebugActive();
+
+    void LogAllData();
 }
 
 public interface IDeathBehavior
 {
+    void SetParent(Ship parent);
+
     void ReportDeath();
 
     void TriggerDeathSequence();
@@ -208,13 +227,23 @@ public interface IDeathBehavior
     void ExitDebug();
 
     bool IsDebugActive();
+
+    void LogAllData();
 }
 
 public interface IShipController
 {
-    void ReadInput();
-    void CommunicateMoveInput();
-    void CommunicateShootInput();
+    void SetParent(Ship parent);
+
+    void DetermineDecisions();
+
+    void CommunicateDecisionsToSubsystems();
+
+
+    //Debugging
+    void ToggleDebug();
+
+    bool IsDebugActive();
 }
 
 public interface IDisableable
@@ -231,44 +260,127 @@ public interface IDamageable
     void TakeDamage(int value, bool preserveShip);
 }
 
+public class ShipSubsystem : MonoBehaviour, IDisableable
+{
+    //Declarations
+    [Header("Subsystem Overview")]
+    [SerializeField] protected string _name = "Unnamed Subsystem";
+    [SerializeField] protected Ship _parentShip;
+    [SerializeField] protected bool _isDisabled = false;
+    [SerializeField] protected bool _showDebug = false;
+
+    public delegate void SubsystemEvent();
+    public event SubsystemEvent OnSubsystemDisabled;
+    public event SubsystemEvent OnSubsystemEnabled;
+
+
+    //Constructors
+    //...
+
+
+    //MonoBehaviours
+    //...
+
+
+    //Interface Utils
+    public bool IsDisabled()
+    {
+        return IsSubsystemDisabled();
+    }
+
+    public void DisableEntity()
+    {
+        DisableSubsystem();
+    }
+
+    public void EnableEntity()
+    {
+        EnableSubsystem();
+    }
+
+
+
+    //Utils
+    public string GetName()
+    {
+        return _name;
+    }
+
+    public void SetName(string newName)
+    {
+        _name = newName;
+    }
+
+    public Ship GetParentShip()
+    {
+        return _parentShip;
+    }
+
+    public bool IsSubsystemDisabled()
+    {
+        return _isDisabled;
+    }
+
+    public void DisableSubsystem()
+    {
+        _isDisabled = true;
+        OnSubsystemDisabled?.Invoke();
+    }
+
+    public void EnableSubsystem()
+    {
+        _isDisabled = false;
+        OnSubsystemEnabled?.Invoke();
+    }
+
+    public bool IsDebugActive()
+    {
+        return _showDebug;
+    }
+
+    public void ToggleDebugMode()
+    {
+        if (_showDebug)
+            _showDebug = false;
+        else _showDebug = true;
+    }
+
+
+}
+
 public abstract class Ship : MonoBehaviour, IDisableable, IDamageable
 {
     //Declarations
-    [SerializeField] private string _name = "Unnamed";
-    [SerializeField] private string _faction = "Independent";
-    [SerializeField] private bool _isPlayer = false;
-    [SerializeField] private bool _isShipDisabled = false;
-    [SerializeField] private bool _debugMode = false;
-    private bool _debugFlag = false;
-
-    [Space(20)]
-    [SerializeField] private int _forwardsInput;
-    [SerializeField] private int _turnInput;
-    [SerializeField] private bool _shootInput;
+    [Header("Ship Info")]
+    [SerializeField] protected string _name = "Unnamed";
+    [SerializeField] protected string _faction = "Independent";
+    [SerializeField] protected bool _isPlayer = false;
+    [SerializeField] protected bool _isShipDisabled = false;
+    [SerializeField] protected bool _debugMode = false;
+    protected bool _debugFlag = false;
 
 
     //behavior references
-    [SerializeField] private IHullBehavior _hullBehavior;
-    [SerializeField] private IEngineBehavior _engineBehavior;
-    [SerializeField] private IShieldBehavior _shieldBehavior;
-    [SerializeField] private IWeaponsBehavior _weaponsBehavior;
-    [SerializeField] private ICargoBehavior _cargoBehavior;
-    [SerializeField] private IWarpBehavior _warpBehavior;
-    [SerializeField] private IBusterBehavior _busterBehavior;
-    [SerializeField] private IDeathBehavior _deathBehavior;
-    [SerializeField] private IShipController _shipController;
+    [Header("Behavior References")]
+    [SerializeField] protected IShipController _shipController;
+    [SerializeField] protected IHullBehavior _hullBehavior;
+    [SerializeField] protected IEngineBehavior _engineBehavior;
+    [SerializeField] protected IDeathBehavior _deathBehavior;
+
 
 
 
     //Monobehaviours
-    private void Update()
+    protected virtual void Awake()
     {
-        WatchDebugMode();
-        _shipController.ReadInput();
-        _shipController.CommunicateMoveInput();
-        _shipController.CommunicateShootInput();
+        InitializeBehaviors();
     }
 
+    protected virtual void Update()
+    {
+        WatchDebugMode();
+        ControlShip();
+    }
 
 
     //Interface Utils
@@ -287,7 +399,7 @@ public abstract class Ship : MonoBehaviour, IDisableable, IDamageable
         EnableShip();
     }
 
-    public void TakeDamage(int damage, bool preserveShip)
+    public virtual void TakeDamage(int damage, bool preserveShip)
     {
         SufferDamage(damage, preserveShip);
     }
@@ -296,64 +408,69 @@ public abstract class Ship : MonoBehaviour, IDisableable, IDamageable
 
 
     //Utils
-    public void DisableShip()
+    protected virtual void InitializeBehaviors()
+    {
+        _shipController = GetComponent<IShipController>();
+        _hullBehavior = GetComponent<IHullBehavior>();
+        _engineBehavior = GetComponent<IEngineBehavior>();
+        _deathBehavior = GetComponent<IDeathBehavior>();
+
+        _shipController.SetParent(this);
+        _hullBehavior.SetParent(this);
+        _engineBehavior.SetParent(this);
+        //_deathBehavior.SetParent(this);
+    }
+
+    protected virtual void ControlShip()
+    {
+        _shipController.DetermineDecisions();
+        _shipController.CommunicateDecisionsToSubsystems();
+    }
+
+    public virtual void DisableShip()
     {
         if (_isShipDisabled == false)
         {
             _isShipDisabled = true;
             _engineBehavior.DisableEngines();
-            _shieldBehavior.DisableShields();
-            _weaponsBehavior.DisableWeapons();
-            _cargoBehavior.DisableCargoSecurity();
-            _warpBehavior.DisableWarping();
-            _busterBehavior.DisableBuster();
         }
     }
 
-    public void EnableShip()
+    public virtual void EnableShip()
     {
         if (_isShipDisabled == true)
         {
             _isShipDisabled = false;
             _engineBehavior.EnableEngines();
-            _shieldBehavior.EnableShields();
-            _weaponsBehavior.EnableWeapons();
-            _cargoBehavior.EnableCargoSecurity();
-            _warpBehavior.EnableWarping();
-            _busterBehavior.EnableBuster();
         }
     }
 
-    public void Die()
+    public virtual void Die()
     {
-        _deathBehavior.ReportDeath();
-        _deathBehavior.TriggerDeathSequence();
+        //_deathBehavior.ReportDeath();
+        //_deathBehavior.TriggerDeathSequence();
     }
 
-    public void SufferDamage(int value, bool preserveShip)
+    public virtual void SufferDamage(int value, bool preserveShip)
     {
-        if (_shieldBehavior.GetCurrentValue() > 0)
-            _shieldBehavior.DamageShields(value);
-
-        else
+        
+        if (preserveShip == true)
         {
-            if (preserveShip == true)
+            if (_hullBehavior.GetCurrentValue() < value)
             {
-                if (_hullBehavior.GetCurrentValue() < value)
-                {
-                    _hullBehavior.DamageHullToNearDeath();
-                    _hullBehavior.DisableShipFromCriticalDamage();
-                }
-
-                else _hullBehavior.DamageHull(value);
+                _hullBehavior.DamageHullToNearDeath();
+                _hullBehavior.DisableShipFromCriticalDamage();
             }
 
             else _hullBehavior.DamageHull(value);
         }
+
+        else _hullBehavior.DamageHull(value);
+        
     }
 
 
-    private void WatchDebugMode()
+    protected virtual void WatchDebugMode()
     {
         if (_debugMode != _debugFlag)
         {
@@ -365,30 +482,26 @@ public abstract class Ship : MonoBehaviour, IDisableable, IDamageable
         }
     }
 
-    public void EnterDebugMode()
+    public virtual void EnterDebugMode()
     {
         _debugMode = true;
-        _hullBehavior.EnterDebug();
-        _engineBehavior.EnterDebug();
-        _shieldBehavior.EnterDebug();
-        _weaponsBehavior.EnterDebug();
-        _cargoBehavior.EnterDebug();
-        _warpBehavior.EnterDebug();
-        _busterBehavior.EnterDebug();
-        _deathBehavior.EnterDebug();
+        Debug.Log("Entered DebugMode");
+        if (_hullBehavior.IsDebugActive() == false)
+            _hullBehavior.ToggleDebugMode();
+        if (_engineBehavior.IsDebugActive() == false)
+            _engineBehavior.ToggleDebugMode();
+        //_deathBehavior.EnterDebug();
     }
 
-    public void ExitDebugMode()
+    public virtual void ExitDebugMode()
     {
         _debugMode = false;
-        _hullBehavior.ExitDebug();
-        _engineBehavior.ExitDebug();
-        _shieldBehavior.ExitDebug();
-        _weaponsBehavior.ExitDebug();
-        _cargoBehavior.ExitDebug();
-        _warpBehavior.ExitDebug();
-        _busterBehavior.ExitDebug();
-        _deathBehavior.ExitDebug();
+        Debug.Log("Exited DebugMode");
+        if (_hullBehavior.IsDebugActive())
+            _hullBehavior.ToggleDebugMode();
+        if (_engineBehavior.IsDebugActive())
+            _engineBehavior.ToggleDebugMode();
+        //_deathBehavior.ExitDebug();
     }
 
 
@@ -424,21 +537,6 @@ public abstract class Ship : MonoBehaviour, IDisableable, IDamageable
         return _isPlayer;
     }
 
-    public void SetForwardsInput(int newValue)
-    {
-        _forwardsInput = newValue;
-    }
-
-    public void SetTurnInput(int newValue)
-    {
-        _turnInput = newValue;
-    }
-
-    public void SetShootInput(bool newValue)
-    {
-        _shootInput = newValue;
-    }
-
     
     public IHullBehavior GetHullBehavior()
     {
@@ -448,31 +546,6 @@ public abstract class Ship : MonoBehaviour, IDisableable, IDamageable
     public IEngineBehavior GetEngineBehavior()
     {
         return _engineBehavior;
-    }
-
-    public IShieldBehavior GetShieldBehavior()
-    {
-        return _shieldBehavior;
-    }
-
-    public IWeaponsBehavior GetWeaponBehavior()
-    {
-        return _weaponsBehavior;
-    }
-
-    public ICargoBehavior GetCargoBehavior()
-    {
-        return _cargoBehavior;
-    }
-
-    public IWarpBehavior GetWarpBehavior()
-    {
-        return _warpBehavior;
-    }
-
-    public IBusterBehavior GetBusterBehavior()
-    {
-        return _busterBehavior;
     }
     
 }
