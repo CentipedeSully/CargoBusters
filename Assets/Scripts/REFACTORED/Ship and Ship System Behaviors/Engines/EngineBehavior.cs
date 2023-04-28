@@ -20,6 +20,8 @@ public class EngineBehavior : ShipSubsystem, IEngineBehavior
 
 
 
+
+
     //Monobehaviour
     private void Awake()
     {
@@ -30,6 +32,9 @@ public class EngineBehavior : ShipSubsystem, IEngineBehavior
     {
         MoveIfEnginesEnabled();
     }
+
+
+
 
 
     //Interface Utils
@@ -128,6 +133,8 @@ public class EngineBehavior : ShipSubsystem, IEngineBehavior
 
 
 
+
+
     //Utils
     private void InitializeReferences()
     {
@@ -165,6 +172,7 @@ public class EngineBehavior : ShipSubsystem, IEngineBehavior
         //reapply the newly-composite rotation to the ship as a Quaternion
         transform.rotation = Quaternion.Euler(shipRotation);   
     }
+
 
 
 

@@ -213,22 +213,20 @@ public interface IDeathBehavior
 {
     void SetParent(Ship parent);
 
-    void ReportDeath();
+    void SetInstanceTracker(IInstanceTracker instanceTracker);
 
     void TriggerDeathSequence();
 
     float GetDeathSequenceDuration();
 
+    bool IsDying();
+
 
 
     //Debugging
-    void EnterDebug();
-
-    void ExitDebug();
+    void ToggleDebugMode();
 
     bool IsDebugActive();
-
-    void LogAllData();
 }
 
 public interface IShipController
@@ -418,7 +416,8 @@ public abstract class Ship : MonoBehaviour, IDisableable, IDamageable
         _shipController.SetParent(this);
         _hullBehavior.SetParent(this);
         _engineBehavior.SetParent(this);
-        //_deathBehavior.SetParent(this);
+        _deathBehavior.SetParent(this);
+        _deathBehavior.SetInstanceTracker(GameManager.Instance.GetInstanceTracker());
     }
 
     protected virtual void ControlShip()
@@ -447,8 +446,7 @@ public abstract class Ship : MonoBehaviour, IDisableable, IDamageable
 
     public virtual void Die()
     {
-        //_deathBehavior.ReportDeath();
-        //_deathBehavior.TriggerDeathSequence();
+        _deathBehavior.TriggerDeathSequence();
     }
 
     public virtual void SufferDamage(int value, bool preserveShip)
@@ -490,7 +488,9 @@ public abstract class Ship : MonoBehaviour, IDisableable, IDamageable
             _hullBehavior.ToggleDebugMode();
         if (_engineBehavior.IsDebugActive() == false)
             _engineBehavior.ToggleDebugMode();
-        //_deathBehavior.EnterDebug();
+        if (_deathBehavior.IsDebugActive() == false)
+            _deathBehavior.ToggleDebugMode();
+
     }
 
     public virtual void ExitDebugMode()
@@ -501,7 +501,8 @@ public abstract class Ship : MonoBehaviour, IDisableable, IDamageable
             _hullBehavior.ToggleDebugMode();
         if (_engineBehavior.IsDebugActive())
             _engineBehavior.ToggleDebugMode();
-        //_deathBehavior.ExitDebug();
+        if (_deathBehavior.IsDebugActive())
+            _deathBehavior.ToggleDebugMode();
     }
 
 
@@ -532,7 +533,7 @@ public abstract class Ship : MonoBehaviour, IDisableable, IDamageable
         return _isShipDisabled;
     }
 
-    public bool _IsPlayer()
+    public bool IsPlayer()
     {
         return _isPlayer;
     }
@@ -546,6 +547,11 @@ public abstract class Ship : MonoBehaviour, IDisableable, IDamageable
     public IEngineBehavior GetEngineBehavior()
     {
         return _engineBehavior;
+    }
+
+    public IDeathBehavior GetDeathBehavior()
+    {
+        return _deathBehavior;
     }
     
 }

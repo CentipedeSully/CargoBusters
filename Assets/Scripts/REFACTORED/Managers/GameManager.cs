@@ -8,7 +8,7 @@ public class GameManager : MonoSingleton<GameManager>
 {
     //Declarations
     [SerializeField] private InputReader _inputReaderReference;
-
+    [SerializeField] private IInstanceTracker _instanceTrackerReference;
 
 
 
@@ -27,6 +27,8 @@ public class GameManager : MonoSingleton<GameManager>
     {
         if (_inputReaderReference == null)
             _inputReaderReference = GetComponent<InputReader>();
+        if (_instanceTrackerReference == null)
+            _instanceTrackerReference = GetComponent<IInstanceTracker>();
     }
 
 
@@ -37,6 +39,11 @@ public class GameManager : MonoSingleton<GameManager>
         return _inputReaderReference;
     }
 
+
+    public IInstanceTracker GetInstanceTracker()
+    {
+        return _instanceTrackerReference;
+    }
 
 
 
