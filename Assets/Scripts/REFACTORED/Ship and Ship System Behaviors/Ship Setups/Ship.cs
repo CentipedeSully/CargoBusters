@@ -2,9 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//NonSubsystem Interfaces
+public interface IShipController
+{
+    void SetParentShipAndInitializeAwakeReferences(Ship parent);
+
+    void InitializeGameManagerDependentReferences();
+
+
+
+    void DetermineDecisions();
+
+    void CommunicateDecisionsToSubsystems();
+
+
+
+
+    //Debugging
+    void ToggleDebug();
+
+    bool IsDebugActive();
+}
+
 public interface IHullBehavior
 {
-    void SetParent(Ship parent);
+    void SetParentShipAndInitializeAwakeReferences(Ship parent);
+
+    void InitializeGameManagerDependentReferences();
+
+
 
     void DisableShipFromCriticalDamage();
 
@@ -37,9 +64,39 @@ public interface IHullBehavior
     bool IsDebugActive();
 }
 
-public interface IEngineBehavior
+public interface IDeathBehavior
 {
-    void SetParent(Ship parent);
+    void SetParentShipAndInitializeAwakeReferences(Ship parent);
+
+    void InitializeGameManagerDependentReferences();
+
+
+
+    void TriggerDeathSequence();
+
+    float GetDeathSequenceDuration();
+
+    bool IsDying();
+
+
+
+    //Debugging
+    void ToggleDebugMode();
+
+    bool IsDebugActive();
+}
+
+
+
+//Subsystem Interfaces and Class Definition
+public interface IEngineSubsystemBehavior
+{
+    void SetParentShipAndInitializeAwakeReferences(Ship parent);
+
+    void InitializeGameManagerDependentReferences();
+
+
+
     bool IsEngineDisabled();
 
     void DisableEngines();
@@ -74,8 +131,14 @@ public interface IEngineBehavior
 
 }
 
-public interface IShieldBehavior
+public interface IShieldSubsystemBehavior
 {
+    void SetParentShipAndInitializeAwakeReferences(Ship parent);
+
+    void InitializeGameManagerDependentReferences();
+
+
+
     bool IsShieldsDisabled();
 
     void DisableShields();
@@ -105,8 +168,15 @@ public interface IShieldBehavior
     void LogAllData();
 }
 
-public interface IWeaponsBehavior
+public interface IWeaponsSubsystemBehavior
 {
+    void SetParentShipAndInitializeAwakeReferences(Ship parent);
+
+    void InitializeGameManagerDependentReferences();
+
+
+
+
     bool IsWeaponsDisabled();
 
     void DisableWeapons();
@@ -141,8 +211,14 @@ public interface IWeaponsBehavior
     void LogAllData();
 }
 
-public interface ICargoBehavior
+public interface ICargoSubsystemBehavior
 {
+    void SetParentShipAndInitializeAwakeReferences(Ship parent);
+
+    void InitializeGameManagerDependentReferences();
+
+
+
     bool IsCargoSecurityDisabled();
 
     void DisableCargoSecurity();
@@ -161,8 +237,14 @@ public interface ICargoBehavior
     void LogAllData();
 }
 
-public interface IWarpBehavior
+public interface IWarpSubsystemBehavior
 {
+    void SetParentShipAndInitializeAwakeReferences(Ship parent);
+
+    void InitializeGameManagerDependentReferences();
+
+
+
     bool IsWarpDisabled();
 
     void DisableWarping();
@@ -185,8 +267,14 @@ public interface IWarpBehavior
     void LogAllData();
 }
 
-public interface IBusterBehavior
+public interface IBusterSubsystemBehavior
 {
+    void SetParentShipAndInitializeAwakeReferences(Ship parent);
+
+    void InitializeGameManagerDependentReferences();
+
+
+
     bool IsBusterDisabled();
 
     void DisableBuster();
@@ -209,56 +297,7 @@ public interface IBusterBehavior
     void LogAllData();
 }
 
-public interface IDeathBehavior
-{
-    void SetParent(Ship parent);
-
-    void SetInstanceTracker(IInstanceTracker instanceTracker);
-
-    void TriggerDeathSequence();
-
-    float GetDeathSequenceDuration();
-
-    bool IsDying();
-
-
-
-    //Debugging
-    void ToggleDebugMode();
-
-    bool IsDebugActive();
-}
-
-public interface IShipController
-{
-    void SetParent(Ship parent);
-
-    void DetermineDecisions();
-
-    void CommunicateDecisionsToSubsystems();
-
-
-    //Debugging
-    void ToggleDebug();
-
-    bool IsDebugActive();
-}
-
-public interface IDisableable
-{
-    bool IsDisabled();
-
-    void DisableEntity();
-
-    void EnableEntity();
-}
-
-public interface IDamageable
-{
-    void TakeDamage(int value, bool preserveShip);
-}
-
-public class ShipSubsystem : MonoBehaviour, IDisableable
+public class ShipSubsystem : MonoBehaviour
 {
     //Declarations
     [Header("Subsystem Overview")]
@@ -281,20 +320,7 @@ public class ShipSubsystem : MonoBehaviour, IDisableable
 
 
     //Interface Utils
-    public bool IsDisabled()
-    {
-        return IsSubsystemDisabled();
-    }
-
-    public void DisableEntity()
-    {
-        DisableSubsystem();
-    }
-
-    public void EnableEntity()
-    {
-        EnableSubsystem();
-    }
+    //...
 
 
 
@@ -346,6 +372,25 @@ public class ShipSubsystem : MonoBehaviour, IDisableable
 
 }
 
+
+
+//Other Interfaces
+public interface IDisableable
+{
+    bool IsDisabled();
+
+    void DisableEntity();
+
+    void EnableEntity();
+}
+
+public interface IDamageable
+{
+    void TakeDamage(int value, bool preserveShip);
+}
+
+
+//Ship Definition
 public abstract class Ship : MonoBehaviour, IDisableable, IDamageable
 {
     //Declarations
@@ -359,11 +404,17 @@ public abstract class Ship : MonoBehaviour, IDisableable, IDamageable
 
 
     //behavior references
-    [Header("Behavior References")]
-    [SerializeField] protected IShipController _shipController;
-    [SerializeField] protected IHullBehavior _hullBehavior;
-    [SerializeField] protected IEngineBehavior _engineBehavior;
-    [SerializeField] protected IDeathBehavior _deathBehavior;
+    protected IShipController _shipController;
+    protected IHullBehavior _hullBehavior;
+    protected IDeathBehavior _deathBehavior;
+
+    protected IEngineSubsystemBehavior _engineBehavior;
+    protected IShieldSubsystemBehavior _shieldsBehavior;
+    protected IWeaponsSubsystemBehavior _weaponsBehavior;
+    protected ICargoSubsystemBehavior _cargoBehavior;
+    protected IWarpSubsystemBehavior _warpBehavior;
+    protected IBusterSubsystemBehavior _busterBehavior;
+    
 
 
 
@@ -371,7 +422,12 @@ public abstract class Ship : MonoBehaviour, IDisableable, IDamageable
     //Monobehaviours
     protected virtual void Awake()
     {
-        InitializeBehaviors();
+        InitializeAwakeBehaviorReferences();
+    }
+
+    protected virtual void Start()
+    {
+        InitializeGameMaangerSourcedReferences();
     }
 
     protected virtual void Update()
@@ -406,18 +462,55 @@ public abstract class Ship : MonoBehaviour, IDisableable, IDamageable
 
 
     //Utils
-    protected virtual void InitializeBehaviors()
+    protected virtual void InitializeAwakeBehaviorReferences()
     {
+        //Initialize local personal references
         _shipController = GetComponent<IShipController>();
         _hullBehavior = GetComponent<IHullBehavior>();
-        _engineBehavior = GetComponent<IEngineBehavior>();
         _deathBehavior = GetComponent<IDeathBehavior>();
 
-        _shipController.SetParent(this);
-        _hullBehavior.SetParent(this);
-        _engineBehavior.SetParent(this);
-        _deathBehavior.SetParent(this);
-        _deathBehavior.SetInstanceTracker(GameManager.Instance.GetInstanceTracker());
+        _engineBehavior = GetComponent<IEngineSubsystemBehavior>();
+        _shieldsBehavior = GetComponent<IShieldSubsystemBehavior>();
+        _weaponsBehavior = GetComponent<IWeaponsSubsystemBehavior>();
+        _cargoBehavior = GetComponent<ICargoSubsystemBehavior>();
+        _warpBehavior = GetComponent<IWarpSubsystemBehavior>();
+        _busterBehavior = GetComponent<IBusterSubsystemBehavior>();
+        
+
+
+        //Initialize component nonSubsystem references
+        _shipController.SetParentShipAndInitializeAwakeReferences(this);
+        _hullBehavior.SetParentShipAndInitializeAwakeReferences(this);
+        _deathBehavior.SetParentShipAndInitializeAwakeReferences(this);
+
+
+
+        //Initialize component Subsystems
+        _engineBehavior.SetParentShipAndInitializeAwakeReferences(this);
+        //_shieldsBehavior.SetParentShipAndInitializeOtherReferences(this);
+        //_weaponsBehavior.SetParentShipAndInitializeOtherReferences(this);
+        //_cargoBehavior.SetParentShipAndInitializeOtherReferences(this);
+        //_warpBehavior.SetParentShipAndInitializeOtherReferences(this);
+        //_busterBehavior.SetParentShipAndInitializeOtherReferences(this);
+
+    }
+
+    protected virtual void InitializeGameMaangerSourcedReferences()
+    {
+        //Initialize component nonSubsystem references
+        _shipController.InitializeGameManagerDependentReferences();
+        _hullBehavior.InitializeGameManagerDependentReferences();
+        _deathBehavior.InitializeGameManagerDependentReferences();
+
+
+
+        //Initialize component Subsystems
+        _engineBehavior.InitializeGameManagerDependentReferences();
+        //_shieldsBehavior.InitializeGameManagerDependentReferences();
+        //_weaponsBehavior.InitializeGameManagerDependentReferences();
+        //_cargoBehavior.InitializeGameManagerDependentReferences();
+        //_warpBehavior.InitializeGameManagerDependentReferences();
+        //_busterBehavior.InitializeGameManagerDependentReferences();
     }
 
     protected virtual void ControlShip()
@@ -426,12 +519,21 @@ public abstract class Ship : MonoBehaviour, IDisableable, IDamageable
         _shipController.CommunicateDecisionsToSubsystems();
     }
 
+
+
+
     public virtual void DisableShip()
     {
         if (_isShipDisabled == false)
         {
+            //disable all subsystems
             _isShipDisabled = true;
             _engineBehavior.DisableEngines();
+            //_shieldsBehavior.DisableShields();
+            //_weaponsBehavior.DisableWeapons();
+            //_cargoBehavior.DisableCargoSecurity();
+            //_warpBehavior.DisableWarping();
+            //_busterBehavior.DisableBuster();
         }
     }
 
@@ -441,6 +543,11 @@ public abstract class Ship : MonoBehaviour, IDisableable, IDamageable
         {
             _isShipDisabled = false;
             _engineBehavior.EnableEngines();
+            //_shieldsBehavior.EnableShields();
+            //_weaponsBehavior.EnableWeapons();
+            //_cargoBehavior.EnableCargoSecurity();
+            //_warpBehavior.EnableWarping();
+            //_busterBehavior.EnableBuster();
         }
     }
 
@@ -466,6 +573,8 @@ public abstract class Ship : MonoBehaviour, IDisableable, IDamageable
         else _hullBehavior.DamageHull(value);
         
     }
+
+
 
 
     protected virtual void WatchDebugMode()
@@ -507,6 +616,7 @@ public abstract class Ship : MonoBehaviour, IDisableable, IDamageable
 
 
 
+
     //External Control Utils
     public string GetName()
     {
@@ -539,19 +649,52 @@ public abstract class Ship : MonoBehaviour, IDisableable, IDamageable
     }
 
     
+
+    public IShipController GetShipControllerBehavior()
+    {
+        return _shipController;
+    }
+
     public IHullBehavior GetHullBehavior()
     {
         return _hullBehavior;
-    }
-
-    public IEngineBehavior GetEngineBehavior()
-    {
-        return _engineBehavior;
     }
 
     public IDeathBehavior GetDeathBehavior()
     {
         return _deathBehavior;
     }
-    
+
+
+
+    public IEngineSubsystemBehavior GetEnginesBehavior()
+    {
+        return _engineBehavior;
+    }
+
+    public IShieldSubsystemBehavior GetShieldsBehavior()
+    {
+        return _shieldsBehavior;
+    }
+
+    public IWeaponsSubsystemBehavior GetWeaponsBehavior()
+    {
+        return _weaponsBehavior;
+    }
+
+    public ICargoSubsystemBehavior GetCargoBehavior()
+    {
+        return _cargoBehavior;
+    }
+
+    public IWarpSubsystemBehavior GetWarpBehavior()
+    {
+        return _warpBehavior;
+    }
+
+    public IBusterSubsystemBehavior GetBusterBehavior()
+    {
+        return _busterBehavior;
+    }
+
 }

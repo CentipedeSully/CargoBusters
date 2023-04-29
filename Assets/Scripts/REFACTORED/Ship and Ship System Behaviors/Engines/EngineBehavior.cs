@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EngineBehavior : ShipSubsystem, IEngineBehavior
+public class EngineBehavior : ShipSubsystem, IEngineSubsystemBehavior
 {
     //Declarations
     [Header("Engines Attributes")]
@@ -15,19 +15,14 @@ public class EngineBehavior : ShipSubsystem, IEngineBehavior
     [SerializeField] private float _strafeInput;
     [SerializeField] private float _turnInput;
 
+
     //References
     private Rigidbody2D _shipRigidbody2D;
 
 
 
 
-
     //Monobehaviour
-    private void Awake()
-    {
-        InitializeReferences();
-    }
-
     private void Update()
     {
         MoveIfEnginesEnabled();
@@ -36,41 +31,34 @@ public class EngineBehavior : ShipSubsystem, IEngineBehavior
 
 
 
-
     //Interface Utils
-
-    void IEngineBehavior.DisableEngines()
+    public void DisableEngines()
     {
         ClearEngineControls();
         DisableSubsystem();
     }
 
-    void IEngineBehavior.EnableEngines()
+    public void EnableEngines()
     {
         EnableSubsystem();
     }
 
-    float IEngineBehavior.GetStrafeForce()
+    public float GetStrafeForce()
     {
         return _strafeForce;
     }
 
-    float IEngineBehavior.GetThrustForce()
+    public float GetThrustForce()
     {
         return _thrustForce;
     }
 
-    float IEngineBehavior.GetTurnSpeed()
+    public float GetTurnSpeed()
     {
         return _turnSpeed;
     }
 
-    bool IEngineBehavior.IsDebugActive()
-    {
-        return _showDebug;
-    }
-
-    bool IEngineBehavior.IsEngineDisabled()
+    public bool IsEngineDisabled()
     {
         return _isDisabled;
     }
@@ -85,62 +73,55 @@ public class EngineBehavior : ShipSubsystem, IEngineBehavior
         }
     }
 
-    void IEngineBehavior.SetParent(Ship parent)
+    public void SetParentShipAndInitializeAwakeReferences(Ship parent)
     {
         this._parentShip = parent;
+        _shipRigidbody2D = GetComponent<Rigidbody2D>();
     }
 
-    void IEngineBehavior.SetStrafeForce(float newValue)
+    public void InitializeGameManagerDependentReferences()
+    {
+        //...
+    }
+
+
+
+    public void SetStrafeForce(float newValue)
     {
         if (newValue >= 0)
             _strafeForce = newValue;
     }
 
-    void IEngineBehavior.SetStrafeInput(float newValue)
+    public void SetStrafeInput(float newValue)
     {
         _strafeInput = newValue;
     }
 
-    void IEngineBehavior.SetThrustInput(float newValue)
+    public void SetThrustInput(float newValue)
     {
         _thrustInput = newValue;
     }
 
-    void IEngineBehavior.SetThustForce(float newValue)
+    public void SetThustForce(float newValue)
     {
         if (newValue >= 0)
             _thrustForce = newValue;
     }
 
-    void IEngineBehavior.SetTurnInput(float newValue)
+    public void SetTurnInput(float newValue)
     {
         _turnInput = newValue;
     }
 
-    void IEngineBehavior.SetTurnSpeed(float newValue)
+    public void SetTurnSpeed(float newValue)
     {
         if (newValue >= 0)
             _turnSpeed = newValue;
     }
 
-    void IEngineBehavior.ToggleDebugMode()
-    {
-        if (_showDebug)
-            _showDebug = false;
-        else _showDebug = true;
-    }
-
-
-
-
 
 
     //Utils
-    private void InitializeReferences()
-    {
-        _shipRigidbody2D = GetComponent<Rigidbody2D>();
-    }
-
     private void ClearEngineControls()
     {
         _turnInput = 0;
@@ -177,7 +158,7 @@ public class EngineBehavior : ShipSubsystem, IEngineBehavior
 
 
     //Debugging
-
+    //...
 
 
 }

@@ -12,26 +12,26 @@ public class DeathBehavior : MonoBehaviour, IDeathBehavior
     [SerializeField] private bool _showDebug;
 
     //References
-    [SerializeField] private Ship _parentShip;
-    [SerializeField] private IInstanceTracker _instanceTracker;
+    private Ship _parentShip;
+    private IInstanceTracker _instanceTracker;
 
 
 
 
 
     //Monobehaviour
-
+    //...
 
 
     //Interface Utils
-    public void SetParent(Ship parent)
+    public void SetParentShipAndInitializeAwakeReferences(Ship parent)
     {
         _parentShip = parent;
     }
 
-    public void SetInstanceTracker(IInstanceTracker newInstanceTracker)
+    public void InitializeGameManagerDependentReferences()
     {
-        _instanceTracker = newInstanceTracker;
+        _instanceTracker = GameManager.Instance.GetInstanceTracker();
     }
 
     public float GetDeathSequenceDuration()

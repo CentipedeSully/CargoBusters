@@ -3,31 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerInputToShipController : MonoBehaviour, IShipController
+public class ShipControllerViaPlayerInput : MonoBehaviour, IShipController
 {
     //Declarations
-    [Header("Ship References(AutoFilled On Play)")]
-    [SerializeField] private Ship _parent;
-    private IEngineBehavior _engineBehaviorRef;
-    [SerializeField] private InputReader _inputReaderReference;
-    [SerializeField] private bool _isDebugActive = false;
+    [SerializeField] private bool _showDebug = false;
+
+    //references
+    private Ship _parent;
+    private IEngineSubsystemBehavior _engineBehaviorRef;
+    private InputReader _inputReaderReference;
+
 
 
 
     //Monbehaviours
-    private void Awake()
-    {
-        _inputReaderReference = GameManager.Instance.GetInputReader();
-        
-    }
+    //...
 
 
     //Interface Utils
-    public void SetParent(Ship parent)
+    public void SetParentShipAndInitializeAwakeReferences(Ship parent)
     {
         _parent = parent;
-        _engineBehaviorRef = _parent.GetEngineBehavior();
+        _engineBehaviorRef = _parent.GetEnginesBehavior();
     }
+
+    public void InitializeGameManagerDependentReferences()
+    {
+        _inputReaderReference = GameManager.Instance.GetInputReader();
+    }
+
 
     public void DetermineDecisions()
     {
@@ -63,13 +67,13 @@ public class PlayerInputToShipController : MonoBehaviour, IShipController
 
     public void ToggleDebug()
     {
-        if (_isDebugActive)
-            _isDebugActive = false;
-        else _isDebugActive = true;
+        if (_showDebug)
+            _showDebug = false;
+        else _showDebug = true;
     }
 
     public bool IsDebugActive()
     {
-        return _isDebugActive;
+        return _showDebug;
     }
 }
