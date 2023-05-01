@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasicHullBehavior : MonoBehaviour, IHullBehavior
+public class HullBehavior : MonoBehaviour, IHullBehavior
 {
     //Declarations
     [Header("Hull Behavior Attributes")]
@@ -13,7 +13,7 @@ public class BasicHullBehavior : MonoBehaviour, IHullBehavior
     [SerializeField] private bool _isHullCritical;
 
     //References
-    private Ship _parentShip;
+    private AbstractShip _parentShip;
 
 
     [Header("Debugging Commands")]
@@ -51,7 +51,7 @@ public class BasicHullBehavior : MonoBehaviour, IHullBehavior
 
 
     //Interface Utils
-    public void SetParentShipAndInitializeAwakeReferences(Ship parent)
+    public void SetParentShipAndInitializeAwakeReferences(AbstractShip parent)
     {
         _parentShip = parent;
     }

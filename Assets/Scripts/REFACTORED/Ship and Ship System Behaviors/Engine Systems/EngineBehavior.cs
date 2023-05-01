@@ -73,7 +73,7 @@ public class EngineBehavior : ShipSubsystem, IEngineSubsystemBehavior
         }
     }
 
-    public void SetParentShipAndInitializeAwakeReferences(Ship parent)
+    public void SetParentShipAndInitializeAwakeReferences(AbstractShip parent)
     {
         this._parentShip = parent;
         _shipRigidbody2D = GetComponent<Rigidbody2D>();

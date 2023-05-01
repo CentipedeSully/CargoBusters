@@ -9,8 +9,9 @@ public class ShipControllerViaPlayerInput : MonoBehaviour, IShipController
     [SerializeField] private bool _showDebug = false;
 
     //references
-    private Ship _parent;
+    private AbstractShip _parent;
     private IEngineSubsystemBehavior _engineBehaviorRef;
+    private IWeaponsSubsystemBehavior _weaponBehaviorRef;
     private InputReader _inputReaderReference;
 
 
@@ -21,10 +22,11 @@ public class ShipControllerViaPlayerInput : MonoBehaviour, IShipController
 
 
     //Interface Utils
-    public void SetParentShipAndInitializeAwakeReferences(Ship parent)
+    public void SetParentShipAndInitializeAwakeReferences(AbstractShip parent)
     {
         _parent = parent;
         _engineBehaviorRef = _parent.GetEnginesBehavior();
+        _weaponBehaviorRef = _parent.GetWeaponsBehavior();
     }
 
     public void InitializeGameManagerDependentReferences()
@@ -44,6 +46,9 @@ public class ShipControllerViaPlayerInput : MonoBehaviour, IShipController
         _engineBehaviorRef.SetStrafeInput(_inputReaderReference.GetPlayerStrafeInput());
         _engineBehaviorRef.SetThrustInput(_inputReaderReference.GetPlayerThrustInput());
         _engineBehaviorRef.SetTurnInput(_inputReaderReference.GetPlayerTurnInput());
+
+        if (_inputReaderReference.GetPlayerShootInput() == true)
+            _weaponBehaviorRef.FireWeapons();
     }
 
 

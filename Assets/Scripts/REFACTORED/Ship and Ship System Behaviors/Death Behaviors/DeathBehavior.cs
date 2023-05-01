@@ -12,7 +12,7 @@ public class DeathBehavior : MonoBehaviour, IDeathBehavior
     [SerializeField] private bool _showDebug;
 
     //References
-    private Ship _parentShip;
+    private AbstractShip _parentShip;
     private IInstanceTracker _instanceTracker;
 
 
@@ -24,7 +24,7 @@ public class DeathBehavior : MonoBehaviour, IDeathBehavior
 
 
     //Interface Utils
-    public void SetParentShipAndInitializeAwakeReferences(Ship parent)
+    public void SetParentShipAndInitializeAwakeReferences(AbstractShip parent)
     {
         _parentShip = parent;
     }
