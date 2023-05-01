@@ -3,6 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+public interface IShipWeaponry
+{
+    void FireWeapon();
+
+    void SetParentSubsystemAndInitialize(IWeaponsSubsystemBehavior weaponSubsystem);
+
+    string GetWeaponName();
+
+    int GetDamage();
+
+    float GetCooldown();
+
+    string GetWeaponType();
+
+    void SetDamage(int value);
+
+    void SetCooldown(float value);
+
+    void SetSubsystemOnlineStatus(bool newStatus);
+
+}
+
 public abstract class ShipWeapon : MonoBehaviour, IShipWeaponry
 {
     //Declarations
@@ -14,17 +36,11 @@ public abstract class ShipWeapon : MonoBehaviour, IShipWeaponry
     [SerializeField] protected bool _isSubsystemOnline = true;
     [SerializeField] protected IWeaponsSubsystemBehavior _parentSubsystem;
 
-    [SerializeField] protected bool _isCoolingDown = false;
-    [SerializeField] protected float _currentCooldownCount = 0;
-
 
 
 
     //Monobehaviours
-    private void Update()
-    {
-        TrackCooldown();
-    }
+    //...
 
 
 
@@ -32,7 +48,11 @@ public abstract class ShipWeapon : MonoBehaviour, IShipWeaponry
     //Interface Utils
     public void FireWeapon()
     {
-        
+        if (_isSubsystemOnline && _isWeaponReady)
+        {
+            FireProjectile();
+            EnterCooldown();
+        }
     }
 
     public float GetCooldown()
@@ -82,23 +102,18 @@ public abstract class ShipWeapon : MonoBehaviour, IShipWeaponry
 
 
     //Utils
-    protected virtual void TrackCooldown()
-    {
-        if (_isCoolingDown)
-        {
-            _currentCooldownCount += Time.deltaTime;
-            if (_currentCooldownCount >= _cooldown)
-            {
-                _isCoolingDown = false;
-                _isWeaponReady = true;
-                _currentCooldownCount = 0;
+    protected abstract void FireProjectile();
 
-            }
-        }
+    protected virtual void EnterCooldown()
+    {
+        _isWeaponReady = false;
+        Invoke("ReadyWeapon", _cooldown);
     }
 
-
-
+    protected void ReadyWeapon()
+    {
+        _isWeaponReady = true;
+    }
 
 }
 
@@ -106,14 +121,11 @@ public class WeaponsBehavior : ShipSubsystem, IWeaponsSubsystemBehavior
 {
     //Declarations
     [SerializeField] private IShipWeaponry[] _weaponsArray;
-    
-
 
 
 
     //Monobehaviours
-
-
+    //...
 
 
 
@@ -206,6 +218,7 @@ public class WeaponsBehavior : ShipSubsystem, IWeaponsSubsystemBehavior
 
 
 
+
     //Utils
     public override void DisableSubsystem()
     {
@@ -231,6 +244,10 @@ public class WeaponsBehavior : ShipSubsystem, IWeaponsSubsystemBehavior
 
 
 
-    //DEbugging
+
+    //Debugging
+
+
+
 
 }

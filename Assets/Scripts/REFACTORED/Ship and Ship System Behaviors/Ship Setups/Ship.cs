@@ -363,28 +363,6 @@ public class ShipSubsystem : MonoBehaviour
 
 }
 
-public interface IShipWeaponry
-{
-    void FireWeapon();
-
-    void SetParentSubsystemAndInitialize(IWeaponsSubsystemBehavior weaponSubsystem);
-
-    string GetWeaponName();
-
-    int GetDamage();
-
-    float GetCooldown();
-
-    string GetWeaponType();
-
-    void SetDamage(int value);
-
-    void SetCooldown(float value);
-
-    void SetSubsystemOnlineStatus(bool newStatus);
-
-}
-
 
 
 //Other Interfaces
@@ -401,6 +379,7 @@ public interface IDamageable
 {
     void TakeDamage(int value, bool preserveShip);
 }
+
 
 
 //Ship Definition
@@ -448,6 +427,7 @@ public abstract class Ship : MonoBehaviour, IDisableable, IDamageable
         WatchDebugMode();
         ControlShip();
     }
+
 
 
     //Interface Utils
