@@ -88,7 +88,7 @@ public interface IDeathBehavior
 
 
 
-//Subsystem Interfaces and Class Definition
+//Subsystem Interfaces and Class Definitions
 public interface IEngineSubsystemBehavior
 {
     void SetParentShipAndInitializeAwakeReferences(Ship parent);
@@ -176,7 +176,6 @@ public interface IWeaponsSubsystemBehavior
 
 
 
-
     bool IsWeaponsDisabled();
 
     void DisableWeapons();
@@ -185,30 +184,22 @@ public interface IWeaponsSubsystemBehavior
 
     void FireWeapons();
 
-    void SetDamage(int newValue);
+    int GetWeaponCount();
 
-    int GetDamage();
+    void AddWeapon(IShipWeaponry newWeapon, int slot);
 
-    void AddBlaster();
+    IShipWeaponry RemoveWeapon(int slot);
 
-    void RemoveBlaster();
+    IShipWeaponry GetWeaponFromSlot(int slot);
 
-    int GetBlasterCount();
-
-    void SetCooldown(float newValue);
-
-    float GetCooldown();
+    int GetSlotCount();
 
 
 
     //Debugging
-    void EnterDebug();
-
-    void ExitDebug();
+    void ToggleDebugMode();
 
     bool IsDebugActive();
-
-    void LogAllData();
 }
 
 public interface ICargoSubsystemBehavior
@@ -345,13 +336,13 @@ public class ShipSubsystem : MonoBehaviour
         return _isDisabled;
     }
 
-    public void DisableSubsystem()
+    public virtual void DisableSubsystem()
     {
         _isDisabled = true;
         OnSubsystemDisabled?.Invoke();
     }
 
-    public void EnableSubsystem()
+    public virtual void EnableSubsystem()
     {
         _isDisabled = false;
         OnSubsystemEnabled?.Invoke();
@@ -369,6 +360,28 @@ public class ShipSubsystem : MonoBehaviour
         else _showDebug = true;
     }
 
+
+}
+
+public interface IShipWeaponry
+{
+    void FireWeapon();
+
+    void SetParentSubsystemAndInitialize(IWeaponsSubsystemBehavior weaponSubsystem);
+
+    string GetWeaponName();
+
+    int GetDamage();
+
+    float GetCooldown();
+
+    string GetWeaponType();
+
+    void SetDamage(int value);
+
+    void SetCooldown(float value);
+
+    void SetSubsystemOnlineStatus(bool newStatus);
 
 }
 
