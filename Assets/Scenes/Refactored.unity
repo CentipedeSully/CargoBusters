@@ -153,7 +153,7 @@ Transform:
   m_Children:
   - {fileID: 1604088816}
   m_Father: {fileID: 624307268}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &420398041
 GameObject:
@@ -165,7 +165,7 @@ GameObject:
   m_Component:
   - component: {fileID: 420398042}
   m_Layer: 0
-  m_Name: Slot4
+  m_Name: Right Outer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -196,7 +196,7 @@ GameObject:
   m_Component:
   - component: {fileID: 461285591}
   m_Layer: 0
-  m_Name: Slot2
+  m_Name: Left Inner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -245,8 +245,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 420036496}
   - {fileID: 851594073}
+  - {fileID: 1305768143}
+  - {fileID: 420036496}
   m_Father: {fileID: 1241039933}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -310,7 +311,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 624307268}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &883759113
 GameObject:
@@ -362,7 +363,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1138286989}
   m_Layer: 0
-  m_Name: Slot3
+  m_Name: Right Inner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -568,14 +569,7 @@ MonoBehaviour:
   _nonPlayerShipsContainer: {fileID: 420036496}
   _projectilesContainer: {fileID: 851594073}
   _explosionsContainer: {fileID: 851594073}
-  _nonPlayerShipCount: 0
-  _playerShipCount: 0
-  _projectilesCount: 0
-  _explosionsCount: 0
-  _NPShipTag: 
-  _playerShipTag: 
-  _projectileTag: 
-  _explosionTag: 
+  _weaponsContainer: {fileID: 1305768143}
 --- !u!114 &1241039938
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -588,7 +582,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0ef36a99d000424a9fc2959a279a4b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _weaponPrefabs: []
+  _weaponPrefabs:
+  - {fileID: 4338734516150373498, guid: bda72f9446f307e4abc528e6553fca97, type: 3}
+--- !u!1 &1305768142
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1305768143}
+  m_Layer: 0
+  m_Name: Weapons Container
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1305768143
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1305768142}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 624307268}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1540491425
 GameObject:
   m_ObjectHideFlags: 0
@@ -599,7 +625,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1540491426}
   m_Layer: 0
-  m_Name: Slot1
+  m_Name: Left Outer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -868,7 +894,11 @@ MonoBehaviour:
   - {fileID: 1138286989}
   - {fileID: 420398042}
   _weaponsReferenceList: []
-  _weaponsFactoryReference: {fileID: 0}
+  _factoryReference: {fileID: 0}
+  _testAddWeapon: 0
+  _testRemoveWeapon: 0
+  _testGetWeaponAtPosition: 0
+  _testEnableDisableWeapons: 0
 --- !u!1001 &6966584507622385876
 PrefabInstance:
   m_ObjectHideFlags: 0

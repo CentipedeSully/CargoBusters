@@ -10,10 +10,23 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
     [SerializeField] private int _weaponCount;
     [SerializeField] private List<Transform> _weaponPositions;
     [SerializeField] private AbstractShipWeapon[] _weaponsReferenceList;
-    [SerializeField] private WeaponFactory _weaponsFactoryReference;
+    [SerializeField] private WeaponFactory _factoryReference;
+
+    [Header("Debugging")]
+    [SerializeField] private bool _testAddWeapon = false;
+    [SerializeField] private bool _testRemoveWeapon = false;
+    [SerializeField] private bool _testGetWeaponAtPosition = false;
+    [SerializeField] private bool _testEnableDisableWeapons = false;
+
 
     //Monobehaviours
-    //...
+    private void Update()
+    {
+        if (_showDebug)
+            ListenForDebugCommands();
+    }
+
+
 
 
     //Interface Utils
@@ -24,11 +37,14 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
             if (GetWeaponFromPosition(position) == null)
             {
                 //Ask the factory to create a new weapon
-                GameObject newWeaponObject = _weaponsFactoryReference.CreateWeaponObject(weaponName);
+                GameObject newWeaponObject = _factoryReference.CreateWeaponObject(weaponName);
 
                 //bind the new weapon to the desired position.
                 newWeaponObject.transform.SetParent(_weaponPositions[position]);
                 newWeaponObject.transform.position = _weaponPositions[position].position;
+
+                //Initialize the weapon
+                newWeaponObject.GetComponent<IShipWeaponry>().SetParentSubsystemAndInitialize(this);
 
                 //Update the weapon count and weapon references
                 RebuildWeaponReferences();
@@ -44,20 +60,23 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
         
     }
 
-    public IShipWeaponry RemoveWeapon(int position)
+    public GameObject RemoveWeapon(int position)
     {
-        IShipWeaponry removedWeapon = null;
+        GameObject removedWeapon = null;
         if (position >= 0 && position < _weaponsReferenceList.Length)
         {
-            removedWeapon = _weaponsReferenceList[position];
-            if (removedWeapon == null)
+            
+            if (GetWeaponFromPosition(position) == null)
                 Debug.LogWarning($"Caution: no weapon exists at position {position} on ship {_parentShip.GetName()}." +
                     $"Ignoring request to remove weapon from position {position}");
             else
             {
-                //remove the weapon from its position, rebuild the weapon reference list, and the update the weapons count
+                removedWeapon = _weaponsReferenceList[position].gameObject;
+                removedWeapon.SetActive(false);
 
-                Destroy(_weaponPositions[position].GetChild(0));
+                //Move the weapon from its position in the weapon system
+                removedWeapon.transform.SetParent(GameManager.Instance.GetInstanceTracker().GetWeaponContainer()); ;
+
 
                 RebuildWeaponReferences();
                 UpdateWeaponCountUsingWeaponReferences();
@@ -97,7 +116,7 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
 
     public void InitializeGameManagerDependentReferences()
     {
-        _weaponsFactoryReference = GameManager.Instance.GetWeaponsFactory();
+        _factoryReference = GameManager.Instance.GetWeaponsFactory();
     }
 
     public bool IsWeaponsDisabled()
@@ -110,6 +129,9 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
         _parentShip = parent;
         RebuildWeaponReferences();
         UpdateWeaponCountUsingWeaponReferences();
+
+        //in case the weapon positions are populated thru the inspector before runtime
+        ReinitializeWeapons();
     }
 
     public IShipWeaponry GetWeaponFromPosition(int position)
@@ -118,7 +140,8 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
             return _weaponsReferenceList[position];
         else
         {
-            Debug.LogWarning($"Position {position} is out of bounds of the Subsystem:{GetName()} on ship {_parentShip.GetName()}");
+            Debug.LogWarning($"Weapon position {position} is out of bounds on ship {_parentShip.GetName()}" +
+                $"Ignoring weapon-request on position {position}");
             return null;
         }
             
@@ -171,7 +194,10 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
         _weaponsReferenceList = new AbstractShipWeapon[_weaponPositions.Count];
 
         for (int i = 0; i < _weaponPositions.Count; i++)
-            _weaponsReferenceList[i] = _weaponPositions[i].GetChild(0).gameObject.GetComponent<AbstractShipWeapon>();
+        {
+            if (_weaponPositions[i].childCount > 0)
+                _weaponsReferenceList[i] = _weaponPositions[i].GetChild(0).gameObject.GetComponent<AbstractShipWeapon>();
+        }            
     }
 
     public void UpdateWeaponCountUsingWeaponReferences()
@@ -186,39 +212,130 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
         _weaponCount = newWeaponCount;
     }
 
-
-    //Debugging
-    private void LogEquiptWeapons()
+    public void ReinitializeWeapons()
     {
-        //int slotCount = 0;
-        //foreach(IShipWeaponry weapon in _weaponsArray)
-        //{
-        //    if (weapon != null)
-        //        Debug.Log($"{weapon.GetWeaponName()} equipt to slot {slotCount}");
-        //    slotCount++;
-        //}
+        foreach (IShipWeaponry weapon in _weaponsReferenceList)
+        {
+            if (weapon != null)
+                weapon.SetParentSubsystemAndInitialize(this);
+        }
     }
 
-    //Testing AddWeapon.
-    //Add new weapon
-    //Add over preexisint weapon
+
+
+
+    //Debugging Debug.Log($"");
+    private void ListenForDebugCommands()
+    {
+        if (_testAddWeapon)
+        {
+            _testAddWeapon = false;
+            AddWeaponTest();
+        }
+        if (_testRemoveWeapon)
+        {
+            _testRemoveWeapon = false;
+            RemoveWeaponTest();
+        }
+        if (_testGetWeaponAtPosition)
+        {
+            _testGetWeaponAtPosition = false;
+            GetWeaponFromPositionTest();
+        }
+        if (_testEnableDisableWeapons)
+        {
+            _testEnableDisableWeapons = false;
+            EnableAndDisableWeaponsTest();
+        }
+    }
+
     private void AddWeaponTest()
     {
+        //Testing AddWeapon.
+        Debug.Log($"Testing Adding weapons...");
+
+        Debug.Log($"Adding 'Test Weapon' to all positions...");
+        for (int i = 0; i < _weaponsReferenceList.Length; i++)
+            AddWeapon("Test Weapon", i);
+
+        //Add weapon to nonexistent position
+        Debug.Log($"Adding 'Test Weapon' to position that doesn't exist. Expect a warning...");
+        AddWeapon("Test Weapon", _weaponsReferenceList.Length);
+
+        //Add weapon to a position with a preexisting weapon
+        Debug.Log($"Adding 'Test Weapon' to position that already holds a weapon. Expect a warning...");
+        AddWeapon("Test Weapon", 0);
+
+        //Add undefined weapon
+        Debug.Log($"Adding undefined weapon to posiion 0. Expect an Error 'Weapon doesnt exist'...");
+        AddWeapon("Nonexistent Weapon", 0);
+
+        Debug.Log($"Add Weapon Testing Completed");
+
+    }
+
+    private void RemoveWeaponTest()
+    {
+        //Testing RemoveWeapon
+        Debug.Log($"Testing Removing Weapons...");
+
+        //Remove valid weapon
+        Debug.Log($"Removing Weapon from an occupied position...");
+        int position = 0;
+        if (_weaponCount > 0)
+        {
+            //find an occupied position
+           for (int i =0; i < _weaponsReferenceList.Length; i++)
+            {
+                if (_weaponsReferenceList[i] != null)
+                    position = i;
+            }
+
+            Debug.Log($"Attempting to remove weapon from position {position}..."); 
+            GameObject removedWeapon = RemoveWeapon(position);
+            Debug.Log($"Removed {removedWeapon.GetComponent<IShipWeaponry>().GetWeaponName()} from position {position}");
+        }
+        else Debug.Log($"No weapons exist on ship {_parentShip.GetName()} to remove!");
+
+        //remove nonexistent weapon
+        Debug.Log($"Attempting to remove weapon from empty position {position}. Expect a warning...");
+        RemoveWeapon(position);
+
+        Debug.Log($"REmove Weapon Testing Completed");
+
 
 
     }
 
-    //Testing RemoveWeapon
-    //Remove valid weapon
-    //remove nonexistent weapon
+    private void EnableAndDisableWeaponsTest()
+    {
+        //Test Enabling/disabling weapons
+        Debug.Log($"Testing Weapon Enabling and Disabling...");
+        Debug.Log($"Disabling Weapons and Firing. Expect no weapons fire...");
+        DisableWeapons();
+        FireWeapons();
+        
+        Debug.Log($"Enabling Weapons and Firing. Expect weapons fire...");
+        EnableWeapons();
+        FireWeapons();
 
-    //Test Enabling/disabling weapons
-    //shoot when enabled
-    //shoot when disabled
+        Debug.Log($"Weapon Enabling and Disabling Completed");
+    }
 
-    //Test Getting weapons from slots
-    //add weapons to arbitrary slots and then
-    //log all weapon slots using GetWeaponFromSlot
+    private void GetWeaponFromPositionTest()
+    {
+        //Test Getting weapons from slots
+        Debug.Log($"Testing Getting Weapon from all positions and one Out of bounds position...");
+        Debug.Log($"Testing InBounds positions...");
+        for (int i = 0; i < _weaponsReferenceList.Length; i++)
+            Debug.Log($"Weapon at position {i}: {GetWeaponFromPosition(i)}");
+
+        Debug.Log($"Testing OutofBounds position...");
+        Debug.Log($"Weapon at position {_weaponsReferenceList.Length}: {GetWeaponFromPosition(_weaponsReferenceList.Length)}");
+
+        Debug.Log($"Getting Weapon from position test Completed");
+    }
+
 
 
 

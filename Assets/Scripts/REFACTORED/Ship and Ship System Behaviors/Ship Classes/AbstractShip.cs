@@ -188,7 +188,7 @@ public interface IWeaponsSubsystemBehavior
 
     void AddWeapon(string weaponName, int slot);
 
-    IShipWeaponry RemoveWeapon(int slot);
+    GameObject RemoveWeapon(int slot);
 
     IShipWeaponry GetWeaponFromPosition(int slot);
 

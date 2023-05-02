@@ -7,9 +7,15 @@ public interface IInstanceTracker
 {
     void ReportDeath(GameObject instance);
 
-    int GetCount(string tag);
+    Transform GetPlayerShipContainer();
 
-    Transform GetContainer(string tag);
+    Transform GetNonPlayerShipContainer();
+
+    Transform GetProjectileContainer();
+
+    Transform GetExplosionContainer();
+
+    Transform GetWeaponContainer();
 }
 
 
@@ -21,16 +27,8 @@ public class InstanceTracker : MonoBehaviour, IInstanceTracker
     [SerializeField] private Transform _nonPlayerShipsContainer;
     [SerializeField] private Transform _projectilesContainer;
     [SerializeField] private Transform _explosionsContainer;
+    [SerializeField] private Transform _weaponsContainer;
 
-    [SerializeField] private int _nonPlayerShipCount;
-    [SerializeField] private int _playerShipCount;
-    [SerializeField] private int _projectilesCount;
-    [SerializeField] private int _explosionsCount;
-
-    [SerializeField] private string _NPShipTag;
-    [SerializeField] private string _playerShipTag;
-    [SerializeField] private string _projectileTag;
-    [SerializeField] private string _explosionTag;
 
 
 
@@ -43,52 +41,33 @@ public class InstanceTracker : MonoBehaviour, IInstanceTracker
     //Interface Utils
     public void ReportDeath(GameObject deadObject)
     {
-        if (deadObject.CompareTag(_NPShipTag))
-            _nonPlayerShipCount--;
-
-        else  if (deadObject.CompareTag(_playerShipTag))
-            _playerShipCount--;
-
-        else if (deadObject.CompareTag(_projectileTag))
-            _projectilesCount--;
-
-        else if (deadObject.CompareTag(_explosionTag))
-            _explosionsCount--;
-
+        //...
     }
 
-
-    public int GetCount(string objectTag)
+    public Transform GetExplosionContainer()
     {
-        if (objectTag == _playerShipTag)
-            return _playerShipCount;
-        else if (objectTag == _NPShipTag)
-            return _nonPlayerShipCount;
-        else if (objectTag == _projectileTag)
-            return _projectilesCount;
-        else if (objectTag == _explosionTag)
-            return _explosionsCount;
-        else return 0;
+        return _explosionsContainer;
     }
 
-    public Transform GetContainer(string objectTag)
+    public Transform GetNonPlayerShipContainer()
     {
-        if (objectTag == _playerShipTag)
-            return _playerShipsContainer;
-        else if (objectTag == _NPShipTag)
-            return _nonPlayerShipsContainer;
-        else if (objectTag == _projectileTag)
-            return _projectilesContainer;
-        else if (objectTag == _explosionTag)
-            return _explosionsContainer;
-        else
-        {
-            Debug.LogError($"Requested Nonexistent Instance Container '{objectTag}'. returning null transform.");
-            return null;
-        }
+        return _nonPlayerShipsContainer;
     }
 
-    //PROBLEM! PLAYER SHIPS ARENT DIFFERENT FROM NPSHIPS. DETERMINE ORGANIZATION THAT'S BEYOND TAG
+    public Transform GetPlayerShipContainer()
+    {
+        return _playerShipsContainer;
+    }
+
+    public Transform GetProjectileContainer()
+    {
+        return _projectilesContainer;
+    }
+
+    public Transform GetWeaponContainer()
+    {
+        return _weaponsContainer;
+    }
 
 
     //Debugging
