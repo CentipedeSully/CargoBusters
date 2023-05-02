@@ -186,13 +186,15 @@ public interface IWeaponsSubsystemBehavior
 
     int GetWeaponCount();
 
-    void AddWeapon(IShipWeaponry newWeapon, int slot);
+    void AddWeapon(string weaponName, int slot);
 
     IShipWeaponry RemoveWeapon(int slot);
 
-    IShipWeaponry GetWeaponFromSlot(int slot);
+    IShipWeaponry GetWeaponFromPosition(int slot);
 
-    int GetSlotCount();
+    int GetAvailablePosition();
+
+    int GetPositionCount();
 
 
 

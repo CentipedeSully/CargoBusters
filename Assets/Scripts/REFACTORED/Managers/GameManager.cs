@@ -9,6 +9,7 @@ public class GameManager : MonoSingleton<GameManager>
     //Declarations
     [SerializeField] private InputReader _inputReaderReference;
     [SerializeField] private IInstanceTracker _instanceTrackerReference;
+    [SerializeField] private WeaponFactory _weaponFactoryReference;
 
 
 
@@ -29,6 +30,8 @@ public class GameManager : MonoSingleton<GameManager>
             _inputReaderReference = GetComponent<InputReader>();
         if (_instanceTrackerReference == null)
             _instanceTrackerReference = GetComponent<IInstanceTracker>();
+        if (_weaponFactoryReference == null)
+            _weaponFactoryReference = GetComponent<WeaponFactory>();
     }
 
 
@@ -43,6 +46,12 @@ public class GameManager : MonoSingleton<GameManager>
     public IInstanceTracker GetInstanceTracker()
     {
         return _instanceTrackerReference;
+    }
+
+
+    public WeaponFactory GetWeaponsFactory()
+    {
+        return _weaponFactoryReference;
     }
 
 
