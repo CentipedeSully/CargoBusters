@@ -37,6 +37,8 @@ public interface IHullBehavior
 
     void EnableShip();
 
+    void RepairHull(int value);
+
     void DamageHull(int damage);
 
     void DamageHullToNearDeath();
@@ -379,13 +381,18 @@ public interface IDisableable
 
 public interface IDamageable
 {
-    void TakeDamage(int value, bool preserveShip);
+    void TakeDamage(int value, bool negateDeath);
+}
+
+public interface IRepairable
+{
+    void RepairDamage(int value);
 }
 
 
 
 //Ship Definition
-public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable
+public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, IRepairable
 {
     //Declarations
     [Header("Ship Info")]
@@ -453,7 +460,10 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable
         SufferDamage(damage, preserveShip);
     }
 
-
+    public virtual void RepairDamage(int value)
+    {
+        _hullBehavior.RepairHull(value);
+    }
 
 
     //Utils
