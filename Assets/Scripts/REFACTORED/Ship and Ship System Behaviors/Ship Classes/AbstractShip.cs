@@ -292,6 +292,54 @@ public interface IBusterSubsystemBehavior
     void LogAllData();
 }
 
+public interface IPhaseSubsystemBehavior
+{
+    void SetParentShipAndInitializeAwakeReferences(AbstractShip parent);
+
+    void InitializeGameManagerDependentReferences();
+
+    bool IsPhasingDisabled();
+
+    void EnablePhasing();
+
+    void DisablePhasing();
+
+
+    void PhaseShift(int actionCode);
+
+    bool IsPhaseAvailable();
+
+    int GetPhaseMax();
+
+    void SetPhaseMax(int value);
+
+    int GetAvailablePhases();
+
+    void ReplenishPhases();
+
+    void EmptyPhases();
+
+    void IncreasePhases(int value);
+
+    void DecreasePhases(int value);
+
+
+    float GetRange();
+
+    void SetRange(float value);
+
+    void SetPhaseInput(bool input);
+
+
+    //Debugging
+
+    void ToggleDebugMode();
+
+
+    bool IsDebugActive();
+
+}
+
 public class ShipSubsystem : MonoBehaviour
 {
     //Declarations
@@ -415,6 +463,7 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
     protected ICargoSubsystemBehavior _cargoBehavior;
     protected IWarpSubsystemBehavior _warpBehavior;
     protected IBusterSubsystemBehavior _busterBehavior;
+    protected IPhaseSubsystemBehavior _phaseBehavior;
     
 
 
@@ -428,7 +477,7 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
 
     protected virtual void Start()
     {
-        InitializeGameMaangerSourcedReferences();
+        InitializeGameManagerSourcedReferences();
     }
 
     protected virtual void Update()
@@ -480,6 +529,7 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
         _cargoBehavior = GetComponent<ICargoSubsystemBehavior>();
         _warpBehavior = GetComponent<IWarpSubsystemBehavior>();
         _busterBehavior = GetComponent<IBusterSubsystemBehavior>();
+        _phaseBehavior = GetComponent<IPhaseSubsystemBehavior>();
         
 
 
@@ -497,10 +547,11 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
         //_cargoBehavior.SetParentShipAndInitializeAwakeReferences(this);
         //_warpBehavior.SetParentShipAndInitializeAwakeReferences(this);
         //_busterBehavior.SetParentShipAndInitializeAwakeReferences(this);
+        _phaseBehavior = GetComponent<IPhaseSubsystemBehavior>();
 
     }
 
-    protected virtual void InitializeGameMaangerSourcedReferences()
+    protected virtual void InitializeGameManagerSourcedReferences()
     {
         //Initialize component nonSubsystem references
         _shipController.InitializeGameManagerDependentReferences();
@@ -516,6 +567,7 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
         //_cargoBehavior.InitializeGameManagerDependentReferences();
         //_warpBehavior.InitializeGameManagerDependentReferences();
         //_busterBehavior.InitializeGameManagerDependentReferences();
+        _phaseBehavior.InitializeGameManagerDependentReferences();
     }
 
     protected virtual void ControlShip()
@@ -539,6 +591,7 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
             //_cargoBehavior.DisableCargoSecurity();
             //_warpBehavior.DisableWarping();
             //_busterBehavior.DisableBuster();
+            _phaseBehavior.DisablePhasing();
         }
     }
 
@@ -553,6 +606,7 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
             //_cargoBehavior.EnableCargoSecurity();
             //_warpBehavior.EnableWarping();
             //_busterBehavior.EnableBuster();
+            _phaseBehavior.EnablePhasing();
         }
     }
 
@@ -606,6 +660,8 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
             _deathBehavior.ToggleDebugMode();
         if (_weaponsBehavior.IsDebugActive() == false)
             _weaponsBehavior.ToggleDebugMode();
+        if (_phaseBehavior.IsDebugActive() == false)
+            _phaseBehavior.ToggleDebugMode();
 
 
     }
@@ -622,6 +678,8 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
             _deathBehavior.ToggleDebugMode();
         if (_weaponsBehavior.IsDebugActive())
             _weaponsBehavior.ToggleDebugMode();
+        if (_phaseBehavior.IsDebugActive())
+            _phaseBehavior.ToggleDebugMode();
     }
 
 
@@ -705,6 +763,11 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
     public IBusterSubsystemBehavior GetBusterBehavior()
     {
         return _busterBehavior;
+    }
+
+    public IPhaseSubsystemBehavior GetPhaseBehavior()
+    {
+        return _phaseBehavior;
     }
 
 }
