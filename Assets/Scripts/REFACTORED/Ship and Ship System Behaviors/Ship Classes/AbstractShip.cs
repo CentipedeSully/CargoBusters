@@ -463,7 +463,6 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
     protected ICargoSubsystemBehavior _cargoBehavior;
     protected IWarpSubsystemBehavior _warpBehavior;
     protected IBusterSubsystemBehavior _busterBehavior;
-    protected IPhaseSubsystemBehavior _phaseBehavior;
     
 
 
@@ -506,7 +505,7 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
 
     public virtual void TakeDamage(int damage, bool preserveShip)
     {
-        SufferDamage(damage, preserveShip);
+        SufferHullDamage(damage, preserveShip);
     }
 
     public virtual void RepairDamage(int value)
@@ -529,7 +528,6 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
         _cargoBehavior = GetComponent<ICargoSubsystemBehavior>();
         _warpBehavior = GetComponent<IWarpSubsystemBehavior>();
         _busterBehavior = GetComponent<IBusterSubsystemBehavior>();
-        _phaseBehavior = GetComponent<IPhaseSubsystemBehavior>();
         
 
 
@@ -542,12 +540,11 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
 
         //Initialize component Subsystems
         _engineBehavior.SetParentShipAndInitializeAwakeReferences(this);
-        //_shieldsBehavior.SetParentShipAndInitializeAwakeReferences(this);
+        _shieldsBehavior.SetParentShipAndInitializeAwakeReferences(this);
         _weaponsBehavior.SetParentShipAndInitializeAwakeReferences(this);
         //_cargoBehavior.SetParentShipAndInitializeAwakeReferences(this);
         //_warpBehavior.SetParentShipAndInitializeAwakeReferences(this);
         //_busterBehavior.SetParentShipAndInitializeAwakeReferences(this);
-        _phaseBehavior = GetComponent<IPhaseSubsystemBehavior>();
 
     }
 
@@ -562,12 +559,11 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
 
         //Initialize component Subsystems
         _engineBehavior.InitializeGameManagerDependentReferences();
-        //_shieldsBehavior.InitializeGameManagerDependentReferences();
+        _shieldsBehavior.InitializeGameManagerDependentReferences();
         _weaponsBehavior.InitializeGameManagerDependentReferences();
         //_cargoBehavior.InitializeGameManagerDependentReferences();
         //_warpBehavior.InitializeGameManagerDependentReferences();
         //_busterBehavior.InitializeGameManagerDependentReferences();
-        _phaseBehavior.InitializeGameManagerDependentReferences();
     }
 
     protected virtual void ControlShip()
@@ -586,12 +582,11 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
             //disable all subsystems
             _isShipDisabled = true;
             _engineBehavior.DisableEngines();
-            //_shieldsBehavior.DisableShields();
+            _shieldsBehavior.DisableShields();
             _weaponsBehavior.DisableWeapons();
             //_cargoBehavior.DisableCargoSecurity();
             //_warpBehavior.DisableWarping();
             //_busterBehavior.DisableBuster();
-            _phaseBehavior.DisablePhasing();
         }
     }
 
@@ -601,12 +596,11 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
         {
             _isShipDisabled = false;
             _engineBehavior.EnableEngines();
-            //_shieldsBehavior.EnableShields();
+            _shieldsBehavior.EnableShields();
             _weaponsBehavior.EnableWeapons();
             //_cargoBehavior.EnableCargoSecurity();
             //_warpBehavior.EnableWarping();
             //_busterBehavior.EnableBuster();
-            _phaseBehavior.EnablePhasing();
         }
     }
 
@@ -615,7 +609,7 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
         _deathBehavior.TriggerDeathSequence();
     }
 
-    public virtual void SufferDamage(int value, bool preserveShip)
+    public virtual void SufferHullDamage(int value, bool preserveShip)
     {
         
         if (preserveShip == true)
@@ -633,7 +627,13 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
         
     }
 
+    public virtual void SufferShieldDamage(int value, bool applyPiercingDamage)
+    {
+        if (_shieldsBehavior != null)
+        {
 
+        }
+    }
 
 
     protected virtual void WatchDebugMode()
@@ -660,8 +660,6 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
             _deathBehavior.ToggleDebugMode();
         if (_weaponsBehavior.IsDebugActive() == false)
             _weaponsBehavior.ToggleDebugMode();
-        if (_phaseBehavior.IsDebugActive() == false)
-            _phaseBehavior.ToggleDebugMode();
 
 
     }
@@ -678,8 +676,6 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
             _deathBehavior.ToggleDebugMode();
         if (_weaponsBehavior.IsDebugActive())
             _weaponsBehavior.ToggleDebugMode();
-        if (_phaseBehavior.IsDebugActive())
-            _phaseBehavior.ToggleDebugMode();
     }
 
 
@@ -763,11 +759,6 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
     public IBusterSubsystemBehavior GetBusterBehavior()
     {
         return _busterBehavior;
-    }
-
-    public IPhaseSubsystemBehavior GetPhaseBehavior()
-    {
-        return _phaseBehavior;
     }
 
 }

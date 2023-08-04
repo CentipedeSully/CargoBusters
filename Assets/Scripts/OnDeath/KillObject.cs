@@ -9,7 +9,7 @@ public class KillObject : MonoBehaviour
     public UnityEvent onDeath;
 
     [SerializeField] private CommuncateInputToPlayerObject _inputCommunicator;
-    [SerializeField] private ShieldBehavior _shieldBehavior;
+    [SerializeField] private OldShieldBehavior _shieldBehavior;
 
 
 

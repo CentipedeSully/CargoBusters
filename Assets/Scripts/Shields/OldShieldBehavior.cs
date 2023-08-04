@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SullysToolkit;
 
-public class ShieldBehavior : MonoBehaviour
+public class OldShieldBehavior : MonoBehaviour
 {
     //Declarations
     [SerializeField] float _shieldIntegrity = 0;
