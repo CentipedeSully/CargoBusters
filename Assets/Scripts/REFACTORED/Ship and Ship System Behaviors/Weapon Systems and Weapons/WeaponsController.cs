@@ -19,6 +19,17 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
     [SerializeField] private bool _testEnableDisableWeapons = false;
 
 
+    //events
+    public delegate void WeaponryUpdateEvent(Transform weaponLocation, int referencePosition);
+    public event WeaponryUpdateEvent OnWeaponAdded;
+    public event WeaponryUpdateEvent OnWeaponRemoved;
+
+    public delegate void WeaponsControllerEvent();
+    public event WeaponsControllerEvent OnWeaponsDisabled;
+    public event WeaponsControllerEvent OnWeaponsEnabled;
+
+
+
     //Monobehaviours
     private void Update()
     {
@@ -49,6 +60,8 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
                 //Update the weapon count and weapon references
                 RebuildWeaponReferences();
                 UpdateWeaponCountUsingWeaponReferences();
+
+                OnWeaponAdded?.Invoke(_weaponPositions[position], position);
             }
             else
                 Debug.LogWarning($"Caution: position {position} already holds a weapon on ship {_parentShip.GetName()}. " +
@@ -93,11 +106,13 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
     public void DisableWeapons()
     {
         DisableSubsystem();
+        OnWeaponsDisabled?.Invoke();
     }
 
     public void EnableWeapons()
     {
         EnableSubsystem();
+        OnWeaponsEnabled?.Invoke();
     }
 
     public void FireWeapons()

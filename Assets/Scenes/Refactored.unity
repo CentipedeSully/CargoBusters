@@ -485,7 +485,7 @@ MonoBehaviour:
     m_ActionName: Player/Shoot[/Keyboard/space]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1604088827}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: dodge, Assembly-CSharp
         m_MethodName: Dodge
         m_Mode: 1
@@ -649,7 +649,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!95 &1507163527
 Animator:
   serializedVersion: 4
@@ -784,7 +784,6 @@ GameObject:
   - component: {fileID: 1604088824}
   - component: {fileID: 1604088821}
   - component: {fileID: 1604088826}
-  - component: {fileID: 1604088827}
   - component: {fileID: 1604088820}
   - component: {fileID: 1604088825}
   - component: {fileID: 1604088822}
@@ -1045,75 +1044,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 1604088814}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a39dbf38737b6d740bf49b913f18a745, type: 3}
+  m_Script: {fileID: 11500000, guid: 25860e7e11cd2674ea49d2de74a1bfde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _name: Unnamed Subsystem
+  _name: Shields
   _parentShip: {fileID: 0}
   _isDisabled: 0
-  _showDebug: 0
-  _phaseInput: 0
-  _isPhasing: 0
-  _phaseCount: 0
-  _phaseMaximum: 0
-  _isPhaseRecharging: 0
-  _phaseRechargeDuration: 0
-  _phaseRange: 3
-  _phaseDodgeCost: 1
-  _phaseShiftCost: 1
---- !u!114 &1604088827
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1604088814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 454a1ec9f48e9054eb7257d2c75fe685, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _TriggerDodgeViaInspector: 0
-  _cooldownDuration: 0.5
-  _isDodgeReady: 1
-  _isDodging: 0
-  _boostPowerCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 9.755279
-      outSlope: 9.755279
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.012515742
-    - serializedVersion: 3
-      time: 0.2
-      value: 1000
-      inSlope: 0.7380569
-      outSlope: 0.7380569
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: -0.05435078
-      outSlope: -0.05435078
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.24905545
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  _currentDodgeDuration: 0
-  _maxDodgeDuration: 1
-  _originalEngineSpeed: 0
-  _boostSpeed: 0
+  _showDebug: 1
+  _startShieldsFull: 1
+  _shieldMaxValue: 10
+  _shieldCurrentValue: 5
+  _isShieldFull: 1
+  _regenAmountPerTick: 1
+  _regenDelaySeconds: 6
+  _regenTickDurationSeconds: 1.5
+  _isShieldRegenerating: 0
+  _isShieldDestablized: 0
+  _debugModifierValue: 0
+  _damageShieldCmd: 0
+  _setMaxShieldCmd: 0
+  _setCurrentShieldCmd: 0
 --- !u!1001 &4185537427230934074
 PrefabInstance:
   m_ObjectHideFlags: 0
