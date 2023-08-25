@@ -6,7 +6,7 @@ using UnityEngine.Events;
 public class OldDamageHandler : MonoBehaviour
 {
     [SerializeField] private OldHealthBehavior _healthReference;
-    [SerializeField] private OldShieldBehavior _shieldReference;
+    [SerializeField] private OldShieldBehaviour _shieldReference;
 
     public UnityEvent<float> OnHealthDamaged;
     public UnityEvent<float> OnShieldDamaged;

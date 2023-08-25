@@ -76,7 +76,7 @@ public class ShieldBehavior : ShipSubsystem, IShieldSubsystemBehavior
 
     private void EnterRegenIfShieldStableAndNotFull()
     {
-        if (_isShieldFull == false && _isShieldRegenerating  == false && _isShieldDestablized == false && _isDisabled == false)
+        if (_isShieldFull == false && _isShieldRegenerating == false && _isShieldDestablized == false && _isDisabled == false)
         {
             STKDebugLogger.LogStatement(_showDebug, $"{_parentShip.GetName()} Shield Regen Started...");
             _isShieldRegenerating = true;
@@ -96,7 +96,7 @@ public class ShieldBehavior : ShipSubsystem, IShieldSubsystemBehavior
             ExitRegen();
             OnShieldFull?.Invoke();
         }
-            
+
     }
 
     private void ExitRegen()
@@ -124,7 +124,7 @@ public class ShieldBehavior : ShipSubsystem, IShieldSubsystemBehavior
             STKDebugLogger.LogStatement(_showDebug, $"{_parentShip.GetName()} Beginning Shield Restabilization...");
             Invoke("RestabilizeShield", _regenDelaySeconds);
         }
-            
+
 
     }
 
@@ -260,3 +260,4 @@ public class ShieldBehavior : ShipSubsystem, IShieldSubsystemBehavior
         }
     }
 }
+

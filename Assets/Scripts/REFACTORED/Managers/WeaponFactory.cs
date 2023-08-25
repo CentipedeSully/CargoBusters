@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SullysToolkit;
 
 public class WeaponFactory : MonoBehaviour
 {
@@ -28,8 +29,19 @@ public class WeaponFactory : MonoBehaviour
                 return Instantiate(prefab);
         }
 
-        Debug.LogError($"Error: Weapon not found amongst possible prefabs, {desiredWeapon}");
+        STKDebugLogger.LogWarning($"Error: Weapon not found amongst possible prefabs, {desiredWeapon}");
         return null;
+    }
+
+    public bool DoesWeaponExist(string weaponName)
+    {
+        foreach (GameObject prefab in _weaponPrefabs)
+        {
+            if (prefab.GetComponent<IShipWeaponry>().GetWeaponName() == weaponName)
+                return true;
+        }
+
+        return false;
     }
 
 

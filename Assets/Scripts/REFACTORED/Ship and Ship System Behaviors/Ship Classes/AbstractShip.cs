@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using SullysToolkit;
 
 //NonSubsystem Interfaces
 public interface IShipController
@@ -170,6 +170,20 @@ public interface IShieldSubsystemBehavior
     void LogAllData();
 }
 
+public struct WeaponRecord
+{
+    public int _slot;
+    public IShipWeaponry _weapon;
+    public IWeaponsSubsystemBehavior _controller;
+
+    public WeaponRecord(IShipWeaponry newWeapon, int slotAssignment, IWeaponsSubsystemBehavior parentController)
+    {
+        _weapon = newWeapon;
+        _slot = slotAssignment;
+        _controller = parentController;
+    }
+}
+
 public interface IWeaponsSubsystemBehavior
 {
     void SetParentShipAndInitializeAwakeReferences(AbstractShip parent);
@@ -188,15 +202,25 @@ public interface IWeaponsSubsystemBehavior
 
     int GetWeaponCount();
 
+    int GetSlotCount();
+
     void AddWeapon(string weaponName, int slot);
 
-    GameObject RemoveWeapon(int slot);
+    void AddWeaponSlot(Transform physicalPositionOnShip);
 
-    IShipWeaponry GetWeaponFromPosition(int slot);
+    void RemoveWeapon(int slot);
 
-    int GetAvailablePosition();
+    AbstractShipWeapon GetWeaponAtSlot(int slot);
 
-    int GetPositionCount();
+    List<int> GetUnoccupiedSlots();
+
+    List<int> GetOccupiedSlots();
+
+    Dictionary<int,AbstractShipWeapon> GetAllWeapons();
+
+    Dictionary<int,Transform> GetAllSlots();
+
+
 
 
 
@@ -487,34 +511,8 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
 
 
 
-    //Interface Utils
-    public bool IsDisabled()
-    {
-        return _isShipDisabled;
-    }
 
-    public void DisableEntity()
-    {
-        DisableShip();
-    }
-
-    public void EnableEntity()
-    {
-        EnableShip();
-    }
-
-    public virtual void TakeDamage(int damage, bool preserveShip)
-    {
-        SufferHullDamage(damage, preserveShip);
-    }
-
-    public virtual void RepairDamage(int value)
-    {
-        _hullBehavior.RepairHull(value);
-    }
-
-
-    //Utils
+    //Internal Utils
     protected virtual void InitializeAwakeBehaviorReferences()
     {
         //Initialize local personal references
@@ -572,48 +570,32 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
         _shipController.CommunicateDecisionsToSubsystems();
     }
 
-
-
-
-    public virtual void DisableShip()
+    protected virtual void SufferDamage(int value, bool preserveShip)
     {
-        if (_isShipDisabled == false)
+        //try damaging shields first
+        if (_shieldsBehavior != null)
         {
-            //disable all subsystems
-            _isShipDisabled = true;
-            _engineBehavior.DisableEngines();
-            _shieldsBehavior.DisableShields();
-            _weaponsBehavior.DisableWeapons();
-            //_cargoBehavior.DisableCargoSecurity();
-            //_warpBehavior.DisableWarping();
-            //_busterBehavior.DisableBuster();
+            if (_shieldsBehavior.GetCurrentValue() > 0)
+                _shieldsBehavior.DamageShields(value);
+            else
+            {
+                if (preserveShip == true)
+                    DamageShipButNegateDeath(value);
+
+                else _hullBehavior.DamageHull(value);
+            }
         }
-    }
 
-    public virtual void EnableShip()
-    {
-        if (_isShipDisabled == true)
-        {
-            _isShipDisabled = false;
-            _engineBehavior.EnableEngines();
-            _shieldsBehavior.EnableShields();
-            _weaponsBehavior.EnableWeapons();
-            //_cargoBehavior.EnableCargoSecurity();
-            //_warpBehavior.EnableWarping();
-            //_busterBehavior.EnableBuster();
-        }
-    }
+        //Damage hull if no shield system exists
+        else if (preserveShip == true)
+            DamageShipButNegateDeath(value);
 
-    public virtual void Die()
-    {
-        _deathBehavior.TriggerDeathSequence();
-    }
-
-    public virtual void SufferHullDamage(int value, bool preserveShip)
-    {
+        else _hullBehavior.DamageHull(value);
         
-        if (preserveShip == true)
-        {
+    }
+
+    private void DamageShipButNegateDeath(int value)
+    {
             if (_hullBehavior.GetCurrentValue() < value)
             {
                 _hullBehavior.DamageHullToNearDeath();
@@ -621,20 +603,7 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
             }
 
             else _hullBehavior.DamageHull(value);
-        }
-
-        else _hullBehavior.DamageHull(value);
-        
     }
-
-    public virtual void SufferShieldDamage(int value, bool applyPiercingDamage)
-    {
-        if (_shieldsBehavior != null)
-        {
-
-        }
-    }
-
 
     protected virtual void WatchDebugMode()
     {
@@ -648,40 +617,10 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
         }
     }
 
-    public virtual void EnterDebugMode()
-    {
-        _debugMode = true;
-        Debug.Log("Entered DebugMode");
-        if (_hullBehavior.IsDebugActive() == false)
-            _hullBehavior.ToggleDebugMode();
-        if (_engineBehavior.IsDebugActive() == false)
-            _engineBehavior.ToggleDebugMode();
-        if (_deathBehavior.IsDebugActive() == false)
-            _deathBehavior.ToggleDebugMode();
-        if (_weaponsBehavior.IsDebugActive() == false)
-            _weaponsBehavior.ToggleDebugMode();
-
-
-    }
-
-    public virtual void ExitDebugMode()
-    {
-        _debugMode = false;
-        Debug.Log("Exited DebugMode");
-        if (_hullBehavior.IsDebugActive())
-            _hullBehavior.ToggleDebugMode();
-        if (_engineBehavior.IsDebugActive())
-            _engineBehavior.ToggleDebugMode();
-        if (_deathBehavior.IsDebugActive())
-            _deathBehavior.ToggleDebugMode();
-        if (_weaponsBehavior.IsDebugActive())
-            _weaponsBehavior.ToggleDebugMode();
-    }
 
 
 
-
-    //External Control Utils
+    //Getters, Setters, & Commands
     public string GetName()
     {
         return _name;
@@ -712,7 +651,67 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
         return _isPlayer;
     }
 
-    
+    public virtual void Die()
+    {
+        _deathBehavior.TriggerDeathSequence();
+    }
+
+    public bool IsDisabled()
+    {
+        return _isShipDisabled;
+    }
+
+    public void DisableEntity()
+    {
+        DisableShip();
+    }
+
+    public void EnableEntity()
+    {
+        EnableShip();
+    }
+
+    public virtual void TakeDamage(int damage, bool preserveShip)
+    {
+        SufferDamage(damage, preserveShip);
+    }
+
+    public virtual void RepairDamage(int value)
+    {
+        _hullBehavior.RepairHull(value);
+    }
+
+    public virtual void DisableShip()
+    {
+        if (_isShipDisabled == false)
+        {
+            //disable all subsystems
+            _isShipDisabled = true;
+            _engineBehavior.DisableEngines();
+            _shieldsBehavior.DisableShields();
+            _weaponsBehavior.DisableWeapons();
+            //_cargoBehavior.DisableCargoSecurity();
+            //_warpBehavior.DisableWarping();
+            //_busterBehavior.DisableBuster();
+        }
+    }
+
+    public virtual void EnableShip()
+    {
+        if (_isShipDisabled == true)
+        {
+            _isShipDisabled = false;
+            _engineBehavior.EnableEngines();
+            _shieldsBehavior.EnableShields();
+            _weaponsBehavior.EnableWeapons();
+            //_cargoBehavior.EnableCargoSecurity();
+            //_warpBehavior.EnableWarping();
+            //_busterBehavior.EnableBuster();
+        }
+    }
+
+
+
 
     public IShipController GetShipControllerBehavior()
     {
@@ -760,5 +759,43 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
     {
         return _busterBehavior;
     }
+
+    public IPhaseSubsystemBehavior GetPhaseBehavior()
+    {
+        return null;
+    }
+
+
+
+    //Debugging
+    public virtual void EnterDebugMode()
+    {
+        _debugMode = true;
+        Debug.Log("Entered DebugMode");
+        //if (_hullBehavior.IsDebugActive() == false)
+        //    _hullBehavior.ToggleDebugMode();
+        //if (_engineBehavior.IsDebugActive() == false)
+        //    _engineBehavior.ToggleDebugMode();
+        //if (_deathBehavior.IsDebugActive() == false)
+        //    _deathBehavior.ToggleDebugMode();
+        //if (_weaponsBehavior.IsDebugActive() == false)
+        //    _weaponsBehavior.ToggleDebugMode();
+
+    }
+
+    public virtual void ExitDebugMode()
+    {
+        _debugMode = false;
+        Debug.Log("Exited DebugMode");
+        //if (_hullBehavior.IsDebugActive())
+        //    _hullBehavior.ToggleDebugMode();
+        //if (_engineBehavior.IsDebugActive())
+        //    _engineBehavior.ToggleDebugMode();
+        //if (_deathBehavior.IsDebugActive())
+        //    _deathBehavior.ToggleDebugMode();
+        //if (_weaponsBehavior.IsDebugActive())
+        //    _weaponsBehavior.ToggleDebugMode();
+    }
+
 
 }
