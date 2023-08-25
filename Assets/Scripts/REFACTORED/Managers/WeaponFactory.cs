@@ -7,7 +7,7 @@ public class WeaponFactory : MonoBehaviour
 {
     //Declarations
     [SerializeField] private List<GameObject> _weaponPrefabs;
-
+    [SerializeField] private Transform _removedWeaponsContainer;
 
     //Monobehaviours
     //...
@@ -44,8 +44,26 @@ public class WeaponFactory : MonoBehaviour
         return false;
     }
 
+    public Transform GetDecomissionedWeaponsContainer()
+    {
+        return _removedWeaponsContainer;
+    }
 
+    public void DeleteDecomissionedWeapons()
+    {
+        int weaponsCount = _removedWeaponsContainer.childCount;
+        if (weaponsCount > 0)
+        {
+            for (int i = weaponsCount - 1; i >= 0; i--)
+                Destroy(_removedWeaponsContainer.GetChild(i));
+        }
+    }
 
+    public void DecomissionWeapon(GameObject weaponObject)
+    {
+        weaponObject.SetActive(false);
+        weaponObject.transform.SetParent(_removedWeaponsContainer,false);
+    }
 
 }
 

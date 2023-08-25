@@ -554,6 +554,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputReaderReference: {fileID: 0}
   _weaponFactoryReference: {fileID: 0}
+  _projectileContainer: {fileID: 851594073}
 --- !u!114 &1241039936
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -601,6 +602,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _weaponPrefabs:
   - {fileID: 4338734516150373498, guid: bda72f9446f307e4abc528e6553fca97, type: 3}
+  - {fileID: 2823438137008020644, guid: b42a7e8fc3b509d47bb04728a0833de0, type: 3}
+  _removedWeaponsContainer: {fileID: 1305768143}
 --- !u!1 &1305768142
 GameObject:
   m_ObjectHideFlags: 0
@@ -1003,7 +1006,7 @@ MonoBehaviour:
   - {fileID: 1138286989}
   _slotVisualizer: []
   _debugSlotIndex: 0
-  _debugWeaponName: Test Weapon
+  _debugWeaponName: Generic Blaster
   _debugNewSlotPosition: {x: 0, y: 0, z: 0}
   _addWeaponCmd: 0
   _addSlotCmd: 0

@@ -6,7 +6,7 @@ public interface IShipWeaponry
 {
     void FireWeapon();
 
-    void SetParentSubsystemAndInitialize(IWeaponsSubsystemBehavior weaponSubsystem);
+    void SetParentSubsystemAndInitialize(IWeaponsSubsystemBehavior weaponSubsystem, AbstractShip parentShip);
 
     string GetWeaponName();
 
@@ -33,7 +33,8 @@ public abstract class AbstractShipWeapon : MonoBehaviour, IShipWeaponry
     [SerializeField] protected float _cooldown = .5f;
     [SerializeField] protected bool _isWeaponReady = true;
     [SerializeField] protected bool _isSubsystemOnline = true;
-    [SerializeField] protected IWeaponsSubsystemBehavior _parentSubsystem;
+    [SerializeField] protected IWeaponsSubsystemBehavior _parentWeaponSubsystemInterface;
+    [SerializeField] protected AbstractShip _parentShip;
 
 
 
@@ -86,10 +87,12 @@ public abstract class AbstractShipWeapon : MonoBehaviour, IShipWeaponry
             _damage = value;
     }
 
-    public void SetParentSubsystemAndInitialize(IWeaponsSubsystemBehavior weaponSubsystem)
+    public void SetParentSubsystemAndInitialize(IWeaponsSubsystemBehavior weaponSubsystem, AbstractShip parentShip)
     {
-        _parentSubsystem = weaponSubsystem;
-        _isSubsystemOnline = !_parentSubsystem.IsWeaponsDisabled();
+        _parentWeaponSubsystemInterface = weaponSubsystem;
+        _isSubsystemOnline = !_parentWeaponSubsystemInterface.IsWeaponsDisabled();
+
+        _parentShip = parentShip;
     }
 
     public void SetSubsystemOnlineStatus(bool newValue)
@@ -109,7 +112,7 @@ public abstract class AbstractShipWeapon : MonoBehaviour, IShipWeaponry
         Invoke("ReadyWeapon", _cooldown);
     }
 
-    protected void ReadyWeapon()
+    protected virtual void ReadyWeapon()
     {
         _isWeaponReady = true;
     }

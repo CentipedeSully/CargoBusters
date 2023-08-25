@@ -10,7 +10,7 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField] private InputReader _inputReaderReference;
     [SerializeField] private IInstanceTracker _instanceTrackerReference;
     [SerializeField] private WeaponFactory _weaponFactoryReference;
-
+    [SerializeField] private Transform _projectileContainer;
 
 
     //Monobehaviours
@@ -54,7 +54,10 @@ public class GameManager : MonoSingleton<GameManager>
         return _weaponFactoryReference;
     }
 
-
+    public Transform GetProjectileContainer()
+    {
+        return _projectileContainer;
+    }
 
 
 }

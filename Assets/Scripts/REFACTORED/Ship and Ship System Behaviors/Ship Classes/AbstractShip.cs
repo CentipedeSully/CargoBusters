@@ -170,17 +170,17 @@ public interface IShieldSubsystemBehavior
     void LogAllData();
 }
 
-public struct WeaponRecord
+public struct WeaponDetails
 {
     public int _slot;
     public IShipWeaponry _weapon;
-    public IWeaponsSubsystemBehavior _controller;
+    public AbstractShip _parentShip;
 
-    public WeaponRecord(IShipWeaponry newWeapon, int slotAssignment, IWeaponsSubsystemBehavior parentController)
+    public WeaponDetails(IShipWeaponry newWeapon, int slotAssignment, AbstractShip parent)
     {
         _weapon = newWeapon;
         _slot = slotAssignment;
-        _controller = parentController;
+        _parentShip = parent;
     }
 }
 

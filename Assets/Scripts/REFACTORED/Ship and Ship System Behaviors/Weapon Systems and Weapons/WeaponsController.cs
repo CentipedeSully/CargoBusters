@@ -32,13 +32,14 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
 
 
     //events
-    public delegate void WeaponryUpdateEvent(WeaponRecord aboutNewWeapon);
+    public delegate void WeaponryUpdateEvent(WeaponDetails aboutNewWeapon);
     public event WeaponryUpdateEvent OnWeaponAdded;
     public event WeaponryUpdateEvent OnWeaponRemoved;
 
     public delegate void WeaponsControllerEvent();
     public event WeaponsControllerEvent OnWeaponsDisabled;
     public event WeaponsControllerEvent OnWeaponsEnabled;
+    public event WeaponsControllerEvent OnSlotAdded;
 
 
 
@@ -101,7 +102,7 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
                 AbstractShipWeapon weaponReference = weaponObjectTransform.GetComponent<AbstractShipWeapon>();
                 if (weaponReference != null)
                 {
-                    weaponReference.SetParentSubsystemAndInitialize(this);
+                    weaponReference.SetParentSubsystemAndInitialize(this, _parentShip);
                     _slotVisualizer[slot.Key] = weaponObjectTransform.GetComponent<AbstractShipWeapon>().GetWeaponName();
                     _equiptWeapons.Add(slot.Key, weaponReference);
                 }
@@ -136,12 +137,12 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
             if (weaponReference != null)
             {
                 _equiptWeapons.Add(newSlotIndex, weaponReference);
-                weaponReference.SetParentSubsystemAndInitialize(this);
+                weaponReference.SetParentSubsystemAndInitialize(this, _parentShip);
             }
         }
 
         RebuildSlotVisualizer();
-        
+        OnSlotAdded?.Invoke();
 
     }
 
@@ -176,10 +177,11 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
             newWeapon.transform.SetParent(_weaponSlots[slot],false);
 
             AbstractShipWeapon weaponReference = newWeapon.GetComponent<AbstractShipWeapon>();
-            weaponReference.SetParentSubsystemAndInitialize(this);
+            weaponReference.SetParentSubsystemAndInitialize(this, _parentShip);
             _equiptWeapons.Add(slot, weaponReference);
 
             RebuildSlotVisualizer();
+            OnWeaponAdded?.Invoke(new WeaponDetails(weaponReference, slot, _parentShip));
         }
     }
 
@@ -187,13 +189,14 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
     {
         if (_weaponSlots.ContainsKey(slot) && _equiptWeapons.ContainsKey(slot))
         {
-            GameObject weaponObject = _equiptWeapons[slot].gameObject;
+            AbstractShipWeapon weaponReference = _equiptWeapons[slot];
+            GameObject weaponObject = weaponReference.gameObject;
             _equiptWeapons.Remove(slot);
 
-            weaponObject.SetActive(false);
-            Destroy(weaponObject);
+            _factoryReference.DecomissionWeapon(weaponObject);
 
             RebuildSlotVisualizer();
+            OnWeaponRemoved?.Invoke(new WeaponDetails(weaponReference, slot, _parentShip));
         }
     }
 
