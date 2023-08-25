@@ -206,7 +206,7 @@ public interface IWeaponsSubsystemBehavior
 
     void AddWeapon(string weaponName, int slot);
 
-    void AddWeaponSlot(Transform physicalPositionOnShip);
+    void AddWeaponSlot(Vector2 SlotPosition);
 
     void RemoveWeapon(int slot);
 

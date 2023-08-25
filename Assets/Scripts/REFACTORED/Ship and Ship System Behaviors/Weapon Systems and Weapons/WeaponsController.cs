@@ -8,6 +8,7 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
 {
     //Declarations
     [Header("Weapons")]
+    [SerializeField] private Transform _weaponPositionParent;
     [SerializeField] private List<Transform> _baseWeaponPositions;
     [SerializeField] private string[] _slotVisualizer;
     private Dictionary<int,Transform> _weaponSlots;
@@ -18,7 +19,7 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
     [Header("Debugging")]
     [SerializeField] private int _debugSlotIndex;
     [SerializeField] private string _debugWeaponName;
-    [SerializeField] private GameObject _debugnNewSlotTransformObj;
+    [SerializeField] private Vector3 _debugNewSlotPosition;
     [SerializeField] private bool _addWeaponCmd = false;
     [SerializeField] private bool _addSlotCmd = false;
     [SerializeField] private bool _removeWeaponCmd = false;
@@ -118,14 +119,18 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
 
 
     //Getters, Setters, & Commands
-    public void AddWeaponSlot(Transform newLocalPosition)
+    public void AddWeaponSlot(Vector2 newLocalPosition)
     {
-        int newSlotIndex = _weaponSlots.Count;
-        _weaponSlots.Add(newSlotIndex, newLocalPosition);
+        Transform newPosition = Instantiate(new GameObject("Custom Position")).transform;
+        newPosition.SetParent(_weaponPositionParent, false);
+        newPosition.localPosition = newLocalPosition;
 
-        if (newLocalPosition.childCount > 0)
+        int newSlotIndex = _weaponSlots.Count;
+        _weaponSlots.Add(newSlotIndex, newPosition);
+
+        if (newPosition.childCount > 0)
         {
-            Transform childTransform = newLocalPosition.GetChild(0);
+            Transform childTransform = newPosition.GetChild(0);
             AbstractShipWeapon weaponReference = childTransform.GetComponent<AbstractShipWeapon>();
 
             if (weaponReference != null)
@@ -136,6 +141,7 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
         }
 
         RebuildSlotVisualizer();
+        
 
     }
 
@@ -384,7 +390,7 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
 
     private void TestAddingNewSlot()
     {
-        AddWeaponSlot(_debugnNewSlotTransformObj.transform);
+        AddWeaponSlot(_debugNewSlotPosition);
     }
 
     private void LogSlotCount()
