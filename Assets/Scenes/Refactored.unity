@@ -891,7 +891,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!114 &1604088821
 MonoBehaviour:
@@ -997,7 +997,7 @@ MonoBehaviour:
   _name: Weapons Subsystem
   _parentShip: {fileID: 0}
   _isDisabled: 0
-  _showDebug: 0
+  _showDebug: 1
   _weaponPositionParent: {fileID: 883759114}
   _baseWeaponPositions:
   - {fileID: 1540491426}

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6089821599481884359}
   - component: {fileID: 913058956673971897}
   - component: {fileID: 6322890794820600564}
-  - component: {fileID: 5562374768106414422}
+  - component: {fileID: 6981529802375397395}
   m_Layer: 0
   m_Name: testProjectile
   m_TagString: Untagged
@@ -105,7 +105,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &5562374768106414422
+--- !u!58 &6981529802375397395
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

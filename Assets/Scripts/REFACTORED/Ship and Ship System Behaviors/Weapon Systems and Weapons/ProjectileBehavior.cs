@@ -58,11 +58,11 @@ public class ProjectileBehavior : MonoBehaviour, IProjectile
         
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.GetInstanceID() != _ownerID && _isFired)
+        if (collision.collider.GetInstanceID() != _ownerID && _isFired)
         {
-            STKDebugLogger.LogStatement(_isDebugActive, $"Hit Collider: {collision.name}");
+            STKDebugLogger.LogStatement(_isDebugActive, $"Hit Collider: {collision.collider.name}");
             ExpireProjectile();
         }
     }
@@ -116,7 +116,7 @@ public class ProjectileBehavior : MonoBehaviour, IProjectile
 
     public virtual void InitializeProjectile(int newOwner, float speed, Vector2 direction, float maxLifetime)
     {
-        SetOwnerID(newOwner);
+        _ownerID = newOwner;
         _speed = speed;
         _travelDirection = direction;
         _maxLifetime = maxLifetime;
