@@ -21,13 +21,17 @@ public interface IProjectile
 
     void SetCurrentDirection(Vector2 newDirection);
 
-    void InitializeProjectile(int newOwner, float speed, Vector2 direction, float maxLifetime);
+    void InitializeProjectile(int newOwner, float speed, Vector2 direction, float maxLifetime, int damage);
 
     void ExpireProjectile();
 
     void TravelWithoutPhysics();
 
     void CountLifetime();
+
+    int GetDamage();
+
+    void SetDamage(int value);
 
 }
 
@@ -41,6 +45,7 @@ public class ProjectileBehavior : MonoBehaviour, IProjectile
     [SerializeField] protected float _maxLifetime;
     [SerializeField] protected float _speed;
     [SerializeField] protected Vector2 _travelDirection;
+    [SerializeField] protected int _damage;
 
     [Header("Debug Utils")]
     [SerializeField] private bool _isDebugActive;
@@ -114,12 +119,23 @@ public class ProjectileBehavior : MonoBehaviour, IProjectile
         _travelDirection = newDirection;
     }
 
-    public virtual void InitializeProjectile(int newOwner, float speed, Vector2 direction, float maxLifetime)
+    public virtual int GetDamage()
+    {
+        return _damage;
+    }
+
+    public virtual void SetDamage(int newValue)
+    {
+        _damage = Mathf.Max(0, newValue);
+    }
+
+    public virtual void InitializeProjectile(int newOwner, float speed, Vector2 direction, float maxLifetime, int damage)
     {
         _ownerID = newOwner;
         _speed = speed;
         _travelDirection = direction;
         _maxLifetime = maxLifetime;
+        _damage = damage;
 
         _isFired = true;
     }

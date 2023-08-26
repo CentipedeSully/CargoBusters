@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GenericBlaster : AbstractShipWeapon
+public class GenericBlaster : AbstractBlasterWeapon
 {
     //Declarations
     [Header("Projectile Settings")]
@@ -34,7 +34,7 @@ public class GenericBlaster : AbstractShipWeapon
         float relativeProjectileSpeed = _projectileSpeed + Mathf.Abs(_parentShip.GetComponent<Rigidbody2D>().velocity.magnitude);
         Vector2 relativeDirection = (Vector2)transform.TransformDirection(_localShotDirection);
 
-        projectileRef.InitializeProjectile(_parentShip.GetInstanceID(), relativeProjectileSpeed , relativeDirection, _projectileLifetime);
+        projectileRef.InitializeProjectile(_parentShip.GetInstanceID(), relativeProjectileSpeed , relativeDirection, _projectileLifetime, _damage);
     }
 
 

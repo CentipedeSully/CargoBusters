@@ -258,7 +258,7 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
     public void FireWeapons()
     {
         foreach (KeyValuePair<int, AbstractShipWeapon> registeredWeapon in _equiptWeapons)
-            registeredWeapon.Value.FireWeapon();
+            registeredWeapon.Value.FireWeaponOnCommand();
     }
 
     public int GetWeaponCount()

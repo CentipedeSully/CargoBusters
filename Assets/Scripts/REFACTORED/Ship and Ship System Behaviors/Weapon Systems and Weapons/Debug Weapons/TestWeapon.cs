@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestWeapon : AbstractShipWeapon
+public class TestWeapon : AbstractBlasterWeapon
 {
     //Declarations
     [SerializeField] private GameObject _projectilePrefab;
