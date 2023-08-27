@@ -299,7 +299,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!120 &746748567
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -413,9 +413,15 @@ MonoBehaviour:
   _weaponName: Generic Laser
   _weaponDescription: Undefined Type
   _damage: 0
-  _cooldown: 0
-  _isWeaponReady: 1
+  _cooldownTime: 0.5
+  _warmupTime: 0
+  _isWarmedUp: 0
+  _isWarmingUp: 0
+  _isCooledDown: 1
   _isSubsystemOnline: 1
+  _shootCommand: 0
+  _isDebugActive: 0
+  _isShotStarted: 0
   _laserRange: 2
   _laserWidth: 0.2
   _localShotDirection: {x: 0, y: 1}
@@ -1157,6 +1163,7 @@ MonoBehaviour:
   _parentShip: {fileID: 0}
   _isDisabled: 0
   _showDebug: 1
+  _shootCommand: 0
   _weaponPositionParent: {fileID: 883759114}
   _baseWeaponPositions:
   - {fileID: 1540491426}

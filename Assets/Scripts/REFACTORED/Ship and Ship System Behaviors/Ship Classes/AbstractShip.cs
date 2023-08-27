@@ -198,7 +198,9 @@ public interface IWeaponsSubsystemBehavior
 
     void EnableWeapons();
 
-    void FireWeapons();
+    void SetShootInput(bool value);
+
+    bool GetShootInput();
 
     int GetWeaponCount();
 

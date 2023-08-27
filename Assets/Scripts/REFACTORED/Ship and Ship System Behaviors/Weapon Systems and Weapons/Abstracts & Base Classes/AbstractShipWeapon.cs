@@ -42,19 +42,20 @@ public abstract class AbstractShipWeapon : MonoBehaviour, IShipWeaponry
     [SerializeField] protected int _damage;
     [SerializeField] protected float _cooldownTime = .5f;
     [SerializeField] protected float _warmupTime = 0;
-    [SerializeField] protected bool _isWarmedUp = false;
-    [SerializeField] protected bool _isWarmingUp = false;
-    [SerializeField] protected bool _isCooledDown = true;
-    [SerializeField] protected bool _isSubsystemOnline = true;
     [SerializeField] protected bool _shootCommand = false;
+    [SerializeField] protected bool _isSubsystemOnline = true;
+    [SerializeField] protected bool _isWarmingUp = false;
+    [SerializeField] protected bool _isFiring = false;
+    [SerializeField] protected bool _isCooledDown = true;
+
 
     public delegate void ShipWeaponEvent();
     public event ShipWeaponEvent OnWarmupEntered;
     public event ShipWeaponEvent OnWarmupCanceled;
-    public event ShipWeaponEvent OnWarmupExited;
+    public event ShipWeaponEvent OnWarmupCompleted;
 
     public event ShipWeaponEvent OnCooldownEntered;
-    public event ShipWeaponEvent OnCooldownExited;
+    public event ShipWeaponEvent OnCooldownCompleted;
 
 
     [Header("Debug Utils")]
@@ -73,21 +74,17 @@ public abstract class AbstractShipWeapon : MonoBehaviour, IShipWeaponry
 
 
     //Interal Utils
-    protected virtual void EnterWarmupIfApplicable()
-    {
-        if (_isCooledDown && _isWarmedUp == false && _isWarmingUp == false)
+    protected virtual void WarmWeapon()
+    {  
+        _isWarmingUp = true;
+        OnWarmupEntered?.Invoke();
+        if (_warmupTime > 0)
         {
-            _isWarmingUp = true;
-            OnWarmupEntered?.Invoke();
-            if (_warmupTime > 0)
-            {
-                LogStatement($"{_weaponName} on {_parentShip.GetName()} began warming up");
-                Invoke("CompleteWarmup", _warmupTime);
-            }
-            else
-                CompleteWarmup();
-            
+            LogStatement($"{_weaponName} on {_parentShip.GetName()} began warming up");
+            Invoke("StartFiringWeapon", _warmupTime);
         }
+        else
+            StartFiringWeapon();
     }
 
     protected virtual void CancelWarmup()
@@ -97,27 +94,44 @@ public abstract class AbstractShipWeapon : MonoBehaviour, IShipWeaponry
             _isWarmingUp = false;
             LogStatement($"{_weaponName} on {_parentShip.GetName()} canceled warmup");
             OnWarmupCanceled?.Invoke();
-            CancelInvoke("CompleteWarmup");
+            CancelInvoke("StartFiringWeapon");
             
         }
             
     }
 
-    protected virtual void CompleteWarmup()
+    protected virtual void StartFiringWeapon()
     {
         _isWarmingUp = false;
-        _isWarmedUp = true;
+        _isFiring = true;
 
         if (_warmupTime > 0)
             LogStatement($"{_weaponName} on {_parentShip.GetName()} completed warmup");
         else
             LogStatement($"{_weaponName} on {_parentShip.GetName()} warmed up instantaneously");
 
-        OnWarmupExited?.Invoke();
+        OnWarmupCompleted?.Invoke();
+    }
+
+    protected virtual void EndWeaponsActivity()
+    {
+        if (_isWarmingUp)
+        {
+            LogStatement($"{_weaponName} on {_parentShip.GetName()} aborted warmup");
+            CancelWarmup();
+        }
+
+        else if (_isFiring)
+        {
+            LogStatement($"{_weaponName} on {_parentShip.GetName()} aborted firing");
+            _isFiring = false;
+            EnterCooldown();
+        }
     }
 
     protected virtual void EnterCooldown()
     {
+        _isFiring = false;
         _isCooledDown = false;
         LogStatement($"{_weaponName} on {_parentShip.GetName()} began cooling down");
         OnCooldownEntered?.Invoke();
@@ -129,17 +143,10 @@ public abstract class AbstractShipWeapon : MonoBehaviour, IShipWeaponry
     {
         _isCooledDown = true;
         LogStatement($"{_weaponName} on {_parentShip.GetName()} completed cooldown");
-        OnCooldownExited?.Invoke();
+        OnCooldownCompleted?.Invoke();
     }
 
-    protected virtual bool IsWeaponReady()
-    {
-        return _isCooledDown && _isWarmedUp;
-    }
-
-    protected abstract void PerformWeaponFire();
-
-    protected abstract void InterruptShotByOtherMeansDueToReleasedInput();
+    protected abstract void PerformWeaponFireLogic();
 
 
 
@@ -152,34 +159,17 @@ public abstract class AbstractShipWeapon : MonoBehaviour, IShipWeaponry
 
     public void FireWeaponOnCommand()
     {
-        if (_shootCommand)
+        if (_shootCommand && _isCooledDown)
         {
-            EnterWarmupIfApplicable();
+            if (_isFiring == false && _isWarmingUp == false)
+                WarmWeapon();
 
-            if (IsWeaponReady())
-            {
-                _isWarmedUp = false;
-                PerformWeaponFire();
-            }
+            else if (_isFiring == true)
+                PerformWeaponFireLogic();
         }
 
-        else
-        {
-            if (_isWarmingUp)
-            {
-                LogStatement($"{_weaponName} on {_parentShip.GetName()} aborted warmup due to released Input");
-                CancelWarmup();
-            }
-
-            else if (IsWeaponReady())
-            {
-                LogStatement($"{_weaponName} on {_parentShip.GetName()} aborted firing due to released Input");
-                _isWarmedUp = false;
-            }
-
-            else InterruptShotByOtherMeansDueToReleasedInput();
-        }
-        
+        else if (_shootCommand == false)
+            EndWeaponsActivity();
     }
 
     public float GetCooldown()
@@ -236,8 +226,8 @@ public abstract class AbstractShipWeapon : MonoBehaviour, IShipWeaponry
     {
         _isSubsystemOnline = newValue;
 
-        if (_isWarmingUp && _isSubsystemOnline == false)
-            CancelWarmup();
+        if (_isSubsystemOnline == false)
+            EndWeaponsActivity();
             
     }
 
@@ -262,16 +252,8 @@ public abstract class AbstractShipWeapon : MonoBehaviour, IShipWeaponry
 
 
 
-
-
-
-
-
-
-    //Utils
-    
-
 }
+
 
 public abstract class AbstractBlasterWeapon : AbstractShipWeapon
 {
@@ -285,7 +267,7 @@ public abstract class AbstractBlasterWeapon : AbstractShipWeapon
 
 
     //Internal Utils
-    protected override void PerformWeaponFire()
+    protected override void PerformWeaponFireLogic()
     {
         FireProjectile();
         OnProjectileFired?.Invoke();
@@ -294,12 +276,12 @@ public abstract class AbstractBlasterWeapon : AbstractShipWeapon
 
     protected abstract void FireProjectile();
 
-    protected override void InterruptShotByOtherMeansDueToReleasedInput()
-    {
-        //nothing. Blasters aren't continuous weapons
-    }
 
     //Getters Setters, & Commands
+    //...
+
+
+    //Debug Utils
     //...
 
 }
@@ -308,8 +290,8 @@ public abstract class AbstractBlasterWeapon : AbstractShipWeapon
 public abstract class AbstractLaserWeapon : AbstractShipWeapon
 {
     //Declarations
-    [SerializeField] protected bool _isShotStarted = false;
-
+    [Header("Laser ")]
+    [SerializeField] protected bool _isLaserStarted = false;
 
     public event ShipWeaponEvent OnLaserFireEntered;
     public event ShipWeaponEvent OnLaserFireExited;
@@ -320,22 +302,41 @@ public abstract class AbstractLaserWeapon : AbstractShipWeapon
 
 
     //Internal Utils
-    protected override void PerformWeaponFire()
+    protected override void PerformWeaponFireLogic()
     {
-        if (_isShotStarted == false)
-        {
-            _isShotStarted = true;
-            OnLaserFireEntered?.Invoke();
-        }
+        if (_isLaserStarted == false)
+            StartLaser();
 
         FireLaser();
+        
     }
 
-    protected override void InterruptShotByOtherMeansDueToReleasedInput()
+    protected virtual void StartLaser()
     {
-        _isShotStarted = false;
+        _isLaserStarted = true;
+        OnLaserFireEntered?.Invoke();
+    }
+
+    protected override void EndWeaponsActivity()
+    {
+        if (_isWarmingUp)
+        {
+            LogStatement($"{_weaponName} on {_parentShip.GetName()} aborted warmup");
+            CancelWarmup();
+        }
+
+        else if (_isFiring)
+        {
+            LogStatement($"{_weaponName} on {_parentShip.GetName()} aborted firing");
+            EndLaser();
+            EnterCooldown();
+            
+        }
+    }
+
+    protected virtual void EndLaser()
+    {
         OnLaserFireExited?.Invoke();
-        EnterCooldown();
     }
 
     protected abstract void FireLaser();
@@ -345,6 +346,9 @@ public abstract class AbstractLaserWeapon : AbstractShipWeapon
     //Getters Setters, & Commands
     //...
 
+
+    //DEbug Uitls
+    //...
 
 }
 

@@ -8,6 +8,7 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
 {
     //Declarations
     [Header("Weapons")]
+    [SerializeField] private bool _shootInput = false;
     [SerializeField] private Transform _weaponPositionParent;
     [SerializeField] private List<Transform> _baseWeaponPositions;
     [SerializeField] private string[] _slotVisualizer;
@@ -26,7 +27,6 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
     [SerializeField] private bool _logWeaponAtSlotCmd = false;
     [SerializeField] private bool _disableWeaponsCmd = false;
     [SerializeField] private bool _enableWeaponsCmd = false;
-    [SerializeField] private bool _debugFireWeaponsCmd = false;
     [SerializeField] private bool _logWeaponCountCmd = false;
     [SerializeField] private bool _logSlotCountCmd = false;
 
@@ -46,6 +46,9 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
     //Monobehaviours
     private void Update()
     {
+        if (_isDisabled == false)
+            PassShootCommandToWeapons();
+
         if (_showDebug)
             ListenForDebugCommands();
     }
@@ -242,6 +245,11 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
         return copyOfShipSlots;
     }
 
+    public void PassShootCommandToWeapons()
+    {
+        foreach (KeyValuePair<int, AbstractShipWeapon> registeredWeapon in _equiptWeapons)
+            registeredWeapon.Value.SetShootCommand(_shootInput);
+    }
 
     public void DisableWeapons()
     {
@@ -253,12 +261,6 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
     {
         EnableSubsystem();
         OnWeaponsEnabled?.Invoke();
-    }
-
-    public void FireWeapons()
-    {
-        foreach (KeyValuePair<int, AbstractShipWeapon> registeredWeapon in _equiptWeapons)
-            registeredWeapon.Value.FireWeaponOnCommand();
     }
 
     public int GetWeaponCount()
@@ -310,7 +312,15 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
     }
 
 
+    public bool GetShootInput()
+    {
+        return _shootInput;
+    }
 
+    public void SetShootInput(bool value)
+    {
+        _shootInput = value;
+    }
 
 
 
@@ -345,12 +355,6 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
         {
             _enableWeaponsCmd = false;
             EnableWeapons();
-        }
-
-        if (_debugFireWeaponsCmd)
-        {
-            _debugFireWeaponsCmd = false;
-            FireWeapons();
         }
 
         if (_addSlotCmd)

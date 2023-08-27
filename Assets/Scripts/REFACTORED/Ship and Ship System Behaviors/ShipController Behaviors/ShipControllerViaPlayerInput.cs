@@ -47,9 +47,9 @@ public class ShipControllerViaPlayerInput : MonoBehaviour, IShipController
         _engineBehaviorRef.SetThrustInput(_inputReaderReference.GetPlayerThrustInput());
         _engineBehaviorRef.SetTurnInput(_inputReaderReference.GetPlayerTurnInput());
 
-        if (_inputReaderReference.GetPlayerShootInput() == true)
-            _weaponBehaviorRef.FireWeapons();
+        _weaponBehaviorRef.SetShootInput(_inputReaderReference.GetPlayerShootInput());
     }
+
 
 
 
