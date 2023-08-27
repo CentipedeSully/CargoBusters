@@ -336,6 +336,7 @@ public abstract class AbstractLaserWeapon : AbstractShipWeapon
 
     protected virtual void EndLaser()
     {
+        _isLaserStarted = false;
         OnLaserFireExited?.Invoke();
     }
 

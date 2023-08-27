@@ -33,10 +33,10 @@ public class GenericLaser : AbstractLaserWeapon
 
 
     //Internal Utils
-    protected virtual void BuildLaser()
+    protected virtual void CastLaser()
     {
         RaycastHit2D[] detectedObjects = Physics2D.CircleCastAll(transform.position, _laserWidth / 2, _localShotDirection * _laserRange);
-
+        bool targetFound = false;
         
         for (int i = 0; i < detectedObjects.Length; i ++)
         {
@@ -45,11 +45,12 @@ public class GenericLaser : AbstractLaserWeapon
             if (_validTags.Contains(detection.collider.tag) && detection.collider.GetInstanceID() != _parentShip.GetInstanceID())
             {
                 RenderLine(detection.distance);
+                targetFound = true;
                 break;
             }
         }
 
-        if (detectedObjects.Length == 0)
+        if (targetFound == false)
         {
             RenderLine(_laserRange);
         }
@@ -67,9 +68,12 @@ public class GenericLaser : AbstractLaserWeapon
     protected virtual void RenderLine(float distance)
     {
         Vector2 endPoint =_localShotDirection * distance;
+        Vector3 endPoint3D = new Vector3(endPoint.x, endPoint.y, transform.position.z);
+
         _lineRenderer.positionCount = 2;
 
-        _lineRenderer.SetPosition(1, endPoint);
+        _lineRenderer.SetPosition(0, Vector3.zero);
+        _lineRenderer.SetPosition(1, endPoint3D);
     }
 
     protected virtual void StopRenderingLine()
@@ -79,10 +83,14 @@ public class GenericLaser : AbstractLaserWeapon
 
     protected override void FireLaser()
     {
-        
+        CastLaser();
     }
 
-
+    protected override void EndLaser()
+    {
+        base.EndLaser();
+        CeaseLaser();
+    }
 
 
     //Getters, Setters, & Commands
