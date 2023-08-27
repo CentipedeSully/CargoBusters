@@ -2,11 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestWeapon : AbstractBlasterWeapon
+public class TestWeapon : BlasterWeapon
 {
     //Declarations
-    [SerializeField] private GameObject _projectilePrefab;
-    [SerializeField] private InstanceTracker _instanceTrackerRef;
 
 
     //Monobehavior

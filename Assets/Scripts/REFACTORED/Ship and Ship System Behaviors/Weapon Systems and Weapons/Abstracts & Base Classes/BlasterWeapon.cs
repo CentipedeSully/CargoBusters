@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GenericBlaster : AbstractBlasterWeapon
+
+public class BlasterWeapon : AbstractShipWeapon
 {
     //Declarations
     [Header("Projectile Settings")]
@@ -11,14 +12,22 @@ public class GenericBlaster : AbstractBlasterWeapon
     [SerializeField] [Min(0)] protected float _projectileSpeed = 5;
     [SerializeField] [Min(.1f)] protected float _projectileLifetime = 1f;
 
+    public event ShipWeaponEvent OnProjectileFired;
 
 
     //Monobehaviours
-
+    //...
 
 
 
     //Internal Utils
+    protected override void PerformWeaponFireLogic()
+    {
+        FireProjectile();
+        OnProjectileFired?.Invoke();
+        EnterCooldown();
+    }
+
     protected virtual GameObject SpawnProjectile()
     {
         GameObject newProjectile = Instantiate(_projectilePrefab, transform.position, Quaternion.identity);
@@ -26,7 +35,7 @@ public class GenericBlaster : AbstractBlasterWeapon
         return newProjectile;
     }
 
-    protected override void FireProjectile()
+    protected virtual void FireProjectile()
     {
         GameObject projectileObject = SpawnProjectile();
         ProjectileBehavior projectileRef = projectileObject.GetComponent<ProjectileBehavior>();
@@ -34,12 +43,13 @@ public class GenericBlaster : AbstractBlasterWeapon
         float relativeProjectileSpeed = _projectileSpeed + Mathf.Abs(_parentShip.GetComponent<Rigidbody2D>().velocity.magnitude);
         Vector2 relativeDirection = (Vector2)transform.TransformDirection(_localShotDirection);
 
-        projectileRef.InitializeProjectile(_parentShip.GetInstanceID(), relativeProjectileSpeed , relativeDirection, _projectileLifetime, _damage);
+        projectileRef.InitializeProjectile(_parentShip.GetInstanceID(), relativeProjectileSpeed, relativeDirection, _projectileLifetime, _damage);
     }
 
 
 
-    //Getters, Setter, & Commands
+
+    //Getters Setters, & Commands
     public float GetProjectileSpeed()
     {
         return _projectileSpeed;
@@ -80,5 +90,9 @@ public class GenericBlaster : AbstractBlasterWeapon
         if (newPrefab != null)
             _projectilePrefab = newPrefab;
     }
+
+
+    //Debug Utils
+    //...
 
 }
