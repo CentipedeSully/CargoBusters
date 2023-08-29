@@ -21,6 +21,7 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
     [SerializeField] private int _debugSlotIndex;
     [SerializeField] private string _debugWeaponName;
     [SerializeField] private Vector3 _debugNewSlotPosition;
+    [SerializeField] private bool _addFullArsenalCmd = false;
     [SerializeField] private bool _addWeaponCmd = false;
     [SerializeField] private bool _addSlotCmd = false;
     [SerializeField] private bool _removeWeaponCmd = false;
@@ -374,6 +375,11 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
             _logWeaponCountCmd = false;
             LogWeaponCount();
         }
+        if (_addFullArsenalCmd)
+        {
+            _addFullArsenalCmd = false;
+            AddFullArsenal();
+        }
 
     }
 
@@ -408,5 +414,13 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
     private void LogWeaponCount()
     {
         STKDebugLogger.LogStatement(_showDebug, $"Current weapon count: {GetWeaponCount()}");
+    }
+
+    private void AddFullArsenal()
+    {
+        AddWeapon("Generic Laser", 0);
+        AddWeapon("Generic Laser", 1);
+        AddWeapon("Generic Blaster", 2);
+        AddWeapon("Generic Blaster", 3);
     }
 }

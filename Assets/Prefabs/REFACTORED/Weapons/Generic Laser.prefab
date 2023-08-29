@@ -56,18 +56,16 @@ MonoBehaviour:
   _isWarmingUp: 0
   _isFiring: 0
   _isCooledDown: 1
-  _isDebugActive: 0
-  _isLaserStarted: 0
+  _isDebugActive: 1
   _laserRange: 2
   _laserWidth: 0.2
   _localShotDirection: {x: 0, y: 1}
-  _validTags: []
+  _piercePower: 0
+  _isLaserStarted: 0
+  _baseAccumulationOnImpact: 0.05
+  _accumulationDegenValue: 0.01
   _maxAccumulationTime: 0.25
-  _currentAccumulationTime: 0
-  _missGracePeriod: 0.1
-  _isBeamActive: 0
-  _isBeamHittingTarget: 0
-  _currentTarget: {fileID: 0}
+  _IDsDetectedThisFrame: 
 --- !u!120 &5009105964737576646
 LineRenderer:
   m_ObjectHideFlags: 0

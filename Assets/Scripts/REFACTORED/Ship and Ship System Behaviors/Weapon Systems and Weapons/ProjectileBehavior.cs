@@ -48,7 +48,7 @@ public class ProjectileBehavior : MonoBehaviour, IProjectile
     [SerializeField] protected int _damage;
 
     [Header("Debug Utils")]
-    [SerializeField] private bool _isDebugActive;
+    [SerializeField] private bool _isDebugActive = true;
 
 
 
@@ -63,18 +63,34 @@ public class ProjectileBehavior : MonoBehaviour, IProjectile
         
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.collider.GetInstanceID() != _ownerID && _isFired)
+        Collider2D detectedCollider = collision;
+        if (_isFired && GameManager.Instance.GetWeaponInteractablesList().Contains(detectedCollider.tag))
         {
-            STKDebugLogger.LogStatement(_isDebugActive, $"Hit Collider: {collision.collider.name}");
-            ExpireProjectile();
+            IDamageable damageableComponentRef = detectedCollider.GetComponent<IDamageable>();
+
+            STKDebugLogger.LogStatement(_isDebugActive, $"Owner Ship ID: {_ownerID}");
+            STKDebugLogger.LogStatement(_isDebugActive, $"Hit Collider: {detectedCollider.name}");
+            STKDebugLogger.LogStatement(_isDebugActive, $"Is Object Damageable: {damageableComponentRef != null}");
+
+            if (damageableComponentRef != null)
+            {
+                STKDebugLogger.LogStatement(_isDebugActive, $"Damageable Object ID: {damageableComponentRef.GetInstanceID()}");
+                if (damageableComponentRef.GetInstanceID() != _ownerID)
+                {
+                    damageableComponentRef.TakeDamage(_damage, false);
+                    ExpireProjectile();
+                }
+                
+            }
+            
         }
     }
 
     //Internal Utils
     //...
-    
+
 
 
 

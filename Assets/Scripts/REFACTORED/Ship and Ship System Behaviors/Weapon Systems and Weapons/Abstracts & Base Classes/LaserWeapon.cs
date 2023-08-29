@@ -10,7 +10,6 @@ public class LaserWeapon : AbstractShipWeapon
     [SerializeField] [Min(.1f)] protected float _laserRange = 2;
     [SerializeField] [Min(.1f)] protected float _laserWidth = .2f;
     [SerializeField] protected Vector2 _localShotDirection = Vector2.up;
-    [SerializeField] protected List<string> _validTags;
     [SerializeField] [Min(0)] protected int _piercePower = 0;
     protected LineRenderer _lineRenderer;
 
@@ -32,20 +31,13 @@ public class LaserWeapon : AbstractShipWeapon
     {
         _lineRenderer = GetComponent<LineRenderer>();
 
-        if (_validTags == null)
-            _validTags = new List<string>();
-
         _targetIDsWithAccumulation = new Dictionary<int, float>();
         _IDsDetectedThisFrame = new List<int>();
     }
 
-    private void Update()
-    {
-        ManageAccumulationOnTrackedTargets();
-    }
-
     private void LateUpdate()
     {
+        ManageAccumulationOnTrackedTargets();
         ResetThisFramesDetectedIDs();
     }
 
@@ -73,11 +65,15 @@ public class LaserWeapon : AbstractShipWeapon
         OnLaserFireEntered?.Invoke();
     }
 
-    protected virtual bool IsColliderValid(Collider2D detectedCollider)
+    protected virtual bool IsDetectionValid(RaycastHit2D detection)
     {
-        return _validTags.Contains(detectedCollider.tag) && 
-               detectedCollider.GetInstanceID() != _parentShip.GetInstanceID() &&
-               _IDsDetectedThisFrame.Contains(detectedCollider.GetInstanceID()) == false;
+        IDamageable damageableRef = detection.collider.GetComponent<IDamageable>();
+        if (damageableRef == null)
+            return false;
+
+        return GameManager.Instance.GetWeaponInteractablesList().Contains(detection.collider.tag) && 
+               damageableRef.GetInstanceID() != _parentShip.GetInstanceID() &&
+               _IDsDetectedThisFrame.Contains(damageableRef.GetInstanceID()) == false;
     }
 
     protected virtual void CastLaserAndCaptureTargets()
@@ -92,16 +88,20 @@ public class LaserWeapon : AbstractShipWeapon
         {
             RaycastHit2D detection = detectedObjects[i];
 
-            if (IsColliderValid(detection.collider))  
+            if (IsDetectionValid(detection))  
             {
-                int detectedColliderID = detection.collider.GetInstanceID();
-                _IDsDetectedThisFrame.Add(detectedColliderID);
+                int detectedParentID = detection.collider.GetComponent<IDamageable>().GetInstanceID();
+                _IDsDetectedThisFrame.Add(detectedParentID);
                 validDetectionsFound += 1;
 
 
                 //start tracking the target's accumulation if it isn't already being tracked
-                if (_targetIDsWithAccumulation.ContainsKey(detectedColliderID) == false)
-                    _targetIDsWithAccumulation.Add(detectedColliderID, _baseAccumulationOnImpact);
+                if (_targetIDsWithAccumulation.ContainsKey(detectedParentID) == false)
+                {
+                    _targetIDsWithAccumulation.Add(detectedParentID, _baseAccumulationOnImpact);
+                    LogStatement($"New ID detected. ID added to Accumulation Tracker");
+                }
+                    
 
 
                 //Determine if the laser should continue down its range: are we done piercing targets?
@@ -118,6 +118,13 @@ public class LaserWeapon : AbstractShipWeapon
 
     protected virtual void ManageAccumulationOnTrackedTargets()
     {
+        //Create a side dictionary to record all changes for the original. Cant edit the original while iterating through it :(
+        Dictionary<int, float> _adjustedAccumulationData = new Dictionary<int, float>();
+
+        foreach (KeyValuePair<int,float> entry in _targetIDsWithAccumulation)
+            _adjustedAccumulationData.Add(entry.Key, entry.Value);
+
+        //Adjust the copy dictionary based on both our original dictionary and our current frame's laser cast results
         foreach (KeyValuePair<int, float> targetEntry in _targetIDsWithAccumulation)
         {
             int entryID = targetEntry.Key;                
@@ -126,10 +133,11 @@ public class LaserWeapon : AbstractShipWeapon
             if (_IDsDetectedThisFrame.Contains(entryID))
             {
                 //accumulate time each frame this object exists within the laser's reach
-                _targetIDsWithAccumulation[entryID] += Time.deltaTime;
+                _adjustedAccumulationData[entryID] += Time.deltaTime;
+                LogStatement($"ID {entryID}'s accumulation is increasing. NewValue: {_adjustedAccumulationData[entryID]}");
 
                 //apply damage if the accumulation value reached the max 
-                if (_targetIDsWithAccumulation[entryID] >= _maxAccumulationTime)
+                if (_adjustedAccumulationData[entryID] >= _maxAccumulationTime)
                 {
                     GameObject matchingObject = FindObjectInScene(entryID);
 
@@ -137,27 +145,41 @@ public class LaserWeapon : AbstractShipWeapon
                         matchingObject.GetComponent<IDamageable>()?.TakeDamage(_damage, false);
 
                     //reset target's accumulation damage
-                    _targetIDsWithAccumulation[entryID] = _baseAccumulationOnImpact;
+                    _adjustedAccumulationData[entryID] = _baseAccumulationOnImpact;
+                    LogStatement($"ID {entryID}'s accumulation has maxed out. Reseting accumulation to base value ({_baseAccumulationOnImpact})");
                 }
 
                 //otherwise, degenerate this target's accumulation
                 else
                 {
-                    _targetIDsWithAccumulation[entryID] -= _accumulationDegenValue;
+                    _adjustedAccumulationData[entryID] -= _accumulationDegenValue;
+                    LogStatement($"ID {entryID}'s accumulation has degenerated by {_accumulationDegenValue} pts. NewValue: {_adjustedAccumulationData[entryID]}");
 
                     //Stop tracking the target's accumulation if its accumulation value degenerated to zero
-                    if (_targetIDsWithAccumulation[entryID] <= 0)
-                        _targetIDsWithAccumulation.Remove(entryID);
+                    if (_adjustedAccumulationData[entryID] <= 0)
+                    {
+                        _adjustedAccumulationData.Remove(entryID);
+                        LogStatement($"ID {entryID}'s accumulation has fully Degenerated. ID removed from tracker");
+                    }
+                       
                 }
 
             }
         }
+
+
+        //Apply our edits to the original dictionary
+        _targetIDsWithAccumulation.Clear();
+
+        foreach (KeyValuePair<int, float> entry in _adjustedAccumulationData)
+            _targetIDsWithAccumulation.Add(entry.Key, entry.Value);
+
     }
 
     protected virtual GameObject FindObjectInScene(int instanceID)
     {
         GameObject[] foundObjects;
-        foreach (string tag in _validTags)
+        foreach (string tag in GameManager.Instance.GetWeaponInteractablesList())
         {
             foundObjects = GameObject.FindGameObjectsWithTag(tag);
 
@@ -190,6 +212,7 @@ public class LaserWeapon : AbstractShipWeapon
 
     protected override void PerformWeaponFireLogic()
     {
+        LogStatement($"Ship {_parentShip.GetName()} is Firing {_weaponName}");
         if (_isLaserStarted == false)
             StartLaser();
 

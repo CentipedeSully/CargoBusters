@@ -11,7 +11,7 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField] private IInstanceTracker _instanceTrackerReference;
     [SerializeField] private WeaponFactory _weaponFactoryReference;
     [SerializeField] private Transform _projectileContainer;
-
+    [SerializeField] private List<string> _weaponInteractablesList;
 
     //Monobehaviours
     //...
@@ -59,5 +59,8 @@ public class GameManager : MonoSingleton<GameManager>
         return _projectileContainer;
     }
 
-
+    public List<string> GetWeaponInteractablesList()
+    {
+        return _weaponInteractablesList;
+    }
 }

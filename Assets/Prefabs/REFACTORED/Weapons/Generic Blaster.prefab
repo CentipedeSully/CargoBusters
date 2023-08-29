@@ -44,13 +44,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21d5202044782214c822a9bbf3c71e48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _weaponName: Generic Blaster
-  _weaponType: Blaster
-  _damage: 1
-  _cooldown: 0.5
-  _isWeaponReady: 1
-  _isSubsystemOnline: 1
   _parentShip: {fileID: 0}
+  _weaponName: Generic Blaster
+  _weaponDescription: Undefined Description
+  _damage: 1
+  _cooldownTime: 0.5
+  _warmupTime: 0
+  _shootCommand: 0
+  _isSubsystemOnline: 1
+  _isWarmingUp: 0
+  _isFiring: 0
+  _isCooledDown: 1
+  _isDebugActive: 0
   _projectilePrefab: {fileID: 1395907952926232425, guid: 71139297da7ff244a8302646c2844071, type: 3}
   _localShotDirection: {x: 0, y: 1}
   _projectileSpeed: 5

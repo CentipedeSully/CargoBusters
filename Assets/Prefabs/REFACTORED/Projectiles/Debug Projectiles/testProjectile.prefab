@@ -52,6 +52,7 @@ MonoBehaviour:
   _maxLifetime: 0
   _speed: 0
   _travelDirection: {x: 0, y: 0}
+  _damage: 0
   _isDebugActive: 0
 --- !u!212 &6322890794820600564
 SpriteRenderer:

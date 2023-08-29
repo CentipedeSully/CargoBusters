@@ -455,11 +455,14 @@ public interface IDisableable
 
 public interface IDamageable
 {
+    int GetInstanceID();
+
     void TakeDamage(int value, bool negateDeath);
 }
 
 public interface IRepairable
 {
+    int GetInstanceID();
     void RepairDamage(int value);
 }
 
@@ -476,7 +479,8 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
     [SerializeField] protected bool _isShipDisabled = false;
     [SerializeField] protected bool _debugMode = false;
     protected bool _debugFlag = false;
-
+    private bool _isControlErrorThrown = false;
+    [SerializeField] protected int _instanceID;
 
     //behavior references
     protected IShipController _shipController;
@@ -498,6 +502,7 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
     protected virtual void Awake()
     {
         InitializeAwakeBehaviorReferences();
+        _instanceID = GetInstanceID();
     }
 
     protected virtual void Start()
@@ -532,7 +537,7 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
 
 
         //Initialize component nonSubsystem references
-        _shipController.SetParentShipAndInitializeAwakeReferences(this);
+        _shipController?.SetParentShipAndInitializeAwakeReferences(this);
         _hullBehavior.SetParentShipAndInitializeAwakeReferences(this);
         _deathBehavior.SetParentShipAndInitializeAwakeReferences(this);
 
@@ -551,7 +556,7 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
     protected virtual void InitializeGameManagerSourcedReferences()
     {
         //Initialize component nonSubsystem references
-        _shipController.InitializeGameManagerDependentReferences();
+        _shipController?.InitializeGameManagerDependentReferences();
         _hullBehavior.InitializeGameManagerDependentReferences();
         _deathBehavior.InitializeGameManagerDependentReferences();
 
@@ -568,8 +573,18 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
 
     protected virtual void ControlShip()
     {
-        _shipController.DetermineDecisions();
-        _shipController.CommunicateDecisionsToSubsystems();
+        if (_shipController != null)
+        {
+            _shipController.DetermineDecisions();
+            _shipController.CommunicateDecisionsToSubsystems();
+        }
+        else if (_isControlErrorThrown == false)
+        {
+            _isControlErrorThrown = true;
+            STKDebugLogger.LogWarning($"Ship {GetName()} has no ShipController. Expect zero player/ai activity");
+        }
+            
+
     }
 
     protected virtual void SufferDamage(int value, bool preserveShip)
