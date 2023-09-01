@@ -48,7 +48,7 @@ MonoBehaviour:
   _parentShip: {fileID: 0}
   _weaponName: Generic Laser
   _weaponDescription: Undefined Type
-  _damage: 0
+  _damage: 1
   _cooldownTime: 0.5
   _warmupTime: 0
   _shootCommand: 0
@@ -61,11 +61,13 @@ MonoBehaviour:
   _laserWidth: 0.2
   _localShotDirection: {x: 0, y: 1}
   _piercePower: 0
+  _worldShotDirection: {x: 0, y: 0, z: 0}
+  _calculatedLaserEndPoint: {x: 0, y: 0, z: 0}
   _isLaserStarted: 0
-  _baseAccumulationOnImpact: 0.05
-  _accumulationDegenValue: 0.01
-  _maxAccumulationTime: 0.25
+  _baseAccumulationOnImpact: 0.01
+  _maxAccumulationTime: 1
   _IDsDetectedThisFrame: 
+  _laserCastGizmoColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!120 &5009105964737576646
 LineRenderer:
   m_ObjectHideFlags: 0
