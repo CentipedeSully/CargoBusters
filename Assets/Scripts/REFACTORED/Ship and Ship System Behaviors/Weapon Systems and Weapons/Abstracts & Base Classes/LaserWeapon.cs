@@ -12,16 +12,21 @@ public class LaserWeapon : AbstractShipWeapon
     [SerializeField] protected Vector2 _localShotDirection = Vector2.up;
     [SerializeField] [Min(0)] protected int _piercePower = 0;
     protected LineRenderer _lineRenderer;
+    [SerializeField] protected Vector3 _worldShotDirection;
+    [SerializeField] protected Vector3 _calculatedLaserEndPoint;
 
     [Header("Accumulation Settings")]
     [SerializeField] protected bool _isLaserStarted = false;
-    [SerializeField] [Min(.01f)] protected float _baseAccumulationOnImpact = .05f;
-    [SerializeField] [Min(.01f)] protected float _accumulationDegenValue = .01f; 
-    [SerializeField] protected float _maxAccumulationTime = .25f;
+    [SerializeField] [Min(.01f)] protected float _baseAccumulationOnImpact = 1;
+    [SerializeField] protected float _maxAccumulationTime = 60;
     [SerializeField] protected Dictionary<int,float> _targetIDsWithAccumulation;
     [SerializeField] protected List<int> _IDsDetectedThisFrame;
 
 
+    [Header("Debug Utils")]
+    [SerializeField] protected Color _laserCastGizmoColor = Color.red;
+    protected Vector3 _gizmoCastVector;
+    protected Vector3 _lazerEndPointGizmo;
     public event ShipWeaponEvent OnLaserFireEntered;
     public event ShipWeaponEvent OnLaserFireExited;
 
@@ -41,6 +46,11 @@ public class LaserWeapon : AbstractShipWeapon
         ResetThisFramesDetectedIDs();
     }
 
+    private void OnDrawGizmosSelected()
+    {
+        DrawCastGizmos();
+    }
+
 
     //Internal Utils
     protected virtual void RenderLaserGraphic(float distance)
@@ -50,8 +60,12 @@ public class LaserWeapon : AbstractShipWeapon
 
         _lineRenderer.positionCount = 2;
 
+        _lineRenderer.startWidth = _laserWidth;
+        _lineRenderer.endWidth = _laserWidth;
+
         _lineRenderer.SetPosition(0, Vector3.zero);
         _lineRenderer.SetPosition(1, endPoint3D);
+
     }
 
     protected virtual void StopRenderingLaserGraphic()
@@ -70,17 +84,35 @@ public class LaserWeapon : AbstractShipWeapon
         IDamageable damageableRef = detection.collider.GetComponent<IDamageable>();
         if (damageableRef == null)
             return false;
-
-        return GameManager.Instance.GetWeaponInteractablesList().Contains(detection.collider.tag) && 
+        LogStatement($"Detected ColliderUD: {damageableRef.GetInstanceID()}");
+        LogStatement($"Parent ship ColliderID: {_parentShip.GetInstanceID()}");
+        LogStatement($"Is Detected ID == parentID: {damageableRef.GetInstanceID() == _parentShip.GetInstanceID()}");
+        bool isValid = GameManager.Instance.GetWeaponInteractablesList().Contains(detection.collider.tag) &&
                damageableRef.GetInstanceID() != _parentShip.GetInstanceID() &&
                _IDsDetectedThisFrame.Contains(damageableRef.GetInstanceID()) == false;
+        LogStatement($"Is Detection Valid: {isValid}");
+        return isValid;
+    }
+
+    protected virtual void DrawCastGizmos()
+    {
+        Gizmos.color = _laserCastGizmoColor;
+        if (_isFiring)
+        {
+            Gizmos.DrawLine(transform.position, _calculatedLaserEndPoint);
+            Gizmos.DrawWireSphere(_calculatedLaserEndPoint, _laserWidth / 2);
+        }
     }
 
     protected virtual void CastLaserAndCaptureTargets()
     {
-        RaycastHit2D[] detectedObjects = Physics2D.CircleCastAll(transform.position, _laserWidth / 2, _localShotDirection * _laserRange);
+
+        _worldShotDirection = transform.TransformVector(_localShotDirection * _laserRange);
+        _calculatedLaserEndPoint = transform.TransformPoint(_localShotDirection* _laserRange);
+        RaycastHit2D[] detectedObjects = Physics2D.CircleCastAll(transform.position, _laserWidth / 2, _worldShotDirection, _laserRange);
+
         int validDetectionsFound = 0;
-        float renderDistace = _laserRange;
+        float localRenderDistace = _laserRange;
         _IDsDetectedThisFrame = new List<int>();
 
 
@@ -101,19 +133,20 @@ public class LaserWeapon : AbstractShipWeapon
                     _targetIDsWithAccumulation.Add(detectedParentID, _baseAccumulationOnImpact);
                     LogStatement($"New ID detected. ID added to Accumulation Tracker");
                 }
-                    
 
 
                 //Determine if the laser should continue down its range: are we done piercing targets?
                 if (validDetectionsFound == _piercePower + 1)
                 {
-                    renderDistace = detection.distance;
+                    // Make sure to keep the laser straight!!! 
+                    _calculatedLaserEndPoint =  transform.TransformPoint(_localShotDirection * (detection.distance + _laserWidth)); 
+                    localRenderDistace = detection.distance;
                     break;
                 }   
             }
         }
 
-        RenderLaserGraphic(renderDistace);
+        RenderLaserGraphic(localRenderDistace);
     }
 
     protected virtual void ManageAccumulationOnTrackedTargets()
@@ -133,8 +166,8 @@ public class LaserWeapon : AbstractShipWeapon
             if (_IDsDetectedThisFrame.Contains(entryID))
             {
                 //accumulate time each frame this object exists within the laser's reach
-                _adjustedAccumulationData[entryID] += Time.deltaTime;
-                LogStatement($"ID {entryID}'s accumulation is increasing. NewValue: {_adjustedAccumulationData[entryID]}");
+                _adjustedAccumulationData[entryID] = _adjustedAccumulationData[entryID] + Time.deltaTime;
+                //LogStatement($"ID {entryID}'s accumulation is increasing. NewValue: {_adjustedAccumulationData[entryID]}");
 
                 //apply damage if the accumulation value reached the max 
                 if (_adjustedAccumulationData[entryID] >= _maxAccumulationTime)
@@ -146,20 +179,20 @@ public class LaserWeapon : AbstractShipWeapon
 
                     //reset target's accumulation damage
                     _adjustedAccumulationData[entryID] = _baseAccumulationOnImpact;
-                    LogStatement($"ID {entryID}'s accumulation has maxed out. Reseting accumulation to base value ({_baseAccumulationOnImpact})");
+                    //LogStatement($"ID {entryID}'s accumulation has maxed out. Reseting accumulation to base value ({_baseAccumulationOnImpact})");
                 }
 
                 //otherwise, degenerate this target's accumulation
                 else
                 {
-                    _adjustedAccumulationData[entryID] -= _accumulationDegenValue;
-                    LogStatement($"ID {entryID}'s accumulation has degenerated by {_accumulationDegenValue} pts. NewValue: {_adjustedAccumulationData[entryID]}");
+                    _adjustedAccumulationData[entryID] = _adjustedAccumulationData[entryID] - Time.deltaTime;
+                    //LogStatement($"ID {entryID}'s accumulation has degenerated by {Time.deltaTime} pts. NewValue: {_adjustedAccumulationData[entryID]}");
 
-                    //Stop tracking the target's accumulation if its accumulation value degenerated to zero
+                    //Stop tracking the target's accumulation if its accumulation value degenerated to zero or beyond
                     if (_adjustedAccumulationData[entryID] <= 0)
                     {
                         _adjustedAccumulationData.Remove(entryID);
-                        LogStatement($"ID {entryID}'s accumulation has fully Degenerated. ID removed from tracker");
+                        //LogStatement($"ID {entryID}'s accumulation has fully Degenerated. ID removed from tracker");
                     }
                        
                 }

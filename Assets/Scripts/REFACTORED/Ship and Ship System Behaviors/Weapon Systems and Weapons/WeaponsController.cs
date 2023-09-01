@@ -30,6 +30,8 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
     [SerializeField] private bool _enableWeaponsCmd = false;
     [SerializeField] private bool _logWeaponCountCmd = false;
     [SerializeField] private bool _logSlotCountCmd = false;
+    [SerializeField] private bool _addLaserPairCmd = false;
+    [SerializeField] private bool _removeAllWeaponsCmd = false;
 
 
     //events
@@ -380,6 +382,16 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
             _addFullArsenalCmd = false;
             AddFullArsenal();
         }
+        if (_addLaserPairCmd)
+        {
+            _addLaserPairCmd = false;
+            AddLaserPair();
+        }
+        if (_removeAllWeaponsCmd)
+        {
+            _removeAllWeaponsCmd = false;
+            RemoveAllWeapons();
+        }
 
     }
 
@@ -422,5 +434,19 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
         AddWeapon("Generic Laser", 1);
         AddWeapon("Generic Blaster", 2);
         AddWeapon("Generic Blaster", 3);
+    }
+
+    private void AddLaserPair()
+    {
+        AddWeapon("Generic Laser", 0);
+        AddWeapon("Generic Laser", 1);
+    }
+
+    private void RemoveAllWeapons()
+    {
+        RemoveWeapon(0);
+        RemoveWeapon(1);
+        RemoveWeapon(2);
+        RemoveWeapon(3);
     }
 }

@@ -615,6 +615,8 @@ MonoBehaviour:
   _enableWeaponsCmd: 0
   _logWeaponCountCmd: 0
   _logSlotCountCmd: 0
+  _addLaserPairCmd: 0
+  _removeAllWeaponsCmd: 0
 --- !u!114 &1122673589
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1231,6 +1233,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 420036496}
     m_Modifications:
+    - target: {fileID: 7764019720808431714, guid: 40d3fa1de34d13d4fa2c0c64a046c961, type: 3}
+      propertyPath: m_LinearDrag
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 7764019720808431714, guid: 40d3fa1de34d13d4fa2c0c64a046c961, type: 3}
+      propertyPath: m_AngularDrag
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7764019720808431715, guid: 40d3fa1de34d13d4fa2c0c64a046c961, type: 3}
+      propertyPath: _turnSpeed
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 7764019720808431718, guid: 40d3fa1de34d13d4fa2c0c64a046c961, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1284,8 +1298,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7764019720808431726, guid: 40d3fa1de34d13d4fa2c0c64a046c961, type: 3}
-      propertyPath: _addFullArsenalCmd
+      propertyPath: _addLaserPairCmd
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7764019720808431726, guid: 40d3fa1de34d13d4fa2c0c64a046c961, type: 3}
+      propertyPath: _addFullArsenalCmd
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7764019720808431736, guid: 40d3fa1de34d13d4fa2c0c64a046c961, type: 3}
       propertyPath: m_Name

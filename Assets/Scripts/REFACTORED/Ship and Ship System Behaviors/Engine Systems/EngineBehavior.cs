@@ -69,7 +69,7 @@ public class EngineBehavior : ShipSubsystem, IEngineSubsystemBehavior
         {
             ApplyThrustToShip();
             ApplyStrafeToShip();
-            ApplyTurnToShip();
+            ApplyTurnViaPhysicsToShip();
         }
     }
 
@@ -139,7 +139,7 @@ public class EngineBehavior : ShipSubsystem, IEngineSubsystemBehavior
         _shipRigidbody2D.AddRelativeForce(new Vector2(_strafeInput, 0) * _strafeForce * Time.deltaTime);
     }
 
-    private void ApplyTurnToShip()
+    private void ApplyTurnViaTransformToShip()
     {
         //Calculate distance to turn in degrees
         float modifierRotation = _turnInput * _turnSpeed * Time.deltaTime;
@@ -154,6 +154,10 @@ public class EngineBehavior : ShipSubsystem, IEngineSubsystemBehavior
         transform.rotation = Quaternion.Euler(shipRotation);   
     }
 
+    private void ApplyTurnViaPhysicsToShip()
+    {
+        _shipRigidbody2D.AddTorque(_turnInput * _turnSpeed * Time.deltaTime);
+    }
 
 
 
