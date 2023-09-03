@@ -58,5 +58,5 @@ MonoBehaviour:
   _isDebugActive: 0
   _projectilePrefab: {fileID: 1395907952926232425, guid: 71139297da7ff244a8302646c2844071, type: 3}
   _localShotDirection: {x: 0, y: 1}
-  _projectileSpeed: 5
-  _projectileLifetime: 2
+  _projectileSpeed: 0.1
+  _projectileLifetime: 50

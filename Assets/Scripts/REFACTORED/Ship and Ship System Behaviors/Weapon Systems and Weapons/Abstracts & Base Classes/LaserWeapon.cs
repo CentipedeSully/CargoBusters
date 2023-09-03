@@ -84,13 +84,34 @@ public class LaserWeapon : AbstractShipWeapon
         IDamageable damageableRef = detection.collider.GetComponent<IDamageable>();
         if (damageableRef == null)
             return false;
-        LogStatement($"Detected ColliderUD: {damageableRef.GetInstanceID()}");
-        LogStatement($"Parent ship ColliderID: {_parentShip.GetInstanceID()}");
-        LogStatement($"Is Detected ID == parentID: {damageableRef.GetInstanceID() == _parentShip.GetInstanceID()}");
-        bool isValid = GameManager.Instance.GetWeaponInteractablesList().Contains(detection.collider.tag) &&
-               damageableRef.GetInstanceID() != _parentShip.GetInstanceID() &&
-               _IDsDetectedThisFrame.Contains(damageableRef.GetInstanceID()) == false;
-        LogStatement($"Is Detection Valid: {isValid}");
+        
+
+        bool isValid = false;
+
+        if (detection.collider.CompareTag("Ship"))
+        {
+
+            isValid = damageableRef.GetInstanceID() != _parentShip.GetInstanceID() &&
+                      _IDsDetectedThisFrame.Contains(damageableRef.GetInstanceID()) == false;
+
+            LogStatement($"Detected Ship, ID: {damageableRef.GetInstanceID()} \n" +
+                         $"Parent ship ID: {_parentShip.GetInstanceID()} \n" +
+                         $"Is Detected ID == parentID: { damageableRef.GetInstanceID() == _parentShip.GetInstanceID()} \n" +
+                         $"Is Detection Valid: {isValid}");
+        }
+
+        else if (detection.collider.CompareTag("Projectile"))
+        {
+            isValid = detection.collider.GetComponent<IProjectile>().GetOwnerID() != _parentShip.GetInstanceID() &&
+                      _IDsDetectedThisFrame.Contains(damageableRef.GetInstanceID()) == false;
+
+            LogStatement($"Detected Projectile, ID: {damageableRef.GetInstanceID()}\n" +
+                         $"Projectile Owner ID: {detection.collider.GetComponent<IProjectile>().GetOwnerID()} \n" +
+                         $"Parent ship ID: {_parentShip.GetInstanceID()}\n" +
+                         $"Is Detection Valid: {isValid}");
+
+        }
+        
         return isValid;
     }
 
@@ -172,7 +193,7 @@ public class LaserWeapon : AbstractShipWeapon
                 //apply damage if the accumulation value reached the max 
                 if (_adjustedAccumulationData[entryID] >= _maxAccumulationTime)
                 {
-                    GameObject matchingObject = FindDamageableObjectInScene(entryID);
+                    GameObject matchingObject = GameManager.Instance.FindDamageableObjectWithID(entryID);
 
                     if (matchingObject!= null)
                         matchingObject.GetComponent<IDamageable>()?.TakeDamage(_damage, false);
@@ -206,30 +227,6 @@ public class LaserWeapon : AbstractShipWeapon
         foreach (KeyValuePair<int, float> entry in _adjustedAccumulationData)
             _targetIDsWithAccumulation.Add(entry.Key, entry.Value);
 
-    }
-
-    protected virtual GameObject FindDamageableObjectInScene(int instanceID)
-    {
-        GameObject[] foundObjects;
-        foreach (string tag in GameManager.Instance.GetWeaponInteractablesList())
-        {
-            foundObjects = GameObject.FindGameObjectsWithTag(tag);
-
-            foreach (GameObject matchingObject in foundObjects)
-            {
-                IDamageable damageableRef = matchingObject.GetComponent<IDamageable>();
-
-                if (damageableRef != null)
-                {
-                    if (damageableRef.GetInstanceID() == instanceID)
-                        return matchingObject;
-                }
-                
-            }
-
-        }
-        LogStatement($"Object of InstanceID '{instanceID}' not found in scene");
-        return null;
     }
 
     protected virtual void ResetThisFramesDetectedIDs()

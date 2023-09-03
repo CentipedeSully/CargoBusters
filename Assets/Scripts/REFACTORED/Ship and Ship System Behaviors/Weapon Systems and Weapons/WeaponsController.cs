@@ -32,6 +32,8 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
     [SerializeField] private bool _logSlotCountCmd = false;
     [SerializeField] private bool _addLaserPairCmd = false;
     [SerializeField] private bool _removeAllWeaponsCmd = false;
+    [SerializeField] private bool _autoFireWeaponsCmd = false;
+    private bool _isWeaponsAutoFiring = false;
 
 
     //events
@@ -53,7 +55,10 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
             PassShootCommandToWeapons();
 
         if (_showDebug)
+        {
             ListenForDebugCommands();
+        }
+            
     }
 
 
@@ -251,7 +256,12 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
     public void PassShootCommandToWeapons()
     {
         foreach (KeyValuePair<int, AbstractShipWeapon> registeredWeapon in _equiptWeapons)
-            registeredWeapon.Value.SetShootCommand(_shootInput);
+        {
+            if (_isWeaponsAutoFiring == false)
+                registeredWeapon.Value.SetShootCommand(_shootInput);
+            else registeredWeapon.Value.SetShootCommand(true);
+        }
+            
     }
 
     public void DisableWeapons()
@@ -392,6 +402,11 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
             _removeAllWeaponsCmd = false;
             RemoveAllWeapons();
         }
+        if (_autoFireWeaponsCmd)
+        {
+            _autoFireWeaponsCmd = false;
+            ToggleAutoFiring();
+        }
 
     }
 
@@ -449,4 +464,12 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
         RemoveWeapon(2);
         RemoveWeapon(3);
     }
+
+    private void ToggleAutoFiring()
+    {
+        if (_isWeaponsAutoFiring)
+            _isWeaponsAutoFiring = false;
+        else _isWeaponsAutoFiring = true;
+    }
+
 }

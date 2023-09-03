@@ -13,7 +13,6 @@ public class DeathBehavior : MonoBehaviour, IDeathBehavior
 
     //References
     private AbstractShip _parentShip;
-    private IInstanceTracker _instanceTracker;
 
 
 
@@ -31,7 +30,7 @@ public class DeathBehavior : MonoBehaviour, IDeathBehavior
 
     public void InitializeGameManagerDependentReferences()
     {
-        _instanceTracker = GameManager.Instance.GetInstanceTracker();
+        
     }
 
     public float GetDeathSequenceDuration()
@@ -70,7 +69,6 @@ public class DeathBehavior : MonoBehaviour, IDeathBehavior
     //Utils
     private void ReportDeathAndDie()
     {
-        _instanceTracker.ReportDeath(this.gameObject);
         Destroy(this.gameObject);
     }
 

@@ -7,6 +7,10 @@ public interface IProjectile
 {
     int GetOwnerID();
 
+    int GetInstanceID();
+
+    GameObject GetGameObject();
+
     void SetOwnerID(int value);
 
     float GetMaxLifetime();
@@ -35,12 +39,14 @@ public interface IProjectile
 
 }
 
-public class ProjectileBehavior : MonoBehaviour, IProjectile
+public class ProjectileBehavior : MonoBehaviour, IProjectile, IDamageable
 {
     //Declarations
     [Header("Projectile Metadata")]
     [SerializeField] protected bool _isFired = false;
     [SerializeField] protected int _ownerID = 0;
+    [SerializeField] protected int _selfID = 0;
+    [SerializeField] protected int _damageableID = 0;
     [SerializeField] protected float _currentLifetime = 0;
     [SerializeField] protected float _maxLifetime;
     [SerializeField] protected float _speed;
@@ -53,6 +59,11 @@ public class ProjectileBehavior : MonoBehaviour, IProjectile
 
 
     //Monobehaviours
+    private void Awake()
+    {
+        _selfID = GetInstanceID();
+    }
+
     private void Update()
     {
         if (_isFired)
@@ -66,7 +77,7 @@ public class ProjectileBehavior : MonoBehaviour, IProjectile
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Collider2D detectedCollider = collision;
-        if (_isFired && GameManager.Instance.GetWeaponInteractablesList().Contains(detectedCollider.tag))
+        if (_isFired && GameManager.Instance.GetDamageableTagsList().Contains(detectedCollider.tag))
         {
             IDamageable damageableComponentRef = detectedCollider.GetComponent<IDamageable>();
 
@@ -95,6 +106,11 @@ public class ProjectileBehavior : MonoBehaviour, IProjectile
 
 
     //Getters, Setters, & Commands
+    public virtual GameObject GetGameObject()
+    {
+        return gameObject;
+    }
+
     public virtual int GetOwnerID()
     {
         return _ownerID;
@@ -175,5 +191,8 @@ public class ProjectileBehavior : MonoBehaviour, IProjectile
             ExpireProjectile();
     }
 
-
+    public virtual void TakeDamage(int value, bool negateDeath)
+    {
+        ExpireProjectile();
+    }
 }
