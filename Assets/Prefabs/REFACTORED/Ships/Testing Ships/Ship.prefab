@@ -256,6 +256,7 @@ GameObject:
   - component: {fileID: 7764019720808431726}
   - component: {fileID: 7764019720808431715}
   - component: {fileID: 7764019720808431724}
+  - component: {fileID: 6834766972968835323}
   - component: {fileID: 7764019720808431714}
   - component: {fileID: 5944404654494731912}
   - component: {fileID: 7764019720808431712}
@@ -396,6 +397,7 @@ MonoBehaviour:
   _logSlotCountCmd: 0
   _addLaserPairCmd: 0
   _removeAllWeaponsCmd: 0
+  _autoFireWeaponsCmd: 0
 --- !u!114 &7764019720808431715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -447,6 +449,27 @@ MonoBehaviour:
   _damageShieldCmd: 0
   _setMaxShieldCmd: 0
   _setCurrentShieldCmd: 0
+--- !u!114 &6834766972968835323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7764019720808431736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 653c06bac29c89c40a5bc2a845449a14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scanRadius: 0
+  _scanCount: 0
+  _parentID: 0
+  _currentTarget: {fileID: 0}
+  _targetingSprite: {fileID: 0}
+  _isDebugActive: 0
+  _scanRadiusGizmoColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  _targetClosestScanCmd: 0
+  _clearCurrentTargetCmd: 0
 --- !u!50 &7764019720808431714
 Rigidbody2D:
   serializedVersion: 4
@@ -486,6 +509,16 @@ CompositeCollider2D:
   m_GenerationType: 0
   m_EdgeRadius: 0
   m_ColliderPaths:
+  - m_Collider: {fileID: 3895286726094293327}
+    m_ColliderPaths:
+    - - X: 2500000
+        Y: -300000
+      - X: -2500000
+        Y: -300000
+      - X: -2500000
+        Y: -2795373
+      - X: 2500000
+        Y: -2795373
   - m_Collider: {fileID: 4256856114882829745}
     m_ColliderPaths:
     - - X: 950000
@@ -506,16 +539,6 @@ CompositeCollider2D:
         Y: -3750000
       - X: 3750000
         Y: -3750000
-  - m_Collider: {fileID: 3895286726094293327}
-    m_ColliderPaths:
-    - - X: 2500000
-        Y: -300000
-      - X: -2500000
-        Y: -300000
-      - X: -2500000
-        Y: -2795373
-      - X: 2500000
-        Y: -2795373
   m_CompositePaths:
     m_Paths:
     - - {x: 0.3749707, y: -0.375}

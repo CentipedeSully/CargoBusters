@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using SullysToolkit;
+using System.Linq;
 
 public class GameManager : MonoSingleton<GameManager>
 {
@@ -56,6 +57,18 @@ public class GameManager : MonoSingleton<GameManager>
         return componentsInTransform;
     }
 
+    private List<GameObject> GetGameObjectsFromComponentsList<T>(List<T> componentList) where T: Component
+    {
+        List<GameObject> returnObjectsList = new List<GameObject>();
+
+        foreach (T component in componentList)
+        {
+            if (component != null)
+                returnObjectsList.Add(component.gameObject);
+        }
+
+        return returnObjectsList;
+    }
     
 
 
@@ -95,9 +108,9 @@ public class GameManager : MonoSingleton<GameManager>
         return GetReferencesFromContainer<AbstractShip>(_shipContainer);
     }
 
-    public List<IProjectile> GetAllProjectilesInScene()
+    public List<ProjectileBehavior> GetAllProjectilesInScene()
     {
-        return GetReferencesFromContainer<IProjectile>(_projectileContainer);
+        return GetReferencesFromContainer<ProjectileBehavior>(_projectileContainer);
     }
 
     public GameObject FindShipWithID(int instanceID)
@@ -147,4 +160,37 @@ public class GameManager : MonoSingleton<GameManager>
         Debug.LogWarning($"Game Manager cant find object w/ID {instanceID} among neither the ships nor projectiles. returning Null");
         return foundObject;
     }
+
+    public List<GameObject> GetAllThings()
+    {
+        List<GameObject> everything = new List<GameObject>();
+        everything.AddRange(GetGameObjectsFromComponentsList(GetAllShipsInScene()));
+        everything.AddRange(GetGameObjectsFromComponentsList(GetAllProjectilesInScene()));
+
+        return everything;
+    }
+
+    public GameObject FindObjectWithID(int instanceID)
+    {
+        GameObject foundObject;
+
+        //Check if the ID is among the ships
+        foundObject = GameManager.Instance.FindShipWithID(instanceID);
+
+        if (foundObject != null)
+            return foundObject;
+
+
+        //Check if the ID is among the Projectiles
+        foundObject = GameManager.Instance.FindProjectileWithID(instanceID);
+
+        if (foundObject != null)
+            return foundObject;
+
+        //object not found. return null
+        Debug.LogWarning($"Game Manager cant find object w/ID {instanceID} among neither the ships nor projectiles. returning Null");
+        return foundObject;
+    }
+
+    
 }
