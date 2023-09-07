@@ -458,18 +458,21 @@ public interface IDamageable
     int GetInstanceID();
 
     void TakeDamage(int value, bool negateDeath);
+
+    string GetTag();
 }
 
 public interface IRepairable
 {
     int GetInstanceID();
     void RepairDamage(int value);
+    string GetTag();
 }
 
 
 
 //Ship Definition
-public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, IRepairable
+public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, IRepairable, IScannable
 {
     //Declarations
     [Header("Ship Info")]
@@ -486,6 +489,7 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
     protected IShipController _shipController;
     protected IHullBehavior _hullBehavior;
     protected IDeathBehavior _deathBehavior;
+    protected ScannerBehaviour _scanner;
 
     protected IEngineSubsystemBehavior _engineBehavior;
     protected IShieldSubsystemBehavior _shieldsBehavior;
@@ -493,7 +497,6 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
     protected ICargoSubsystemBehavior _cargoBehavior;
     protected IWarpSubsystemBehavior _warpBehavior;
     protected IBusterSubsystemBehavior _busterBehavior;
-    
 
 
 
@@ -526,6 +529,7 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
         _shipController = GetComponent<IShipController>();
         _hullBehavior = GetComponent<IHullBehavior>();
         _deathBehavior = GetComponent<IDeathBehavior>();
+        _scanner = GetComponent<ScannerBehaviour>();
 
         _engineBehavior = GetComponent<IEngineSubsystemBehavior>();
         _shieldsBehavior = GetComponent<IShieldSubsystemBehavior>();
@@ -540,6 +544,7 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
         _shipController?.SetParentShipAndInitializeAwakeReferences(this);
         _hullBehavior.SetParentShipAndInitializeAwakeReferences(this);
         _deathBehavior.SetParentShipAndInitializeAwakeReferences(this);
+        _scanner?.InitializeScanner(GetInstanceID());
 
 
 
@@ -641,6 +646,11 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
     public string GetName()
     {
         return _name;
+    }
+
+    public string GetTag()
+    {
+        return tag;
     }
 
     public void SetName(string newName)
@@ -782,6 +792,15 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
         return null;
     }
 
+    public GameObject GetGameObject()
+    {
+        return gameObject;
+    }
+
+    public string GetNameAsScannedObject()
+    {
+        return GetName();
+    }
 
 
     //Debugging
@@ -814,5 +833,5 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
         //    _weaponsBehavior.ToggleDebugMode();
     }
 
-
+ 
 }

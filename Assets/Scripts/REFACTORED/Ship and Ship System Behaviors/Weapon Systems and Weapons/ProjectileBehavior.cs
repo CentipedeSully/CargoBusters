@@ -111,6 +111,11 @@ public class ProjectileBehavior : MonoBehaviour, IProjectile, IDamageable
         return gameObject;
     }
 
+    public virtual string GetTag()
+    {
+        return tag;
+    }
+
     public virtual int GetOwnerID()
     {
         return _ownerID;
