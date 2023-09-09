@@ -169,7 +169,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mainVirtualCamera: {fileID: 8537865600520150985}
   _playspaceOrigin: {fileID: 891534914}
-  _currentFocusObject: {fileID: 1570300459}
+  _currentFocusObject: {fileID: 1890114613}
   _starParticlesPrefab: {fileID: 4185537426332216061, guid: 4f884d8f2f522774fb6a219bc8fba9d0, type: 3}
   _minZoomDistance: 2
   _maxZoomDistance: 20
@@ -1595,11 +1595,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1570300459 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7764019720808431736, guid: 40d3fa1de34d13d4fa2c0c64a046c961, type: 3}
-  m_PrefabInstance: {fileID: 7764019719743894422}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1604088816 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7764019720808431718, guid: 40d3fa1de34d13d4fa2c0c64a046c961, type: 3}
@@ -1868,6 +1863,11 @@ BoxCollider2D:
 BoxCollider2D:
   m_CorrespondingSourceObject: {fileID: 3895286726094293327, guid: 40d3fa1de34d13d4fa2c0c64a046c961, type: 3}
   m_PrefabInstance: {fileID: 1829758958}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1890114613 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4169206777367440316, guid: 40d3fa1de34d13d4fa2c0c64a046c961, type: 3}
+  m_PrefabInstance: {fileID: 7764019719743894422}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &2035360792 stripped
 Transform:

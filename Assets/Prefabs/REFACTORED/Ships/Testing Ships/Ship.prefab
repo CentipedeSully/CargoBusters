@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 250379331049632442}
   - component: {fileID: 7359194052421919308}
   m_Layer: 0
-  m_Name: Look Ahead Focus
+  m_Name: Camera Focus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

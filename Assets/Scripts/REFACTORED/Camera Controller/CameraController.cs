@@ -13,10 +13,11 @@ public class CameraController : MonoSingleton<CameraController>
     [SerializeField] private Transform _playspaceOrigin;
     [SerializeField] private GameObject _currentFocusObject;
     [SerializeField] private GameObject _starParticlesPrefab;
+    private LookAheadFocus _lookAheadFocusRef;
     private GameObject _starParticlesInstance;
 
     [Header("Zoom Settings")]
-    
+
     [SerializeField] private float _minZoomDistance = 2;
     [SerializeField] private float _maxZoomDistance = 20;
     [SerializeField] private float _zoomSpeed = 2;
@@ -25,7 +26,7 @@ public class CameraController : MonoSingleton<CameraController>
     [SerializeField] private bool _isDebugActive = false;
     [SerializeField] private float _currentZoomDistance;
     [SerializeField] private int _currentZoomStep;
-    [SerializeField] [Range(-1,1)] private float _zoomInput;
+    [SerializeField] [Range(-1, 1)] private float _zoomInput;
 
 
 
@@ -61,7 +62,12 @@ public class CameraController : MonoSingleton<CameraController>
             SetCurrentFocus(_playspaceOrigin.gameObject);
         else SetCurrentFocus(_currentFocusObject);
 
-        
+
+    }
+
+    private void SetupLookAheadFocusIfItExists(GameObject cameraFocus)//!!!!!!!!!!!!!!!!! Find LookAheadRef
+    {
+
     }
 
     private void CreateNewStarParticlesOnFocus()
@@ -77,7 +83,7 @@ public class CameraController : MonoSingleton<CameraController>
             if (_starParticlesInstance != null)
                 Destroy(_starParticlesInstance);
 
-            _starParticlesInstance = Instantiate(_starParticlesPrefab, Vector3.zero, Quaternion.identity, _currentFocusObject.transform);
+            _starParticlesInstance = Instantiate(_starParticlesPrefab, Vector3.zero, Quaternion.Euler(90, 0, 0), _currentFocusObject.transform);
         }
     }
 
@@ -93,14 +99,14 @@ public class CameraController : MonoSingleton<CameraController>
 
         else if (_zoomInput > 0 && _currentZoomDistance > _minZoomDistance)
             newZoomDistance -= _zoomSpeed * Time.deltaTime;
-            
+
 
         if (newZoomDistance != _currentZoomDistance)
         {
             _mainVirtualCamera.m_Lens.OrthographicSize = newZoomDistance;
             _currentZoomDistance = _mainVirtualCamera.m_Lens.OrthographicSize;
         }
-    }
+    }// !!!!!!!!!!!!!!!!!!! Hook up inputs to Input Reader Reference
 
 
     //Getters, Setters, & Commands
@@ -119,11 +125,21 @@ public class CameraController : MonoSingleton<CameraController>
         if (newFocusObject != null)
         {
             _currentFocusObject = newFocusObject;
-            _mainVirtualCamera.Follow = newFocusObject.transform;
+            SetupLookAheadFocusIfItExists(newFocusObject);
+
+            if (_lookAheadFocusRef == null)
+                _mainVirtualCamera.Follow = newFocusObject.transform;
+
+            else
+            {
+                _mainVirtualCamera.Follow = _lookAheadFocusRef.transform;
+                if (_lookAheadFocusRef.IsCameraOnThisFocus() == false)
+                    _lookAheadFocusRef.ToggleLookAheadFocus();
+
+            }
 
             CreateNewStarParticlesOnFocus();
         }
-
     }
 
 
@@ -132,6 +148,7 @@ public class CameraController : MonoSingleton<CameraController>
         _zoomInput = Mathf.Clamp(zoomCommand, -1, 1);
     }
 
+    //ALSO Create ChangeCameraFocus Utils
 
     //Debug Utils
     public bool IsDebugActive()

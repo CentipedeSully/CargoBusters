@@ -8,7 +8,9 @@ public class LookAheadFocus : MonoBehaviour
     [Header("Look Ahead Settings")]
     [SerializeField][Min(0)] private float _maxLookAheadDistance = 1.5f;
     [SerializeField] [Min(0)] private float _lerpTimeStep = .01f;
+    [SerializeField] private bool _isCameraOnThisFocus = false;
     [SerializeField] private Rigidbody2D _shipRB;
+    private InputReader _inputReaderRef;
 
     [Header("Debugging Utilities")]
     [SerializeField] private bool _isDebugActive = false;
@@ -20,7 +22,11 @@ public class LookAheadFocus : MonoBehaviour
     //Monobehaviours
     private void Update()
     {
-        DriftFocusTowardsInputDirection();
+        if (_isCameraOnThisFocus)
+        {
+            ReadInput();
+            DriftFocusTowardsInputDirection();
+        }
     }
 
 
@@ -38,6 +44,15 @@ public class LookAheadFocus : MonoBehaviour
 
     }
 
+    private void ReadInput()
+    {
+        if (_inputReaderRef == null) 
+            _inputReaderRef = GameManager.Instance.GetInputReader();
+        
+        if (_inputReaderRef != null)
+            _inputDirection = new Vector2(_inputReaderRef.GetPlayerStrafeInput(),_inputReaderRef.GetPlayerThrustInput());
+    }
+
 
     //Getters, Setters, & Commands
     public void SetInput(Vector2 newInput)
@@ -47,6 +62,16 @@ public class LookAheadFocus : MonoBehaviour
         _inputDirection.y = Mathf.Clamp(_inputDirection.y, -1, 1);
     }
 
+    public void ToggleLookAheadFocus()
+    {
+        if (_isCameraOnThisFocus)
+            _isCameraOnThisFocus = false;
+        else _isCameraOnThisFocus = true;
+    }
 
+    public bool IsCameraOnThisFocus()
+    {
+        return _isCameraOnThisFocus;
+    }
 
 }
