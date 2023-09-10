@@ -427,7 +427,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
         _currentBusterUpgradePrice = new List<int>(_initialBusterMaterialCounts);
 
         UpdateUpgradeAvailability();
-        UiManager.Instance.GetUpgradeDescController().InitializeReferences();
+        OldUiManager.Instance.GetUpgradeDescController().InitializeReferences();
     }
 
     public void UpgradeWeaponsCooldown()
@@ -448,7 +448,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
 
             _weaponsBubbleController.FillSingle();
             UpdateUpgradeAvailability();
-            UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
+            OldUiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
     }
 
@@ -470,7 +470,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
 
             _weaponsBubbleController.FillSingle();
             UpdateUpgradeAvailability();
-            UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
+            OldUiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
     }
 
@@ -498,7 +498,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
 
             _weaponsBubbleController.FillSingle();
             UpdateUpgradeAvailability();
-            UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
+            OldUiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
     }
 
@@ -519,7 +519,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
 
             _weaponsBubbleController.FillSingle();
             UpdateUpgradeAvailability();
-            UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
+            OldUiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
     }
 
@@ -540,7 +540,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
 
             _enginesBubbleController.FillSingle();
             UpdateUpgradeAvailability();
-            UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
+            OldUiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
     }
 
@@ -561,7 +561,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
 
             _enginesBubbleController.FillSingle();
             UpdateUpgradeAvailability();
-            UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
+            OldUiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
     }
 
@@ -583,7 +583,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
 
             _hullBubbleController.FillSingle();
             UpdateUpgradeAvailability();
-            UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
+            OldUiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
     }
 
@@ -607,7 +607,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
 
             _hullBubbleController.FillSingle();
             UpdateUpgradeAvailability();
-            UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
+            OldUiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
     }
 
@@ -631,7 +631,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
 
             _shieldsBubbleController.FillSingle();
             UpdateUpgradeAvailability();
-            UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
+            OldUiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
     }
 
@@ -652,7 +652,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
 
             _shieldsBubbleController.FillSingle();
             UpdateUpgradeAvailability();
-            UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
+            OldUiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
     }
 
@@ -670,7 +670,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
             _isWarpCoreRepaired = true;
 
             UpdateUpgradeAvailability();
-            UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
+            OldUiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
     }
 
@@ -690,7 +690,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
 
             _AuxBubbleController.FillSingle();
             UpdateUpgradeAvailability();
-            UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
+            OldUiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
     }
 
@@ -710,7 +710,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
 
             _AuxBubbleController.FillSingle();
             UpdateUpgradeAvailability();
-            UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
+            OldUiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
     }
 
@@ -728,7 +728,7 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
             _isScrapHarvesterPurchased = true;
 
             UpdateUpgradeAvailability();
-            UiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
+            OldUiManager.Instance.GetUpgradeDescController().UpdateDescriptionValuesAndCosts();
         }
     }
 

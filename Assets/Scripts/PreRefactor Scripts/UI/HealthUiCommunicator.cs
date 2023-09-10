@@ -26,48 +26,48 @@ public class HealthUiCommunicator : MonoBehaviour
     public void ReduceHealthUI()
     {
         if (_isPlayer)
-            UiManager.Instance.GetHealthUiController().DrainSingle();
+            OldUiManager.Instance.GetHealthUiController().DrainSingle();
     }
 
     public void FillHealthUI()
     {
         if (_isPlayer)
-            UiManager.Instance.GetHealthUiController().FillSingle();
+            OldUiManager.Instance.GetHealthUiController().FillSingle();
     }
 
     public void ReduceAllHealthUI()
     {
         if (_isPlayer)
-            UiManager.Instance.GetHealthUiController().DrainAll();
+            OldUiManager.Instance.GetHealthUiController().DrainAll();
     }
 
     public void FillAllHealthUI()
     {
         if (_isPlayer)
-            UiManager.Instance.GetHealthUiController().FillAll();
+            OldUiManager.Instance.GetHealthUiController().FillAll();
     }
 
     public void DeactivateHealthUI()
     {
         if (_isPlayer)
-            UiManager.Instance.GetHealthUiController().GetComponent<DisplayAnimController>().HideDisplay();
+            OldUiManager.Instance.GetHealthUiController().GetComponent<DisplayAnimController>().HideDisplay();
     }
 
     public void ActivateHealthUI()
     {
         if (_isPlayer)
-            UiManager.Instance.GetHealthUiController().GetComponent<DisplayAnimController>().ShowDisplay();
+            OldUiManager.Instance.GetHealthUiController().GetComponent<DisplayAnimController>().ShowDisplay();
     }
 
     public void EnterRegen()
     {
         if (_isPlayer)
-            UiManager.Instance.GetHealthUiController().SetIsRegeneratingState(true);
+            OldUiManager.Instance.GetHealthUiController().SetIsRegeneratingState(true);
     }
 
     public void ExitRegen()
     {
         if (_isPlayer)
-            UiManager.Instance.GetHealthUiController().SetIsRegeneratingState(false);
+            OldUiManager.Instance.GetHealthUiController().SetIsRegeneratingState(false);
     }
 }

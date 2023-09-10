@@ -11,6 +11,9 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField] private List<string> _damageableTagsList;
     [SerializeField] private InputReader _inputReaderReference;
     [SerializeField] private WeaponFactory _weaponFactoryReference;
+    [SerializeField] private UiManager _UiManagerReference;
+    [SerializeField] private ShipOccupancyManager _shipOccupierReference;
+    [SerializeField] private CameraController _cameraControllerReference;
     [SerializeField] private Transform _projectileContainer;
     [SerializeField] private Transform _asteroidContainer;
     [SerializeField] private Transform _shipContainer;
@@ -26,7 +29,9 @@ public class GameManager : MonoSingleton<GameManager>
     //Utils
     protected override void InitializeAdditionalFields()
     {
+        //Allows for Laser beams to hit projectiles. Projectile colliders are triggers. 
         Physics2D.queriesHitTriggers = true;
+
         InitializeReferences();
     }
 
@@ -73,6 +78,21 @@ public class GameManager : MonoSingleton<GameManager>
 
 
     //Getters & Setters
+    public UiManager GetUiManager()
+    {
+        return _UiManagerReference;
+    }
+
+    public ShipOccupancyManager GetShipOccupancyManager()
+    {
+        return _shipOccupierReference;
+    }
+
+    public CameraController GetCameraController()
+    {
+        return _cameraControllerReference;
+    }
+
     public InputReader GetInputReader()
     {
         return _inputReaderReference;

@@ -42,11 +42,11 @@ public class PlayerInventoryManager : MonoSingleton<PlayerInventoryManager>
     //Monobehaviors
     private void Start()
     {
-        UiManager.Instance.GetScrapCountText().text = _currentScrap.ToString();
-        UiManager.Instance.GetEnergyCellsCountText().text = _currentEnergyCells.ToString();
-        UiManager.Instance.GetWarpCoilsCountText().text = _currentWarpCoils.ToString();
-        UiManager.Instance.GetPlasmaAcceleratorsCountText().text = _currentPlasmaAccelerators.ToString();
-        UiManager.Instance.GetCannonAlloysCountText().text = _currentCannonAlloys.ToString();
+        OldUiManager.Instance.GetScrapCountText().text = _currentScrap.ToString();
+        OldUiManager.Instance.GetEnergyCellsCountText().text = _currentEnergyCells.ToString();
+        OldUiManager.Instance.GetWarpCoilsCountText().text = _currentWarpCoils.ToString();
+        OldUiManager.Instance.GetPlasmaAcceleratorsCountText().text = _currentPlasmaAccelerators.ToString();
+        OldUiManager.Instance.GetCannonAlloysCountText().text = _currentCannonAlloys.ToString();
 
     }
 
@@ -75,36 +75,36 @@ public class PlayerInventoryManager : MonoSingleton<PlayerInventoryManager>
                 _scrapTotalCollected += amount;
                 _currentScrap += amount;
                 LogItemAdded(amount, "scrap");
-                UiManager.Instance.GetScrapCountText().text = _currentScrap.ToString();
-                UiManager.Instance.GetScrapCollectedText().text = _scrapTotalCollected.ToString();
+                OldUiManager.Instance.GetScrapCountText().text = _currentScrap.ToString();
+                OldUiManager.Instance.GetScrapCollectedText().text = _scrapTotalCollected.ToString();
                 break;
 
             case 1:
                 _energyCellsTotalCollected += amount;
                 _currentEnergyCells += amount;
                 LogItemAdded(amount, "energy cells");
-                UiManager.Instance.GetEnergyCellsCountText().text = _currentEnergyCells.ToString();
+                OldUiManager.Instance.GetEnergyCellsCountText().text = _currentEnergyCells.ToString();
                 break;
 
             case 2:
                 _warpCoilsTotoalCollected += amount;
                 _currentWarpCoils += amount;
                 LogItemAdded(amount, "warp coils");
-                UiManager.Instance.GetWarpCoilsCountText().text = _currentWarpCoils.ToString();
+                OldUiManager.Instance.GetWarpCoilsCountText().text = _currentWarpCoils.ToString();
                 break;
 
             case 3:
                 _plasmaAcceleratorsTotoalCollected += amount;
                 _currentPlasmaAccelerators += amount;
                 LogItemAdded(amount, "plasma accelerators");
-                UiManager.Instance.GetPlasmaAcceleratorsCountText().text = _currentPlasmaAccelerators.ToString();
+                OldUiManager.Instance.GetPlasmaAcceleratorsCountText().text = _currentPlasmaAccelerators.ToString();
                 break;
 
             case 4:
                 _cannonAlloysTotalCollected += amount;
                 _currentCannonAlloys += amount;
                 LogItemAdded(amount, "cannon alloys");
-                UiManager.Instance.GetCannonAlloysCountText().text = _currentCannonAlloys.ToString();
+                OldUiManager.Instance.GetCannonAlloysCountText().text = _currentCannonAlloys.ToString();
                 break;
         }
 
@@ -123,7 +123,7 @@ public class PlayerInventoryManager : MonoSingleton<PlayerInventoryManager>
                     _currentScrap -= amount;
                     OnItemAmountDecremented?.Invoke(itemCode, amount);
                     LogItemRemoved(amount, "scrap");
-                    UiManager.Instance.GetScrapCountText().text = _currentScrap.ToString();
+                    OldUiManager.Instance.GetScrapCountText().text = _currentScrap.ToString();
                 }
                     
                 break;
@@ -134,7 +134,7 @@ public class PlayerInventoryManager : MonoSingleton<PlayerInventoryManager>
                     _currentEnergyCells -= amount;
                     OnItemAmountDecremented?.Invoke(itemCode, amount);
                     LogItemRemoved(amount, "energy cells");
-                    UiManager.Instance.GetEnergyCellsCountText().text = _currentEnergyCells.ToString();
+                    OldUiManager.Instance.GetEnergyCellsCountText().text = _currentEnergyCells.ToString();
                 }
                     
                 break;
@@ -145,7 +145,7 @@ public class PlayerInventoryManager : MonoSingleton<PlayerInventoryManager>
                     _currentWarpCoils -= amount;
                     OnItemAmountDecremented?.Invoke(itemCode, amount);
                     LogItemRemoved(amount, "warp coils");
-                    UiManager.Instance.GetWarpCoilsCountText().text = _currentWarpCoils.ToString();
+                    OldUiManager.Instance.GetWarpCoilsCountText().text = _currentWarpCoils.ToString();
                 }
                     
                 break;
@@ -156,7 +156,7 @@ public class PlayerInventoryManager : MonoSingleton<PlayerInventoryManager>
                     _currentPlasmaAccelerators -= amount;
                     OnItemAmountDecremented?.Invoke(itemCode, amount);
                     LogItemRemoved(amount, "plasma accelerators");
-                    UiManager.Instance.GetPlasmaAcceleratorsCountText().text = _currentPlasmaAccelerators.ToString();
+                    OldUiManager.Instance.GetPlasmaAcceleratorsCountText().text = _currentPlasmaAccelerators.ToString();
                 }
                     
                 break;
@@ -167,7 +167,7 @@ public class PlayerInventoryManager : MonoSingleton<PlayerInventoryManager>
                     _currentCannonAlloys -= amount;
                     OnItemAmountDecremented?.Invoke(itemCode, amount);
                     LogItemRemoved(amount, "cannon alloys");
-                    UiManager.Instance.GetCannonAlloysCountText().text = _currentCannonAlloys.ToString();
+                    OldUiManager.Instance.GetCannonAlloysCountText().text = _currentCannonAlloys.ToString();
                 }
 
                 break;

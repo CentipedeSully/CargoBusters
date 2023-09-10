@@ -22,56 +22,56 @@ public class WarpUiCommunicator : MonoBehaviour
     public void ReduceUI()
     {
         if (_isPlayer)
-            UiManager.Instance.GetWarpUiController().DrainSingle();
+            OldUiManager.Instance.GetWarpUiController().DrainSingle();
     }
 
     public void FillUI()
     {
         if (_isPlayer)
-            UiManager.Instance.GetWarpUiController().FillSingle();
+            OldUiManager.Instance.GetWarpUiController().FillSingle();
     }
 
     public void ReduceAllUI()
     {
         if (_isPlayer)
-            UiManager.Instance.GetWarpUiController().DrainAll();
+            OldUiManager.Instance.GetWarpUiController().DrainAll();
     }
 
     public void FillAllUI()
     {
         if (_isPlayer)
-            UiManager.Instance.GetWarpUiController().FillAll();
+            OldUiManager.Instance.GetWarpUiController().FillAll();
     }
 
     public void DeactivateUI()
     {
         if (_isPlayer)
-            UiManager.Instance.GetWarpUiController().GetComponent<DisplayAnimController>().HideDisplay();
+            OldUiManager.Instance.GetWarpUiController().GetComponent<DisplayAnimController>().HideDisplay();
     }
 
     public void ActivateUI()
     {
         if (_isPlayer)
-            UiManager.Instance.GetWarpUiController().GetComponent<DisplayAnimController>().ShowDisplay();
+            OldUiManager.Instance.GetWarpUiController().GetComponent<DisplayAnimController>().ShowDisplay();
     }
 
     public void EnterRegen()
     {
         if (_isPlayer)
-            UiManager.Instance.GetWarpUiController().SetIsRegeneratingState(true);
+            OldUiManager.Instance.GetWarpUiController().SetIsRegeneratingState(true);
     }
 
     public void ExitRegen()
     {
         if (_isPlayer)
-            UiManager.Instance.GetWarpUiController().SetIsRegeneratingState(false);
+            OldUiManager.Instance.GetWarpUiController().SetIsRegeneratingState(false);
     }
 
     public void TriggerPositiveEffectAndReset()
     {
         if (_isPlayer)
         {
-            UiManager.Instance.GetWarpUiController().GetComponent<DisplayAnimController>().TriggerPositiveEffect();
+            OldUiManager.Instance.GetWarpUiController().GetComponent<DisplayAnimController>().TriggerPositiveEffect();
             Invoke("DeactivateUI", .35f);
             Invoke("ReduceAllUI", .35f);
         }

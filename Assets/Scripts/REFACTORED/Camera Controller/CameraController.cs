@@ -13,6 +13,7 @@ public class CameraController : MonoSingleton<CameraController>
     [SerializeField] private Transform _playspaceOrigin;
     [SerializeField] private GameObject _currentFocusObject;
     [SerializeField] private GameObject _starParticlesPrefab;
+    [SerializeField] private string _lookAheadFocusObjectName = "Look Ahead Focus";
     private LookAheadFocus _lookAheadFocusRef;
     private GameObject _starParticlesInstance;
 

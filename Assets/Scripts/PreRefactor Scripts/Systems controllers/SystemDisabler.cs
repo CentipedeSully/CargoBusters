@@ -59,7 +59,7 @@ public class SystemDisabler : MonoBehaviour
 
     private void UpdateBoundaryUiTimer(int timeToDisplay)
     {
-        UiManager.Instance.GetBoundaryTimerText().text = timeToDisplay.ToString();
+        OldUiManager.Instance.GetBoundaryTimerText().text = timeToDisplay.ToString();
     }
 
     public void DisableAllSystems()
@@ -113,7 +113,7 @@ public class SystemDisabler : MonoBehaviour
         //Tick remaining time
         OnBoundaryTimerTick?.Invoke(_boundaryCountdownDurationMax - _currentCountdownDuation);
         UpdateBoundaryUiTimer(_boundaryCountdownDurationMax - _currentCountdownDuation);
-        UiManager.Instance.GetBoundaryTimerDisplay().ShowDisplay();
+        OldUiManager.Instance.GetBoundaryTimerDisplay().ShowDisplay();
 
         while (_currentCountdownDuation < _boundaryCountdownDurationMax)
         {
@@ -123,7 +123,7 @@ public class SystemDisabler : MonoBehaviour
             UpdateBoundaryUiTimer(_boundaryCountdownDurationMax - _currentCountdownDuation);
         }
 
-        UiManager.Instance.GetBoundaryTimerDisplay().HideDisplay();
+        OldUiManager.Instance.GetBoundaryTimerDisplay().HideDisplay();
         _isPenalized = true;
         _isDisablerTicking = false;
         OnBoundaryTimerExpired?.Invoke();
@@ -149,7 +149,7 @@ public class SystemDisabler : MonoBehaviour
         if (_timerReference != null)
         {
             onBoundaryTimerInterrupted?.Invoke();
-            UiManager.Instance.GetBoundaryTimerDisplay().HideDisplay();
+            OldUiManager.Instance.GetBoundaryTimerDisplay().HideDisplay();
             _isDisablerTicking = false;
             _currentCountdownDuation = 0;
             StopCoroutine(_timerReference);

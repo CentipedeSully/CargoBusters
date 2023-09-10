@@ -4,7 +4,7 @@ using UnityEngine;
 using SullysToolkit;
 using TMPro;
 
-public class UiManager : MonoSingleton<UiManager>
+public class OldUiManager : MonoSingleton<OldUiManager>
 {
     //Declarations
     [SerializeField] private BubbleCollectionController _healthControllerRef;

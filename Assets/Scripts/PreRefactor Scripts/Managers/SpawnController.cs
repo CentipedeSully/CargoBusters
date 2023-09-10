@@ -111,24 +111,24 @@ public class SpawnController : MonoSingleton<SpawnController>
             _enemiesSpawned = 0;
             _enemiesDefeated = 0;
 
-            UiManager.Instance.GetWavesCompletedText().text = _totalWavesCompleted.ToString();
+            OldUiManager.Instance.GetWavesCompletedText().text = _totalWavesCompleted.ToString();
             OnWaveEnded?.Invoke();
             LogWaveEnded();
 
 
             //Enter Intermission and Wait...
             OnIntermissionStarted?.Invoke();
-            UiManager.Instance.GetIntermissionTimerDisplay().ShowDisplay();
+            OldUiManager.Instance.GetIntermissionTimerDisplay().ShowDisplay();
             int timePassed = 0;
             while(timePassed <= _intermissionDuration && _skipIntermission == false) 
             {
-                UiManager.Instance.GetIntermissionTimerText().text = ((int)_intermissionDuration - timePassed).ToString();
+                OldUiManager.Instance.GetIntermissionTimerText().text = ((int)_intermissionDuration - timePassed).ToString();
                 yield return _cachedIntermissionWaitForSeconds;
                 timePassed++;
             }
             OnIntermissionEnded?.Invoke();
-            UiManager.Instance.GetIntermissionTimerDisplay().HideDisplay();
-            UiManager.Instance.GetIntermissionTimerText().text = "00:00";
+            OldUiManager.Instance.GetIntermissionTimerDisplay().HideDisplay();
+            OldUiManager.Instance.GetIntermissionTimerText().text = "00:00";
 
             _skipIntermission = false;
 
@@ -168,7 +168,7 @@ public class SpawnController : MonoSingleton<SpawnController>
     {
         _enemiesDefeated++;
         _totalEnemiesDefeated++;
-        UiManager.Instance.GetShipsDestroyedText().text = _totalEnemiesDefeated.ToString();
+        OldUiManager.Instance.GetShipsDestroyedText().text = _totalEnemiesDefeated.ToString();
         LogEnemyReportedDefeated();
     }
 

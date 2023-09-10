@@ -23,49 +23,49 @@ public class ShieldUiCommunicator : MonoBehaviour
     public void ReduceShieldsUI()
     {
         if (_isPlayer)
-            UiManager.Instance.GetShieldsUiController().DrainSingle();
+            OldUiManager.Instance.GetShieldsUiController().DrainSingle();
     }
 
     public void FillShieldsUI()
     {
         if (_isPlayer)
-            UiManager.Instance.GetShieldsUiController().FillSingle();
+            OldUiManager.Instance.GetShieldsUiController().FillSingle();
     }
 
     public void ReduceAllShieldsUI()
     {
         if (_isPlayer)
-            UiManager.Instance.GetShieldsUiController().DrainAll();
+            OldUiManager.Instance.GetShieldsUiController().DrainAll();
     }
 
     public void FillAllShieldsUI()
     {
         if (_isPlayer)
-            UiManager.Instance.GetShieldsUiController().FillAll();
+            OldUiManager.Instance.GetShieldsUiController().FillAll();
     }
 
     public void DeactivateShieldsUI()
     {
         if (_isPlayer)
-            UiManager.Instance.GetShieldsUiController().GetComponent<DisplayAnimController>().HideDisplay();
+            OldUiManager.Instance.GetShieldsUiController().GetComponent<DisplayAnimController>().HideDisplay();
     }
 
     public void ActivateShieldsUI()
     {
         if (_isPlayer)
-            UiManager.Instance.GetShieldsUiController().GetComponent<DisplayAnimController>().ShowDisplay();
+            OldUiManager.Instance.GetShieldsUiController().GetComponent<DisplayAnimController>().ShowDisplay();
     }
 
     public void EnterRegen()
     {
         if (_isPlayer)
-            UiManager.Instance.GetShieldsUiController().SetIsRegeneratingState(true);
+            OldUiManager.Instance.GetShieldsUiController().SetIsRegeneratingState(true);
     }
 
     public void ExitRegen()
     {
         if (_isPlayer)
-            UiManager.Instance.GetShieldsUiController().SetIsRegeneratingState(false);
+            OldUiManager.Instance.GetShieldsUiController().SetIsRegeneratingState(false);
     }
 
 

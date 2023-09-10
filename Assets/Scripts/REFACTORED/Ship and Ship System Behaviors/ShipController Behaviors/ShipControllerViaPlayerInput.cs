@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 public class ShipControllerViaPlayerInput : MonoBehaviour, IShipController
 {
     //Declarations
+    [SerializeField] private bool _arePersonalRefsInitialized = false;
+    [SerializeField] private bool _areGMRefsInitialized = false;
     [SerializeField] private bool _showDebug = false;
 
     //references
@@ -27,11 +29,13 @@ public class ShipControllerViaPlayerInput : MonoBehaviour, IShipController
         _parent = parent;
         _engineBehaviorRef = _parent.GetEnginesBehavior();
         _weaponBehaviorRef = _parent.GetWeaponsBehavior();
+        _arePersonalRefsInitialized = true;
     }
 
     public void InitializeGameManagerDependentReferences()
     {
         _inputReaderReference = GameManager.Instance.GetInputReader();
+        _areGMRefsInitialized = true;
     }
 
 
@@ -43,11 +47,15 @@ public class ShipControllerViaPlayerInput : MonoBehaviour, IShipController
 
     public void CommunicateDecisionsToSubsystems()
     {
-        _engineBehaviorRef.SetStrafeInput(_inputReaderReference.GetPlayerStrafeInput());
-        _engineBehaviorRef.SetThrustInput(_inputReaderReference.GetPlayerThrustInput());
-        _engineBehaviorRef.SetTurnInput(_inputReaderReference.GetPlayerTurnInput());
+        if (_areGMRefsInitialized && _arePersonalRefsInitialized)
+        {
+            _engineBehaviorRef.SetStrafeInput(_inputReaderReference.GetPlayerStrafeInput());
+            _engineBehaviorRef.SetThrustInput(_inputReaderReference.GetPlayerThrustInput());
+            _engineBehaviorRef.SetTurnInput(_inputReaderReference.GetPlayerTurnInput());
 
-        _weaponBehaviorRef.SetShootInput(_inputReaderReference.GetPlayerShootInput());
+            _weaponBehaviorRef.SetShootInput(_inputReaderReference.GetPlayerShootInput());
+        }
+
     }
 
 
