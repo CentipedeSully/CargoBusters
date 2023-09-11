@@ -14,7 +14,7 @@ namespace SullysToolkit
         private static GameObject _objectPoolerGameObject;
 
 
-        protected override void InitializeAdditionalFields()
+        protected override void InitializeAwakeUtils()
         {
             _objectPoolerGameObject = gameObject;
             _pooledObjects = new List<GameObject>();

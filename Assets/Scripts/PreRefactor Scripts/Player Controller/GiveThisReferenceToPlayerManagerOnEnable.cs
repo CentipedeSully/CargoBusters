@@ -6,7 +6,7 @@ public class GiveThisReferenceToPlayerManagerOnEnable : MonoBehaviour
 {
     private void Start()
     {
-        if (PlayerObjectManager.Instance)
-            PlayerObjectManager.Instance.SetPlayerObject(gameObject);
+        if (OldPlayerObjectManager.Instance)
+            OldPlayerObjectManager.Instance.SetPlayerObject(gameObject);
     }
 }

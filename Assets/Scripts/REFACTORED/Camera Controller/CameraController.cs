@@ -42,7 +42,7 @@ public class CameraController : MonoSingleton<CameraController>
 
 
     //Internal Utils
-    protected override void InitializeAdditionalFields()
+    protected override void InitializeAwakeUtils()
     {
         InitializeUtils();
     }

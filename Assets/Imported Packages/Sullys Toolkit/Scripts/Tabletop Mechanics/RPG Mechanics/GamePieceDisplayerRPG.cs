@@ -41,7 +41,7 @@ namespace SullysToolkit.TableTop.RPG
 
 
         //Internal Utils
-        protected override void InitializeAdditionalFields()
+        protected override void InitializeAwakeUtils()
         {
             SetupDisplays();
         }

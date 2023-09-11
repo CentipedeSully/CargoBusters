@@ -146,7 +146,7 @@ public class SpawnController : MonoSingleton<SpawnController>
 
     private void SetupPointerToEnemy(GameObject enemy)
     {
-        GameObject enemyDotObj = Instantiate(_enemyDotSensorPrefab, PlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetSensorObject().transform);
+        GameObject enemyDotObj = Instantiate(_enemyDotSensorPrefab, OldPlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetSensorObject().transform);
         enemyDotObj.GetComponent<PointToEnemy>().SetEnemyTarget(enemy);
         enemyDotObj.GetComponent<PointToEnemy>().EnablePointer();
     }
@@ -154,7 +154,7 @@ public class SpawnController : MonoSingleton<SpawnController>
     private void SetupEnemyTargetingAI(GameObject enemy)
     {
         AiController enemyAiController = enemy.GetComponent<ShipSystemReferencer>().GetAiBehaviorObject().GetComponent<AiController>();
-        enemyAiController.EnterPursuit(PlayerObjectManager.Instance.GetPlayerObject());
+        enemyAiController.EnterPursuit(OldPlayerObjectManager.Instance.GetPlayerObject());
     }
 
     //External Control Utils

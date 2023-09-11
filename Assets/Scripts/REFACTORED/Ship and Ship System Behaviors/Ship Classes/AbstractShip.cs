@@ -6,11 +6,9 @@ using SullysToolkit;
 //NonSubsystem Interfaces
 public interface IShipController
 {
-    void SetParentShipAndInitializeAwakeReferences(AbstractShip parent);
+    void InitializeReferences(AbstractShip parentShip);
 
-    void InitializeGameManagerDependentReferences();
-
-
+    void RemoveController();
 
     void DetermineDecisions();
 
@@ -526,7 +524,6 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
     protected virtual void InitializeAwakeBehaviorReferences()
     {
         //Initialize local personal references
-        _shipController = GetComponent<IShipController>();
         _hullBehavior = GetComponent<IHullBehavior>();
         _deathBehavior = GetComponent<IDeathBehavior>();
         _scanner = GetComponent<ScannerBehaviour>();
@@ -541,7 +538,6 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
 
 
         //Initialize component nonSubsystem references
-        _shipController?.SetParentShipAndInitializeAwakeReferences(this);
         _hullBehavior.SetParentShipAndInitializeAwakeReferences(this);
         _deathBehavior.SetParentShipAndInitializeAwakeReferences(this);
         _scanner?.InitializeScanner(GetInstanceID());
@@ -561,7 +557,6 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
     protected virtual void InitializeGameManagerSourcedReferences()
     {
         //Initialize component nonSubsystem references
-        _shipController?.InitializeGameManagerDependentReferences();
         _hullBehavior.InitializeGameManagerDependentReferences();
         _deathBehavior.InitializeGameManagerDependentReferences();
 
@@ -616,7 +611,7 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
         
     }
 
-    private void DamageShipButNegateDeath(int value)
+    protected virtual void DamageShipButNegateDeath(int value)
     {
             if (_hullBehavior.GetCurrentValue() < value)
             {
@@ -639,6 +634,50 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
         }
     }
 
+    protected virtual void RemoveShipController()
+    {
+        _shipController.RemoveController();
+        _shipController = null;
+        ResetControlError();
+    }
+
+    protected virtual void ResetControlError()
+    {
+        _isControlErrorThrown = false;
+    }
+
+    protected virtual void MarkThisShipAsUnplayableIfCurrentlyPlayable()
+    {
+        if (_isPlayer)
+        {
+            _isPlayer = false;
+            GameManager.Instance.GetPlayerManager().ClearPlayerShip();
+        }
+    }
+
+    protected virtual void MarkThisShipAsPlayable()
+    {
+        if (!_isPlayer && !DoesPlayerShipAlreadyExist())
+        {
+            _isPlayer = true;
+            GameManager.Instance.GetPlayerManager().SetShipAsPlayer(this);
+        }
+
+        else
+        {
+            if (_isPlayer)
+                STKDebugLogger.LogWarning($"Attempted to make ship {_name} playable when it's already the player ship");
+            else
+                STKDebugLogger.LogWarning($"Failed to make ship {_name} playable. Ship {GameManager.Instance.GetPlayerManager().GetPlayerShip()._name}" +
+                                          $" is already playable");
+        }
+            
+    }
+
+    protected virtual bool DoesPlayerShipAlreadyExist()
+    {
+        return GameManager.Instance.GetPlayerManager().DoesPlayerShipExist();
+    }
 
 
 
@@ -735,6 +774,32 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
             //_warpBehavior.EnableWarping();
             //_busterBehavior.EnableBuster();
         }
+    }
+
+    public virtual void MakeShipAiControlled()
+    {
+        if (_shipController != null)
+            RemoveShipController();
+    }
+
+    public virtual void MakeShipPlayerControlled()
+    {
+        if (DoesPlayerShipAlreadyExist() == false)
+        {
+            if (_shipController != null)
+            {
+                RemoveShipController();
+                _shipController = gameObject.AddComponent<ShipControllerViaPlayerInput>();
+                _shipController.InitializeReferences(this);
+                MarkThisShipAsPlayable();
+            }
+        }
+
+        else
+        {
+            //Log Error
+        }
+            
     }
 
 

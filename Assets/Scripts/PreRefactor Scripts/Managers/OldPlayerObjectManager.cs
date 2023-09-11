@@ -5,7 +5,7 @@ using SullysToolkit;
 using UnityEngine.Events;
 using Cinemachine;
 
-public class PlayerObjectManager : MonoSingleton<PlayerObjectManager>
+public class OldPlayerObjectManager : MonoSingleton<OldPlayerObjectManager>
 {
     //Declarations
     [SerializeField] private GameObject _playerShipPreference;

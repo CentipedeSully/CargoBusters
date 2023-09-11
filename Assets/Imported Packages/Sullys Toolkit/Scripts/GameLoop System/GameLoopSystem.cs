@@ -113,7 +113,7 @@ namespace SullysToolkit
 
 
         //Inherited, overridden Utils
-        protected override void InitializeAdditionalFields()
+        protected override void InitializeAwakeUtils()
         {
             InitializeAwakeSettings();
         }

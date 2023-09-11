@@ -10,8 +10,10 @@ public class GameManager : MonoSingleton<GameManager>
     //Declarations
     [SerializeField] private List<string> _damageableTagsList;
     [SerializeField] private InputReader _inputReaderReference;
+    [SerializeField] private ShipFactory _shipFactoryReference;
     [SerializeField] private WeaponFactory _weaponFactoryReference;
     [SerializeField] private UiManager _UiManagerReference;
+    [SerializeField] private PlayerManager _playerManagerReference;
     [SerializeField] private ShipOccupancyManager _shipOccupierReference;
     [SerializeField] private CameraController _cameraControllerReference;
     [SerializeField] private Transform _projectileContainer;
@@ -27,7 +29,7 @@ public class GameManager : MonoSingleton<GameManager>
 
 
     //Utils
-    protected override void InitializeAdditionalFields()
+    protected override void InitializeAwakeUtils()
     {
         //Allows for Laser beams to hit projectiles. Projectile colliders are triggers. 
         Physics2D.queriesHitTriggers = true;
@@ -37,10 +39,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     private void InitializeReferences()
     {
-        if (_inputReaderReference == null)
-            _inputReaderReference = GetComponent<InputReader>();
-        if (_weaponFactoryReference == null)
-            _weaponFactoryReference = GetComponent<WeaponFactory>();
+
     }
 
     private List<T> GetReferencesFromContainer<T>(Transform container) 
@@ -98,6 +97,11 @@ public class GameManager : MonoSingleton<GameManager>
         return _inputReaderReference;
     }
 
+    public PlayerManager GetPlayerManager()
+    {
+        return _playerManagerReference;
+    }
+
     public Transform GetShipContainer()
     {
         return _shipContainer;
@@ -111,6 +115,11 @@ public class GameManager : MonoSingleton<GameManager>
     public List<string> GetDamageableTagsList()
     {
         return _damageableTagsList;
+    }
+
+    public ShipFactory GetShipFactory()
+    {
+        return _shipFactoryReference;
     }
 
     public WeaponFactory GetWeaponsFactory()

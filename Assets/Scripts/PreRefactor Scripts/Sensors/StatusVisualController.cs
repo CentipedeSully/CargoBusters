@@ -44,7 +44,7 @@ public class StatusVisualController : MonoBehaviour
     public void SetPlayerReference()
     {
         if (_playerShip == null)
-            _playerShip = PlayerObjectManager.Instance.GetPlayerObject();
+            _playerShip = OldPlayerObjectManager.Instance.GetPlayerObject();
     }
 
     private void CalculateDistanceFromPlayer()

@@ -62,7 +62,7 @@ public class BoundaryInhibitorBehavior : MonoBehaviour
     //External Control Utils
     public void SetPlayer()
     {
-        _playerObj = PlayerObjectManager.Instance.GetPlayerObject();
+        _playerObj = OldPlayerObjectManager.Instance.GetPlayerObject();
         _playerSystemDisabler = _playerObj.GetComponent<SystemDisabler>();
     }
 }

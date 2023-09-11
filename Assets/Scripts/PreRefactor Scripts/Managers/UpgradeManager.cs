@@ -408,12 +408,12 @@ public class UpgradeManager : MonoSingleton<UpgradeManager>
     {
         _inventoryRef = PlayerInventoryManager.Instance;
 
-        _playerWeaponsObject = PlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetWeaponsObject();
-        _playerEnginesObject = PlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetEnginesObject();
-        _playerHullObject = PlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetHullObject();
-        _playerShieldsObject = PlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetShieldsObject();
-        _playerWarpCoreObject = PlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetWarpCoreObject();
-        _playerBusterObject = PlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetCargoBuster();
+        _playerWeaponsObject = OldPlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetWeaponsObject();
+        _playerEnginesObject = OldPlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetEnginesObject();
+        _playerHullObject = OldPlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetHullObject();
+        _playerShieldsObject = OldPlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetShieldsObject();
+        _playerWarpCoreObject = OldPlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetWarpCoreObject();
+        _playerBusterObject = OldPlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetCargoBuster();
 
         _playerBlastersArray = _playerWeaponsObject.GetComponentsInChildren<SpawnLaserOnCommand>();
 

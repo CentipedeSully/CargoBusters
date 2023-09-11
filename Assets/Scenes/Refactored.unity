@@ -1013,6 +1013,9 @@ GameObject:
   - component: {fileID: 1241039935}
   - component: {fileID: 1241039934}
   - component: {fileID: 1241039936}
+  - component: {fileID: 1241039941}
+  - component: {fileID: 1241039939}
+  - component: {fileID: 1241039940}
   - component: {fileID: 1241039938}
   m_Layer: 0
   m_Name: Management Utilites
@@ -1182,8 +1185,13 @@ MonoBehaviour:
   - Ship
   - Asteroid
   - Projectile
-  _inputReaderReference: {fileID: 0}
-  _weaponFactoryReference: {fileID: 0}
+  _inputReaderReference: {fileID: 1241039936}
+  _shipFactoryReference: {fileID: 1241039940}
+  _weaponFactoryReference: {fileID: 1241039938}
+  _UiManagerReference: {fileID: 1491179253}
+  _playerManagerReference: {fileID: 1241039941}
+  _shipOccupierReference: {fileID: 1241039939}
+  _cameraControllerReference: {fileID: 249739991}
   _projectileContainer: {fileID: 851594073}
   _asteroidContainer: {fileID: 2058455753}
   _shipContainer: {fileID: 420036496}
@@ -1221,6 +1229,46 @@ MonoBehaviour:
   - {fileID: 2823438137008020644, guid: b42a7e8fc3b509d47bb04728a0833de0, type: 3}
   - {fileID: 5009105964737576647, guid: 779676e2f6c15134181417a447f152c1, type: 3}
   _removedWeaponsContainer: {fileID: 1305768143}
+--- !u!114 &1241039939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1241039932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cdd40cd2ca6ca948a79e98eb29dd94c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _currentPlayerShip: {fileID: 0}
+--- !u!114 &1241039940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1241039932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f2c3e66e27aa8c4899fd5517bd0d2c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _shipPrefabs: []
+  _isDebugActive: 0
+--- !u!114 &1241039941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1241039932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cdce2dfdb1d4a64c90dfa082cc356fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerShipRef: {fileID: 0}
 --- !u!1 &1305768142
 GameObject:
   m_ObjectHideFlags: 0

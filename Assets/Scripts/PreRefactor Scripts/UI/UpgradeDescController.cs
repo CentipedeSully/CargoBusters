@@ -154,7 +154,7 @@ public class UpgradeDescController : MonoBehaviour
     //Utilites
     private void UpdatePrices()
     {
-        if (PlayerObjectManager.Instance.GetPlayerObject() != null)
+        if (OldPlayerObjectManager.Instance.GetPlayerObject() != null)
         { 
             //weapons
             _damageScrapCost.text = UpgradeManager.Instance.GetWeaponsUpgradePrice()[0].ToString();
@@ -265,15 +265,15 @@ public class UpgradeDescController : MonoBehaviour
     //externals
     public void  InitializeReferences()
     {
-        if (PlayerObjectManager.Instance.GetPlayerObject() != null)
+        if (OldPlayerObjectManager.Instance.GetPlayerObject() != null)
         {
-            _hullIntergityRef = PlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetHullObject().GetComponent<IntegrityBehavior>();
-            _shieldIntegrityRef = PlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetShieldsObject().GetComponent<IntegrityBehavior>();
-            _weaponsControllerRef = PlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetWeaponsObject().GetComponent<WeaponsSystemController>();
-            _enginesMoveRef = PlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetEnginesObject().GetComponent<MoveObject>();
-            _enginesRotateRef = PlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetEnginesObject().GetComponent<AddRotationToObject>();
-            _warpCoreRef = PlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetWarpCoreObject().GetComponent<WarpCoreBehavior>();
-            _busterRef = PlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetCargoBuster();
+            _hullIntergityRef = OldPlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetHullObject().GetComponent<IntegrityBehavior>();
+            _shieldIntegrityRef = OldPlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetShieldsObject().GetComponent<IntegrityBehavior>();
+            _weaponsControllerRef = OldPlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetWeaponsObject().GetComponent<WeaponsSystemController>();
+            _enginesMoveRef = OldPlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetEnginesObject().GetComponent<MoveObject>();
+            _enginesRotateRef = OldPlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetEnginesObject().GetComponent<AddRotationToObject>();
+            _warpCoreRef = OldPlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetWarpCoreObject().GetComponent<WarpCoreBehavior>();
+            _busterRef = OldPlayerObjectManager.Instance.GetPlayerObject().GetComponent<ShipSystemReferencer>().GetCargoBuster();
 
             UpdateDescriptionValuesAndCosts();
             
@@ -282,7 +282,7 @@ public class UpgradeDescController : MonoBehaviour
 
     public void UpdateDescriptionValuesAndCosts()
     {
-        if (PlayerObjectManager.Instance.GetPlayerObject() != null)
+        if (OldPlayerObjectManager.Instance.GetPlayerObject() != null)
         {
             _damageValue.text = _weaponsControllerRef.gameObject.GetComponentInChildren<SpawnLaserOnCommand>().GetDamage().ToString();
             _cooldownValue.text = _weaponsControllerRef.gameObject.GetComponentInChildren<SpawnLaserOnCommand>().GetCooldown().ToString();

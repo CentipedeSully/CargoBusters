@@ -6,8 +6,7 @@ using UnityEngine.InputSystem;
 public class ShipControllerViaPlayerInput : MonoBehaviour, IShipController
 {
     //Declarations
-    [SerializeField] private bool _arePersonalRefsInitialized = false;
-    [SerializeField] private bool _areGMRefsInitialized = false;
+    [SerializeField] private bool _isInitialized = false;
     [SerializeField] private bool _showDebug = false;
 
     //references
@@ -24,20 +23,19 @@ public class ShipControllerViaPlayerInput : MonoBehaviour, IShipController
 
 
     //Interface Utils
-    public void SetParentShipAndInitializeAwakeReferences(AbstractShip parent)
+     public void InitializeReferences(AbstractShip parent)
     {
         _parent = parent;
         _engineBehaviorRef = _parent.GetEnginesBehavior();
         _weaponBehaviorRef = _parent.GetWeaponsBehavior();
-        _arePersonalRefsInitialized = true;
-    }
-
-    public void InitializeGameManagerDependentReferences()
-    {
         _inputReaderReference = GameManager.Instance.GetInputReader();
-        _areGMRefsInitialized = true;
+        _isInitialized = true;
     }
 
+    public void RemoveController()
+    {
+        Destroy(this);
+    }
 
     public void DetermineDecisions()
     {
@@ -47,7 +45,7 @@ public class ShipControllerViaPlayerInput : MonoBehaviour, IShipController
 
     public void CommunicateDecisionsToSubsystems()
     {
-        if (_areGMRefsInitialized && _arePersonalRefsInitialized)
+        if (_isInitialized)
         {
             _engineBehaviorRef.SetStrafeInput(_inputReaderReference.GetPlayerStrafeInput());
             _engineBehaviorRef.SetThrustInput(_inputReaderReference.GetPlayerThrustInput());

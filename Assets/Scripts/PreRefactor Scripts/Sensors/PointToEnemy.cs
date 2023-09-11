@@ -21,7 +21,7 @@ public class PointToEnemy : MonoBehaviour
     //Monobheaviors
     private void Start()
     {
-        _playerShip = PlayerObjectManager.Instance.GetPlayerObject();
+        _playerShip = OldPlayerObjectManager.Instance.GetPlayerObject();
     }
 
     private void Update()

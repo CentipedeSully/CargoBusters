@@ -18,7 +18,7 @@ public class ReportDeath : MonoBehaviour
         if (_isDeathAlreadyReported == false)
         {
             if (transform.parent.GetComponent<ShipInformation>().IsPlayer())
-                PlayerObjectManager.Instance.ReportPlayerDeath();
+                OldPlayerObjectManager.Instance.ReportPlayerDeath();
 
             else
             {

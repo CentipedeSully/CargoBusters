@@ -20,10 +20,10 @@ namespace SullysToolkit
         private void Awake()
         {
             _instance = (T)this;
-            InitializeAdditionalFields();
+            InitializeAwakeUtils();
         }
 
-        protected virtual void InitializeAdditionalFields() { }
+        protected virtual void InitializeAwakeUtils() { }
     }
 }
 

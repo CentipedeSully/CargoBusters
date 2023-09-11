@@ -9,7 +9,7 @@ public class ContainersManager : MonoSingleton<ContainersManager>
     [SerializeField] private GameObject _lasersContainer;
     [SerializeField] private GameObject _explosionsContainer;
     [SerializeField] private GameObject _shipsContainer;
-    [SerializeField] private PlayerObjectManager _playerObjectManager;
+    [SerializeField] private OldPlayerObjectManager _playerObjectManager;
     [SerializeField] private GameObject _visualizerContainer;
 
 

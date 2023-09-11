@@ -64,8 +64,8 @@ public class CommuncateInputToPlayerObject : MonoSingleton<CommuncateInputToPlay
 
     private void SpawnPlayerOnInput()
     {
-        if (PlayerObjectManager.Instance.IsPlayerAlive() == false && _spawnPlayerInput)
-            PlayerObjectManager.Instance.SpawnPlayer();
+        if (OldPlayerObjectManager.Instance.IsPlayerAlive() == false && _spawnPlayerInput)
+            OldPlayerObjectManager.Instance.SpawnPlayer();
     }
 
     private void ShareMoveInputWithEnginesControllerScript()
@@ -98,7 +98,7 @@ public class CommuncateInputToPlayerObject : MonoSingleton<CommuncateInputToPlay
     public void InitializePlayerObjectReferences()
     {
         //Establish Refererences to the player
-        _playerShipObject = PlayerObjectManager.Instance.GetPlayerObject();
+        _playerShipObject = OldPlayerObjectManager.Instance.GetPlayerObject();
         if (_playerShipObject != null)
             _isPlayerReferencesInitialized = true;
 
