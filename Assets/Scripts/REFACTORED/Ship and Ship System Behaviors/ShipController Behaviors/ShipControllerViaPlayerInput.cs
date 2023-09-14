@@ -3,17 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class ShipControllerViaPlayerInput : MonoBehaviour, IShipController
+public abstract class AbstractShipController: MonoBehaviour, IShipController
 {
     //Declarations
-    [SerializeField] private bool _isInitialized = false;
-    [SerializeField] private bool _showDebug = false;
+    [SerializeField] protected bool _isInitialized = false;
+    [SerializeField] protected bool _showDebug = false;
 
     //references
-    private AbstractShip _parent;
-    private IEngineSubsystemBehavior _engineBehaviorRef;
-    private IWeaponsSubsystemBehavior _weaponBehaviorRef;
-    private InputReader _inputReaderReference;
+    protected AbstractShip _parent;
 
 
 
@@ -22,28 +19,101 @@ public class ShipControllerViaPlayerInput : MonoBehaviour, IShipController
     //...
 
 
-    //Interface Utils
-     public void InitializeReferences(AbstractShip parent)
+
+
+    //Internal Utils
+    protected virtual void InitializeMoreReferences()
+    {
+
+    }
+
+
+
+
+
+    //Getters, Setters, & Commands
+    public virtual void InitializeReferences(AbstractShip parent)
     {
         _parent = parent;
-        _engineBehaviorRef = _parent.GetEnginesBehavior();
-        _weaponBehaviorRef = _parent.GetWeaponsBehavior();
-        _inputReaderReference = GameManager.Instance.GetInputReader();
+        InitializeMoreReferences();
         _isInitialized = true;
     }
 
-    public void RemoveController()
+
+    public virtual void RemoveController()
     {
         Destroy(this);
     }
 
-    public void DetermineDecisions()
+    public abstract void DetermineDecisions();
+
+    public abstract void CommunicateDecisionsToSubsystems();
+
+
+
+
+
+    //Debugging
+    protected virtual void LogResponse(string responseDescription)
     {
-        //Decisions are made by the InputSystem via UnityEvents. Not Here.
-        //...
+        if (_parent != null)
+            Debug.Log(_parent.GetName() + " " + responseDescription);
+        else
+        {
+            Debug.LogError($"NULL_PARENT_SHIP on obejct: {this.gameObject}, {this}");
+            Debug.Log("NULL_SHIP " + responseDescription);
+        }
     }
 
-    public void CommunicateDecisionsToSubsystems()
+    public virtual void ToggleDebug()
+    {
+        if (_showDebug)
+            _showDebug = false;
+        else _showDebug = true;
+    }
+
+    public virtual bool IsDebugActive()
+    {
+        return _showDebug;
+    }
+
+}
+
+
+
+public class ShipControllerViaPlayerInput : AbstractShipController
+{
+    //Declarations
+    protected IEngineSubsystemBehavior _engineBehaviorRef;
+    protected IWeaponsSubsystemBehavior _weaponBehaviorRef;
+    protected InputReader _inputReaderReference;
+
+
+
+    //Monobehaviors
+    //...
+
+
+
+
+    //Internal Utils
+    protected override void InitializeMoreReferences()
+    {
+        _engineBehaviorRef = _parent.GetEnginesBehavior();
+        _weaponBehaviorRef = _parent.GetWeaponsBehavior();
+        _inputReaderReference = GameManager.Instance.GetInputReader();
+    }
+
+
+
+
+    //Getters Setters, & commands
+    public override void DetermineDecisions()
+    {
+        //Inputs determined via player input Reader
+    }
+
+    public override void CommunicateDecisionsToSubsystems()
     {
         if (_isInitialized)
         {
@@ -59,32 +129,4 @@ public class ShipControllerViaPlayerInput : MonoBehaviour, IShipController
 
 
 
-
-    //Utils
-    //...
-
-
-    //Debugging
-    private void LogResponse(string responseDescription)
-    {
-        if (_parent != null)
-            Debug.Log(_parent.GetName() + " " + responseDescription);
-        else
-        {
-            Debug.LogError($"NULL_PARENT_SHIP on obejct: {this.gameObject}, {this}");
-            Debug.Log("NULL_SHIP " + responseDescription);
-        }
-    }
-
-    public void ToggleDebug()
-    {
-        if (_showDebug)
-            _showDebug = false;
-        else _showDebug = true;
-    }
-
-    public bool IsDebugActive()
-    {
-        return _showDebug;
-    }
 }

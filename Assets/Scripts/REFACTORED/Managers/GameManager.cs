@@ -16,6 +16,7 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField] private PlayerManager _playerManagerReference;
     [SerializeField] private ShipOccupancyManager _shipOccupierReference;
     [SerializeField] private CameraController _cameraControllerReference;
+    [SerializeField] private FactionRelationshipManager _factionRelationshipManagerReference;
     [SerializeField] private Transform _projectileContainer;
     [SerializeField] private Transform _asteroidContainer;
     [SerializeField] private Transform _shipContainer;
@@ -219,6 +220,11 @@ public class GameManager : MonoSingleton<GameManager>
         //object not found. return null
         Debug.LogWarning($"Game Manager cant find object w/ID {instanceID} among neither the ships nor projectiles. returning Null");
         return foundObject;
+    }
+
+    public FactionRelationshipManager GetFactionRelationshipManager()
+    {
+        return _factionRelationshipManagerReference;
     }
 
     

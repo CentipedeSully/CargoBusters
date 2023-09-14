@@ -559,6 +559,7 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
         //Initialize component nonSubsystem references
         _hullBehavior.InitializeGameManagerDependentReferences();
         _deathBehavior.InitializeGameManagerDependentReferences();
+        _scanner.InitializeScanner(GetInstanceID());
 
 
 
@@ -646,7 +647,7 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
         _isControlErrorThrown = false;
     }
 
-    protected virtual void MarkThisShipAsUnplayableIfCurrentlyPlayable()
+    protected virtual void MakeShipUnplayable()
     {
         if (_isPlayer)
         {
@@ -655,23 +656,13 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
         }
     }
 
-    protected virtual void MarkThisShipAsPlayable()
+    protected virtual void MakeShipPlayable()
     {
-        if (!_isPlayer && !DoesPlayerShipAlreadyExist())
+        if (_isPlayer == false)
         {
             _isPlayer = true;
             GameManager.Instance.GetPlayerManager().SetShipAsPlayer(this);
         }
-
-        else
-        {
-            if (_isPlayer)
-                STKDebugLogger.LogWarning($"Attempted to make ship {_name} playable when it's already the player ship");
-            else
-                STKDebugLogger.LogWarning($"Failed to make ship {_name} playable. Ship {GameManager.Instance.GetPlayerManager().GetPlayerShip()._name}" +
-                                          $" is already playable");
-        }
-            
     }
 
     protected virtual bool DoesPlayerShipAlreadyExist()
@@ -780,6 +771,13 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
     {
         if (_shipController != null)
             RemoveShipController();
+
+        _shipController = gameObject.AddComponent<ShipControllerViaAi>();
+        _shipController.InitializeReferences(this);
+
+        if (_isPlayer)
+            MakeShipUnplayable();
+
     }
 
     public virtual void MakeShipPlayerControlled()
@@ -787,17 +785,22 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
         if (DoesPlayerShipAlreadyExist() == false)
         {
             if (_shipController != null)
-            {
                 RemoveShipController();
-                _shipController = gameObject.AddComponent<ShipControllerViaPlayerInput>();
-                _shipController.InitializeReferences(this);
-                MarkThisShipAsPlayable();
-            }
+
+            //Add new playerControlled Ship Controller
+            _shipController = gameObject.AddComponent<ShipControllerViaPlayerInput>();
+            _shipController.InitializeReferences(this);
+
+            MakeShipPlayable();
         }
 
         else
         {
-            //Log Error
+            if (_isPlayer)
+                STKDebugLogger.LogWarning($"Attempted to make ship {_name} playable when it's already the player ship");
+            else
+                STKDebugLogger.LogWarning($"Failed to make ship {_name} playable. Ship {GameManager.Instance.GetPlayerManager().GetPlayerShip()._name}" +
+                                          $" is already playable");
         }
             
     }
@@ -820,6 +823,10 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
         return _deathBehavior;
     }
 
+    public ScannerBehaviour GetScannerBehavior()
+    {
+        return _scanner;
+    }
 
 
     public IEngineSubsystemBehavior GetEnginesBehavior()

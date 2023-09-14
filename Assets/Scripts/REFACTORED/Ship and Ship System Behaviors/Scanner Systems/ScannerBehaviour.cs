@@ -209,8 +209,6 @@ public class ScannerBehaviour : MonoBehaviour
         return;
     }
 
-    
-
 
     //Getters, Setters, and Commands
     public void InitializeScanner(int parentID)
@@ -233,7 +231,12 @@ public class ScannerBehaviour : MonoBehaviour
     public void TargetClosestScan()
     {
         if (_scanCount > 0)
-            SetCurrentTarget(FindClosestScan());
+            SetCurrentTarget(FindClosestScan());;
+    }
+
+    public IScannable GetCurrentTarget()
+    {
+        return _currentTarget.GetComponent<IScannable>();
     }
 
 
