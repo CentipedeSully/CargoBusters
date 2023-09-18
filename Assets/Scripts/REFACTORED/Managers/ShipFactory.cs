@@ -8,6 +8,7 @@ public class ShipFactory : MonoBehaviour
     //Declarations
     [Header("Settings")]
     [SerializeField] private List<GameObject> _shipPrefabs;
+    private FactionRelationshipManager _factionManagerRef;
 
     [Header("========== Debug Utilities ==========")]
     [SerializeField] private bool _isDebugActive = false;
@@ -15,7 +16,7 @@ public class ShipFactory : MonoBehaviour
     [Header ("Testing Values")]
     [SerializeField] private string _prefabNameDebug;
     [SerializeField] private Vector3 _prefabSpawnPositionDebug;
-    [SerializeField] private Vector3 _prefabRotationDebug;
+    [SerializeField] private float _prefabRotationDebug;
     [SerializeField] private bool _spawnPrefabAsPlayerDebug;
     [SerializeField] private string _shipNameDebug;
     [SerializeField] private string _factionNameDebug;
@@ -50,17 +51,37 @@ public class ShipFactory : MonoBehaviour
         return null;
     }
 
-
     //Getters, Setters, & Commands
-    public AbstractShip SpawnShip(string prefabName, Vector3 position, Vector3 rotation, string shipName, string faction, bool isPlayer)
+    public AbstractShip SpawnShip(string prefabName, Vector3 position, float rotation, string shipName, string faction, bool isPlayer)
     {
         GameObject shipPrefab = GetPrefab(prefabName);
         if (shipPrefab != null)
         {
+            Vector3 zRotation = new Vector3(0, 0, rotation);
+            Transform containerTransform = GameManager.Instance.GetShipContainer();
+
             //Spawn new ship within the ship container
-            AbstractShip newShip = Instantiate(shipPrefab, position, Quaternion.Euler(rotation), GameManager.Instance.GetShipContainer()).GetComponent<AbstractShip>();
+            AbstractShip newShip = Instantiate(shipPrefab, position, Quaternion.Euler(zRotation), containerTransform).GetComponent<AbstractShip>();
+
+            //Setup Ship Info
+            newShip.SetName(shipName);
+
+            if (_factionManagerRef == null)
+                _factionManagerRef = GameManager.Instance.GetFactionRelationshipManager();
+
+            if (_factionManagerRef.DoesFactionExist(faction) == false)
+                _factionManagerRef.AddFaction(faction);
+            
+            newShip.SetFaction(faction);
+
+            if (isPlayer && GameManager.Instance.GetPlayerManager().DoesPlayerShipExist() == false)
+                newShip.MakeShipPlayerControlled();
+            else
+                newShip.MakeShipAiControlled();
+
             return newShip;
         }
+
         LogWarning($"Prefab '{prefabName}' doesnt exist in the Ship Factory. returning null");
         return null;
 

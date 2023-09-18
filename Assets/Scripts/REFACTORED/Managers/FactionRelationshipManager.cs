@@ -39,6 +39,9 @@ public class FactionRelationshipManager : MonoBehaviour
 {
     //Declarations
     [Header("Settings")]
+    [SerializeField] private string _independentFactionName = "Independent";
+    [SerializeField] private string _enforcersFactionName = "Enforcers";
+    [SerializeField] private string _piratesFactionName = "Pirates";
     private List<FactionInfo> _factionsList;
 
 
@@ -70,6 +73,8 @@ public class FactionRelationshipManager : MonoBehaviour
     {
         if (_factionsList == null)
             _factionsList = new List<FactionInfo>();
+
+        InitializeBaseFactions();
     }
 
     private void Update()
@@ -93,6 +98,26 @@ public class FactionRelationshipManager : MonoBehaviour
         STKDebugLogger.LogWarning($"Attempted to retieve nonexistent faction {factionName}. Returning  default Faction");
         return default;
     }
+
+    private void InitializeBaseFactions()
+    {
+        AddFaction(_independentFactionName);
+        AddFaction(_enforcersFactionName);
+        AddFaction(_piratesFactionName);
+
+
+        //Relationships
+        AddEnemyToFaction(_piratesFactionName, _independentFactionName);
+        AddEnemyToFaction(_piratesFactionName, _enforcersFactionName);
+
+        AddEnemyToFaction(_independentFactionName, _piratesFactionName);
+        AddEnemyToFaction(_enforcersFactionName, _piratesFactionName);
+
+        if (_isDebugActive)
+            LogFactions();
+
+    }
+
 
 
 
