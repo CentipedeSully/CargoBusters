@@ -498,7 +498,6 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
 
 
 
-
     //Monobehaviours
     protected virtual void Awake()
     {

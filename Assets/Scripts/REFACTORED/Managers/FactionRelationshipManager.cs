@@ -38,8 +38,29 @@ struct FactionInfo
 public class FactionRelationshipManager : MonoBehaviour
 {
     //Declarations
+    [Header("Settings")]
     private List<FactionInfo> _factionsList;
+
+
+    [Header("Debug Utils")]
     [SerializeField] private bool _isDebugActive = false;
+
+    [Header("Testing Values")]
+    [SerializeField] private string _factionNameDebug;
+    [SerializeField] private string _otherFactionNameDebug;
+    [SerializeField] private string _factionAllyNameDebug;
+    [SerializeField] private string _factionEnemyNameDebug;
+
+    [Header("Commands")]
+    [SerializeField] private bool _logFactionsCmd;
+    [SerializeField] private bool _isFactionEnemyOfOtherCmd;
+    [SerializeField] private bool _isFactionAllyOfOtherCmd;
+    [SerializeField] private bool _addFactionCmd;
+    [SerializeField] private bool _removeFactionCmd;
+    [SerializeField] private bool _addAllyCmd;
+    [SerializeField] private bool _removeAllyCmd;
+    [SerializeField] private bool _AddEnemyCmd;
+    [SerializeField] private bool _removeEnemyCmd;
 
 
 
@@ -49,6 +70,12 @@ public class FactionRelationshipManager : MonoBehaviour
     {
         if (_factionsList == null)
             _factionsList = new List<FactionInfo>();
+    }
+
+    private void Update()
+    {
+        if (_isDebugActive)
+            ListenForDebugCommands();
     }
 
 
@@ -66,8 +93,6 @@ public class FactionRelationshipManager : MonoBehaviour
         STKDebugLogger.LogWarning($"Attempted to retieve nonexistent faction {factionName}. Returning  default Faction");
         return default;
     }
-
-
 
 
 
@@ -115,21 +140,109 @@ public class FactionRelationshipManager : MonoBehaviour
     public void RemoveAllyFromFaction(string allyName, string faction)
     {
         if (DoesFactionExist(allyName) && DoesFactionExist(faction))
-            GetFactionInfo(faction).GetEnemies().Remove(allyName);
+            GetFactionInfo(faction).GetAllies().Remove(allyName);
     }
 
-    public bool IsTargetFactionMyEnemy(string targetFaction, string selfFaction)
+    public bool IsOtherFactionMyEnemy(string otherFaction, string selfFaction)
     {
-        return GetFactionInfo(selfFaction).GetEnemies().Contains(targetFaction);
+        return GetFactionInfo(selfFaction).GetEnemies().Contains(otherFaction);
     }
 
-    public bool IsTargetFactionMyAlly(string targetFaction, string selfFaction)
+    public bool IsOtherFactionMyAlly(string otherFaction, string selfFaction)
     {
-        return GetFactionInfo(selfFaction).GetAllies().Contains(targetFaction);
+        return GetFactionInfo(selfFaction).GetAllies().Contains(otherFaction);
+    }
+
+    public void RemoveFaction(string factionName)
+    {
+        if (DoesFactionExist(factionName))
+        {
+            foreach (FactionInfo faction in _factionsList)
+            {
+                if (faction.GetName() != factionName)
+                {
+                    if (faction.GetAllies().Contains(factionName))
+                        faction.GetAllies().Remove(factionName);
+
+                    if (faction.GetEnemies().Contains(factionName))
+                        faction.GetEnemies().Remove(factionName);
+                }
+            }
+
+            _factionsList.Remove(GetFactionInfo(factionName));
+        }
     }
 
 
     //Debugging
+    private void ListenForDebugCommands()
+    {
+        if (_logFactionsCmd)
+        {
+            _logFactionsCmd = false;
+            LogFactions();
+        }
+
+        if (_addFactionCmd)
+        {
+            _addFactionCmd = false;
+            AddFaction(_factionNameDebug);
+            LogCommandRecieved("Add Faction");
+        }
+
+        if (_removeFactionCmd)
+        {
+            _removeFactionCmd = false;
+            //Remove Faction
+            LogCommandRecieved("Remove Faction");
+            RemoveFaction(_factionNameDebug);
+        }
+
+        if (_addAllyCmd)
+        {
+            _addAllyCmd = false;
+            AddAllyToFaction(_factionAllyNameDebug, _factionNameDebug);
+            LogCommandRecieved("Add Ally");
+        }
+
+        if (_removeAllyCmd)
+        {
+            _removeAllyCmd = false;
+            RemoveAllyFromFaction(_factionAllyNameDebug, _factionNameDebug);
+            LogCommandRecieved("Remove Ally");
+        }
+
+        if (_AddEnemyCmd)
+        {
+            _AddEnemyCmd = false;
+            AddEnemyToFaction(_factionEnemyNameDebug, _factionNameDebug);
+            LogCommandRecieved("Add Enemy");
+        }
+
+        if (_removeEnemyCmd)
+        {
+            _removeEnemyCmd = false;
+            RemoveEnemyFromFaction(_factionEnemyNameDebug, _factionNameDebug);
+            LogCommandRecieved("Remove Enemy");
+        }
+        
+        if (_isFactionAllyOfOtherCmd)
+        {
+            _isFactionAllyOfOtherCmd = false;
+            STKDebugLogger.LogStatement(_isDebugActive, $"Is {_otherFactionNameDebug} ally of {_factionNameDebug}: " +
+                                     $"{IsOtherFactionMyAlly(_otherFactionNameDebug, _factionNameDebug)}");
+        }
+
+        if (_isFactionEnemyOfOtherCmd)
+        {
+            _isFactionEnemyOfOtherCmd = false;
+            STKDebugLogger.LogStatement(_isDebugActive, $"Is {_otherFactionNameDebug} enemy of {_factionNameDebug}: " +
+                                     $"{IsOtherFactionMyEnemy(_otherFactionNameDebug, _factionNameDebug)}");
+        }
+
+    }
+
+
     public void LogFactions()
     {
         
@@ -137,7 +250,7 @@ public class FactionRelationshipManager : MonoBehaviour
 
         foreach (FactionInfo faction in _factionsList)
         {
-            factionLog += "-------------------";
+            factionLog += "-------------------\n";
             factionLog += $"Name: {faction.GetName()} \n ";
 
             factionLog += "Enemies: \n";
@@ -161,6 +274,11 @@ public class FactionRelationshipManager : MonoBehaviour
 
         log += "\n";
         return log;
+    }
+
+    private void LogCommandRecieved(string commandDescription)
+    {
+        STKDebugLogger.LogStatement(_isDebugActive, $"{commandDescription} command recieved");
     }
 
 }

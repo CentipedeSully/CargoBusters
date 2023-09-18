@@ -14,7 +14,6 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField] private WeaponFactory _weaponFactoryReference;
     [SerializeField] private UiManager _UiManagerReference;
     [SerializeField] private PlayerManager _playerManagerReference;
-    [SerializeField] private ShipOccupancyManager _shipOccupierReference;
     [SerializeField] private CameraController _cameraControllerReference;
     [SerializeField] private FactionRelationshipManager _factionRelationshipManagerReference;
     [SerializeField] private Transform _projectileContainer;
@@ -81,11 +80,6 @@ public class GameManager : MonoSingleton<GameManager>
     public UiManager GetUiManager()
     {
         return _UiManagerReference;
-    }
-
-    public ShipOccupancyManager GetShipOccupancyManager()
-    {
-        return _shipOccupierReference;
     }
 
     public CameraController GetCameraController()

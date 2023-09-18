@@ -970,6 +970,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7764019720808431719, guid: 40d3fa1de34d13d4fa2c0c64a046c961, type: 3}
+      propertyPath: _showDebug
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7764019720808431726, guid: 40d3fa1de34d13d4fa2c0c64a046c961, type: 3}
       propertyPath: _showDebug
       value: 1
@@ -1013,8 +1017,8 @@ GameObject:
   - component: {fileID: 1241039935}
   - component: {fileID: 1241039934}
   - component: {fileID: 1241039936}
+  - component: {fileID: 1241039942}
   - component: {fileID: 1241039941}
-  - component: {fileID: 1241039939}
   - component: {fileID: 1241039940}
   - component: {fileID: 1241039938}
   m_Layer: 0
@@ -1190,8 +1194,8 @@ MonoBehaviour:
   _weaponFactoryReference: {fileID: 1241039938}
   _UiManagerReference: {fileID: 1491179253}
   _playerManagerReference: {fileID: 1241039941}
-  _shipOccupierReference: {fileID: 1241039939}
   _cameraControllerReference: {fileID: 249739991}
+  _factionRelationshipManagerReference: {fileID: 1241039942}
   _projectileContainer: {fileID: 851594073}
   _asteroidContainer: {fileID: 2058455753}
   _shipContainer: {fileID: 420036496}
@@ -1229,19 +1233,6 @@ MonoBehaviour:
   - {fileID: 2823438137008020644, guid: b42a7e8fc3b509d47bb04728a0833de0, type: 3}
   - {fileID: 5009105964737576647, guid: 779676e2f6c15134181417a447f152c1, type: 3}
   _removedWeaponsContainer: {fileID: 1305768143}
---- !u!114 &1241039939
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1241039932}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4cdd40cd2ca6ca948a79e98eb29dd94c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _currentPlayerShip: {fileID: 0}
 --- !u!114 &1241039940
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1254,8 +1245,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f2c3e66e27aa8c4899fd5517bd0d2c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _shipPrefabs: []
+  _shipPrefabs:
+  - {fileID: 388249351847180213, guid: a61b750797a75b049952dbea385eff4b, type: 3}
   _isDebugActive: 0
+  _prefabNameDebug: 
+  _prefabSpawnPositionDebug: {x: 0, y: 0, z: 0}
+  _prefabRotationDebug: {x: 0, y: 0, z: 0}
+  _spawnPrefabAsPlayerDebug: 0
+  _shipNameDebug: 
+  _factionNameDebug: 
+  _spawnShipCmd: 0
+  _checkPrefabExistenceCmd: 0
 --- !u!114 &1241039941
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1269,6 +1269,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerShipRef: {fileID: 0}
+--- !u!114 &1241039942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1241039932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56f3beac57c3e8c4596caff0857387fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isDebugActive: 1
+  _factionNameDebug: Independent
+  _otherFactionNameDebug: Space Pollock
+  _factionAllyNameDebug: 
+  _factionEnemyNameDebug: 
+  _logFactionsCmd: 0
+  _isFactionEnemyOfOtherCmd: 0
+  _isFactionAllyOfOtherCmd: 0
+  _addFactionCmd: 0
+  _removeFactionCmd: 0
+  _addAllyCmd: 0
+  _removeAllyCmd: 0
+  _AddEnemyCmd: 0
+  _removeEnemyCmd: 0
 --- !u!1 &1305768142
 GameObject:
   m_ObjectHideFlags: 0
@@ -1473,6 +1499,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7764019720808431718, guid: 40d3fa1de34d13d4fa2c0c64a046c961, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7764019720808431719, guid: 40d3fa1de34d13d4fa2c0c64a046c961, type: 3}
+      propertyPath: _showDebug
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7764019720808431726, guid: 40d3fa1de34d13d4fa2c0c64a046c961, type: 3}
@@ -1868,6 +1898,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7764019720808431719, guid: 40d3fa1de34d13d4fa2c0c64a046c961, type: 3}
+      propertyPath: _showDebug
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7764019720808431726, guid: 40d3fa1de34d13d4fa2c0c64a046c961, type: 3}
       propertyPath: _showDebug
       value: 1
@@ -2149,9 +2183,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7764019720808431719, guid: 40d3fa1de34d13d4fa2c0c64a046c961, type: 3}
+      propertyPath: _showDebug
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7764019720808431724, guid: 40d3fa1de34d13d4fa2c0c64a046c961, type: 3}
+      propertyPath: _showDebug
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7764019720808431726, guid: 40d3fa1de34d13d4fa2c0c64a046c961, type: 3}
       propertyPath: _showDebug
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7764019720808431726, guid: 40d3fa1de34d13d4fa2c0c64a046c961, type: 3}
       propertyPath: _addWeaponCmd
