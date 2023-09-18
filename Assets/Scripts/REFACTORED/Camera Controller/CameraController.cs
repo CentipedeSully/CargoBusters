@@ -11,14 +11,13 @@ public class CameraController : MonoSingleton<CameraController>
     [Header("Camera Controller Settings")]
     [SerializeField] private CinemachineVirtualCamera _mainVirtualCamera;
     [SerializeField] private Transform _playspaceOrigin;
-    [SerializeField] private GameObject _currentFocusObject;
-    [SerializeField] private GameObject _starParticlesPrefab;
-    [SerializeField] private string _lookAheadFocusObjectName = "Look Ahead Focus";
-    private LookAheadFocus _lookAheadFocusRef;
-    private GameObject _starParticlesInstance;
+    [SerializeField] private LookAheadFocus _lookAheadFocusRef;
+    [SerializeField] private ParticleSystem _starParticlesRef;
+    [SerializeField] private GameObject _minimapCamera;
+    [SerializeField] private GameObject _followObject;
+    [SerializeField] private bool _doesFollowObjectHaveScanner = false;
 
     [Header("Zoom Settings")]
-
     [SerializeField] private float _minZoomDistance = 2;
     [SerializeField] private float _maxZoomDistance = 20;
     [SerializeField] private float _zoomSpeed = 2;
@@ -29,15 +28,31 @@ public class CameraController : MonoSingleton<CameraController>
     [SerializeField] private int _currentZoomStep;
     [SerializeField] [Range(-1, 1)] private float _zoomInput;
 
+    [Header("Testing Values")]
+    [SerializeField] private GameObject _testFollowObjectDebug;
+
+
+    [Header("Commands")]
+    [SerializeField] private bool _followDebugObjectCmd;
+    [SerializeField] private bool _releaseCameraFocusCmd;
+    [SerializeField] private bool _stopParticlesCmd;
+    [SerializeField] private bool _playParticlesCmd;
+
 
 
     //Monobehaviors
     private void Update()
     {
         ZoomBasedOnInput();
+
+        if (_isDebugActive)
+            ListenForDebugCommands();
     }
 
-
+    private void LateUpdate()
+    {
+        UpdateMinimapPositionToFollowObject();
+    }
 
 
 
@@ -58,37 +73,15 @@ public class CameraController : MonoSingleton<CameraController>
             STKDebugLogger.LogWarning("CameraController's playspaceOrigin set to CameraController's transform.");
         }
 
-
-        if (IsCurrentFocusNull())
-            SetCurrentFocus(_playspaceOrigin.gameObject);
-        else SetCurrentFocus(_currentFocusObject);
-
-
-    }
-
-    private void SetupLookAheadFocusIfItExists(GameObject cameraFocus)//!!!!!!!!!!!!!!!!! Find LookAheadRef
-    {
-
-    }
-
-    private void CreateNewStarParticlesOnFocus()
-    {
-        if (_starParticlesPrefab == null)
-        {
-            STKDebugLogger.LogError("No StarParticlePrefab is set for the CameraController");
-            return;
-        }
-
+        if (_lookAheadFocusRef == null)
+            STKDebugLogger.LogError("An object with a LookAheadFocus isn't set in the CameraController");
         else
-        {
-            if (_starParticlesInstance != null)
-                Destroy(_starParticlesInstance);
+            _mainVirtualCamera.Follow = _lookAheadFocusRef.transform;
 
-            _starParticlesInstance = Instantiate(_starParticlesPrefab, Vector3.zero, Quaternion.Euler(90, 0, 0), _currentFocusObject.transform);
-        }
     }
 
 
+    //FIX THIS vvv
     private void ZoomBasedOnInput()
     {
         _currentZoomDistance = _mainVirtualCamera.m_Lens.OrthographicSize;
@@ -107,41 +100,93 @@ public class CameraController : MonoSingleton<CameraController>
             _mainVirtualCamera.m_Lens.OrthographicSize = newZoomDistance;
             _currentZoomDistance = _mainVirtualCamera.m_Lens.OrthographicSize;
         }
-    }// !!!!!!!!!!!!!!!!!!! Hook up inputs to Input Reader Reference
+    }
+    //FIX THIS ^^^
+
+    private void UpdateMinimapPositionToFollowObject()
+    {
+        if (_followObject != null)
+        {
+            if (_doesFollowObjectHaveScanner)
+            {
+                _minimapCamera.transform.position = new Vector3(_followObject.transform.position.x, 
+                                                                _followObject.transform.position.y, 
+                                                                _minimapCamera.transform.position.z);
+            }
+                
+        }
+    }
+
+
 
 
     //Getters, Setters, & Commands
-    public bool IsCurrentFocusNull()
+    public bool IsCameraFocusingOnObject()
     {
-        return _currentFocusObject == null;
+        return _followObject != null;
     }
 
-    public GameObject GetCurrentFocus()
+    public GameObject GetCurrentCameraFocus()
     {
-        return _currentFocusObject;
+        return _followObject;
     }
 
-    public void SetCurrentFocus(GameObject newFocusObject)
+    public void SetCameraFocusToNewFollowObject(GameObject newFollowObject)
     {
-        if (newFocusObject != null)
+        if (newFollowObject != null)
         {
-            _currentFocusObject = newFocusObject;
-            SetupLookAheadFocusIfItExists(newFocusObject);
+            _followObject = newFollowObject;
 
-            if (_lookAheadFocusRef == null)
-                _mainVirtualCamera.Follow = newFocusObject.transform;
+            //Determine what UI to show...
+            //Currently just all there is to show is Minimap. Detemine if the minimap should be shown
 
-            else
-            {
-                _mainVirtualCamera.Follow = _lookAheadFocusRef.transform;
-                if (_lookAheadFocusRef.IsCameraOnThisFocus() == false)
-                    _lookAheadFocusRef.ToggleLookAheadFocus();
+            if (_followObject.GetComponent<ScannerBehaviour>() != null)
+                _doesFollowObjectHaveScanner = true;
+            else _doesFollowObjectHaveScanner = false;
 
-            }
+            // parent the lookAhead object to the new Follow object. Be sure to go to that object
+            _lookAheadFocusRef.transform.SetParent(_followObject.transform, false);
 
-            CreateNewStarParticlesOnFocus();
+            EnableLookAhead();
         }
     }
+
+    public void ReleaseCameraFocus()
+    {
+        //unparent from the current
+        _lookAheadFocusRef.transform.SetParent(transform, true);
+        //Disable All ShipUI objects, since we arent focused on any ships
+
+        DisableLookAhead();
+        _followObject = null;
+    }
+
+
+
+    public void StopStarParticles()
+    {
+        if (_starParticlesRef.isPlaying)
+            _starParticlesRef.Stop();
+    }
+
+    public void PlayStarParticles()
+    {
+        if (_starParticlesRef.isStopped)
+            _starParticlesRef.Play();
+    }
+
+
+
+    public void DisableLookAhead()
+    {
+        _lookAheadFocusRef.SetLookAheadActivity(false);
+    }
+
+    public void EnableLookAhead()
+    {
+        _lookAheadFocusRef.SetLookAheadActivity(true);
+    }
+
 
 
     public void SetZoomInput(float zoomCommand)
@@ -149,9 +194,39 @@ public class CameraController : MonoSingleton<CameraController>
         _zoomInput = Mathf.Clamp(zoomCommand, -1, 1);
     }
 
-    //ALSO Create ChangeCameraFocus Utils
+
+
+
 
     //Debug Utils
+    private void ListenForDebugCommands()
+    {
+        if (_playParticlesCmd)
+        {
+            _playParticlesCmd = false;
+            PlayStarParticles();
+        }
+
+        if (_stopParticlesCmd)
+        {
+            _stopParticlesCmd = false;
+            StopStarParticles();
+        }
+
+        if (_followDebugObjectCmd)
+        {
+            _followDebugObjectCmd = false;
+            SetCameraFocusToNewFollowObject(_testFollowObjectDebug);
+        }
+
+        if (_releaseCameraFocusCmd)
+        {
+            _releaseCameraFocusCmd = false;
+            ReleaseCameraFocus();
+        }
+
+    }
+
     public bool IsDebugActive()
     {
         return _isDebugActive;

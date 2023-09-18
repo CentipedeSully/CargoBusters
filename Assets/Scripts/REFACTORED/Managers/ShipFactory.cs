@@ -51,6 +51,9 @@ public class ShipFactory : MonoBehaviour
         return null;
     }
 
+
+
+
     //Getters, Setters, & Commands
     public AbstractShip SpawnShip(string prefabName, Vector3 position, float rotation, string shipName, string faction, bool isPlayer)
     {
@@ -75,7 +78,11 @@ public class ShipFactory : MonoBehaviour
             newShip.SetFaction(faction);
 
             if (isPlayer && GameManager.Instance.GetPlayerManager().DoesPlayerShipExist() == false)
+            {
                 newShip.MakeShipPlayerControlled();
+                GameManager.Instance.GetCameraController().SetCameraFocusToNewFollowObject(newShip.gameObject);
+            }
+                
             else
                 newShip.MakeShipAiControlled();
 

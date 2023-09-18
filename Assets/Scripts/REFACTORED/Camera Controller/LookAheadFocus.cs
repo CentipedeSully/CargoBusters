@@ -8,12 +8,10 @@ public class LookAheadFocus : MonoBehaviour
     [Header("Look Ahead Settings")]
     [SerializeField][Min(0)] private float _maxLookAheadDistance = 1.5f;
     [SerializeField] [Min(0)] private float _lerpTimeStep = .01f;
-    [SerializeField] private bool _isCameraOnThisFocus = false;
-    [SerializeField] private Rigidbody2D _shipRB;
+    [SerializeField] private bool _isLookAheadActive = false;
     private InputReader _inputReaderRef;
 
     [Header("Debugging Utilities")]
-    [SerializeField] private bool _isDebugActive = false;
     [SerializeField] private Vector2 _inputDirection = Vector2.zero;
 
 
@@ -22,11 +20,9 @@ public class LookAheadFocus : MonoBehaviour
     //Monobehaviours
     private void Update()
     {
-        if (_isCameraOnThisFocus)
-        {
-            ReadInput();
+        ReadInput();
+        if (_isLookAheadActive)
             DriftFocusTowardsInputDirection();
-        }
     }
 
 
@@ -49,29 +45,29 @@ public class LookAheadFocus : MonoBehaviour
         if (_inputReaderRef == null) 
             _inputReaderRef = GameManager.Instance.GetInputReader();
         
-        if (_inputReaderRef != null)
-            _inputDirection = new Vector2(_inputReaderRef.GetPlayerStrafeInput(),_inputReaderRef.GetPlayerThrustInput());
+        _inputDirection = new Vector2(_inputReaderRef.GetPlayerStrafeInput(),_inputReaderRef.GetPlayerThrustInput());
     }
 
 
     //Getters, Setters, & Commands
-    public void SetInput(Vector2 newInput)
+    private void SetInput(Vector2 newInput)
     {
         _inputDirection = newInput;
         _inputDirection.x = Mathf.Clamp(_inputDirection.x, -1, 1);
         _inputDirection.y = Mathf.Clamp(_inputDirection.y, -1, 1);
     }
 
-    public void ToggleLookAheadFocus()
+    public void SetLookAheadActivity( bool newValue)
     {
-        if (_isCameraOnThisFocus)
-            _isCameraOnThisFocus = false;
-        else _isCameraOnThisFocus = true;
+        _isLookAheadActive = newValue;
     }
 
-    public bool IsCameraOnThisFocus()
+    public bool IsLookaAheadActive()
     {
-        return _isCameraOnThisFocus;
+        return _isLookAheadActive;
     }
+
+
+    
 
 }
