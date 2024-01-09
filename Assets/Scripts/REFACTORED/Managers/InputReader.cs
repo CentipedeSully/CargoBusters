@@ -10,7 +10,7 @@ public class InputReader : MonoBehaviour
     [SerializeField] private float _strafeInput;
     [SerializeField] private float _turnInput;
     [SerializeField] private bool _shootInput;
-
+    [SerializeField] private float _zoomInput;
 
 
     //Monobehaviours
@@ -36,6 +36,12 @@ public class InputReader : MonoBehaviour
         _shootInput = context.ReadValueAsButton();
     }
 
+    public void ReadPlayerZoomInput(InputAction.CallbackContext context)
+    {
+        _zoomInput = context.ReadValue<Vector2>().y;
+        Debug.Log($"ZoomValue: {_zoomInput}");
+    }
+
 
     public float GetPlayerThrustInput()
     {
@@ -57,5 +63,8 @@ public class InputReader : MonoBehaviour
         return _shootInput;
     }
 
-
+    public float GetPlayerZoomInput()
+    {
+        return _zoomInput;
+    }
 }

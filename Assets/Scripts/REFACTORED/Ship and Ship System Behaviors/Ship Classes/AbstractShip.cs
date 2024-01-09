@@ -1,16 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using SullysToolkit;
 
 //NonSubsystem Interfaces
 public interface IShipController
 {
-    void SetParentShipAndInitializeAwakeReferences(AbstractShip parent);
+    void InitializeReferences(AbstractShip parentShip);
 
-    void InitializeGameManagerDependentReferences();
-
-
+    void RemoveController();
 
     void DetermineDecisions();
 
@@ -170,6 +168,20 @@ public interface IShieldSubsystemBehavior
     void LogAllData();
 }
 
+public struct WeaponDetails
+{
+    public int _slot;
+    public IShipWeaponry _weapon;
+    public AbstractShip _parentShip;
+
+    public WeaponDetails(IShipWeaponry newWeapon, int slotAssignment, AbstractShip parent)
+    {
+        _weapon = newWeapon;
+        _slot = slotAssignment;
+        _parentShip = parent;
+    }
+}
+
 public interface IWeaponsSubsystemBehavior
 {
     void SetParentShipAndInitializeAwakeReferences(AbstractShip parent);
@@ -184,19 +196,31 @@ public interface IWeaponsSubsystemBehavior
 
     void EnableWeapons();
 
-    void FireWeapons();
+    void SetShootInput(bool value);
+
+    bool GetShootInput();
 
     int GetWeaponCount();
 
+    int GetSlotCount();
+
     void AddWeapon(string weaponName, int slot);
 
-    GameObject RemoveWeapon(int slot);
+    void AddWeaponSlot(Vector2 SlotPosition);
 
-    IShipWeaponry GetWeaponFromPosition(int slot);
+    void RemoveWeapon(int slot);
 
-    int GetAvailablePosition();
+    AbstractShipWeapon GetWeaponAtSlot(int slot);
 
-    int GetPositionCount();
+    List<int> GetUnoccupiedSlots();
+
+    List<int> GetOccupiedSlots();
+
+    Dictionary<int,AbstractShipWeapon> GetAllWeapons();
+
+    Dictionary<int,Transform> GetAllSlots();
+
+
 
 
 
@@ -429,18 +453,24 @@ public interface IDisableable
 
 public interface IDamageable
 {
+    int GetInstanceID();
+
     void TakeDamage(int value, bool negateDeath);
+
+    string GetTag();
 }
 
 public interface IRepairable
 {
+    int GetInstanceID();
     void RepairDamage(int value);
+    string GetTag();
 }
 
 
 
 //Ship Definition
-public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, IRepairable
+public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, IRepairable, IScannable
 {
     //Declarations
     [Header("Ship Info")]
@@ -450,12 +480,14 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
     [SerializeField] protected bool _isShipDisabled = false;
     [SerializeField] protected bool _debugMode = false;
     protected bool _debugFlag = false;
-
+    private bool _isControlErrorThrown = false;
+    [SerializeField] protected int _instanceID;
 
     //behavior references
     protected IShipController _shipController;
     protected IHullBehavior _hullBehavior;
     protected IDeathBehavior _deathBehavior;
+    protected ScannerBehaviour _scanner;
 
     protected IEngineSubsystemBehavior _engineBehavior;
     protected IShieldSubsystemBehavior _shieldsBehavior;
@@ -463,8 +495,6 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
     protected ICargoSubsystemBehavior _cargoBehavior;
     protected IWarpSubsystemBehavior _warpBehavior;
     protected IBusterSubsystemBehavior _busterBehavior;
-    
-
 
 
 
@@ -472,6 +502,7 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
     protected virtual void Awake()
     {
         InitializeAwakeBehaviorReferences();
+        _instanceID = GetInstanceID();
     }
 
     protected virtual void Start()
@@ -487,7 +518,200 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
 
 
 
-    //Interface Utils
+
+    //Internal Utils
+    protected virtual void InitializeAwakeBehaviorReferences()
+    {
+        //Initialize local personal references
+        _hullBehavior = GetComponent<IHullBehavior>();
+        _deathBehavior = GetComponent<IDeathBehavior>();
+        _scanner = GetComponent<ScannerBehaviour>();
+
+        _engineBehavior = GetComponent<IEngineSubsystemBehavior>();
+        _shieldsBehavior = GetComponent<IShieldSubsystemBehavior>();
+        _weaponsBehavior = GetComponent<IWeaponsSubsystemBehavior>();
+        _cargoBehavior = GetComponent<ICargoSubsystemBehavior>();
+        _warpBehavior = GetComponent<IWarpSubsystemBehavior>();
+        _busterBehavior = GetComponent<IBusterSubsystemBehavior>();
+        
+
+
+        //Initialize component nonSubsystem references
+        _hullBehavior.SetParentShipAndInitializeAwakeReferences(this);
+        _deathBehavior.SetParentShipAndInitializeAwakeReferences(this);
+        _scanner?.InitializeScanner(GetInstanceID());
+
+
+
+        //Initialize component Subsystems
+        _engineBehavior.SetParentShipAndInitializeAwakeReferences(this);
+        _shieldsBehavior.SetParentShipAndInitializeAwakeReferences(this);
+        _weaponsBehavior.SetParentShipAndInitializeAwakeReferences(this);
+        //_cargoBehavior.SetParentShipAndInitializeAwakeReferences(this);
+        //_warpBehavior.SetParentShipAndInitializeAwakeReferences(this);
+        //_busterBehavior.SetParentShipAndInitializeAwakeReferences(this);
+
+    }
+
+    protected virtual void InitializeGameManagerSourcedReferences()
+    {
+        //Initialize component nonSubsystem references
+        _hullBehavior.InitializeGameManagerDependentReferences();
+        _deathBehavior.InitializeGameManagerDependentReferences();
+        _scanner.InitializeScanner(GetInstanceID());
+
+
+
+        //Initialize component Subsystems
+        _engineBehavior.InitializeGameManagerDependentReferences();
+        _shieldsBehavior.InitializeGameManagerDependentReferences();
+        _weaponsBehavior.InitializeGameManagerDependentReferences();
+        //_cargoBehavior.InitializeGameManagerDependentReferences();
+        //_warpBehavior.InitializeGameManagerDependentReferences();
+        //_busterBehavior.InitializeGameManagerDependentReferences();
+    }
+
+    protected virtual void ControlShip()
+    {
+        if (_shipController != null)
+        {
+            _shipController.DetermineDecisions();
+            _shipController.CommunicateDecisionsToSubsystems();
+        }
+        else if (_isControlErrorThrown == false)
+        {
+            _isControlErrorThrown = true;
+            STKDebugLogger.LogWarning($"Ship {GetName()} has no ShipController. Expect zero player/ai activity");
+        }
+            
+
+    }
+
+    protected virtual void SufferDamage(int value, bool preserveShip)
+    {
+        //try damaging shields first
+        if (_shieldsBehavior != null)
+        {
+            if (_shieldsBehavior.GetCurrentValue() > 0)
+                _shieldsBehavior.DamageShields(value);
+            else
+            {
+                if (preserveShip == true)
+                    DamageShipButNegateDeath(value);
+
+                else _hullBehavior.DamageHull(value);
+            }
+        }
+
+        //Damage hull if no shield system exists
+        else if (preserveShip == true)
+            DamageShipButNegateDeath(value);
+
+        else _hullBehavior.DamageHull(value);
+        
+    }
+
+    protected virtual void DamageShipButNegateDeath(int value)
+    {
+            if (_hullBehavior.GetCurrentValue() < value)
+            {
+                _hullBehavior.DamageHullToNearDeath();
+                _hullBehavior.DisableShipFromCriticalDamage();
+            }
+
+            else _hullBehavior.DamageHull(value);
+    }
+
+    protected virtual void WatchDebugMode()
+    {
+        if (_debugMode != _debugFlag)
+        {
+            if (_debugMode)
+                EnterDebugMode();
+            else ExitDebugMode();
+
+            _debugFlag = _debugMode;
+        }
+    }
+
+    protected virtual void RemoveShipController()
+    {
+        _shipController.RemoveController();
+        _shipController = null;
+        ResetControlError();
+    }
+
+    protected virtual void ResetControlError()
+    {
+        _isControlErrorThrown = false;
+    }
+
+    protected virtual void MakeShipUnplayable()
+    {
+        if (_isPlayer)
+        {
+            _isPlayer = false;
+            GameManager.Instance.GetPlayerManager().ClearPlayerShip();
+        }
+    }
+
+    protected virtual void MakeShipPlayable()
+    {
+        if (_isPlayer == false)
+        {
+            _isPlayer = true;
+            GameManager.Instance.GetPlayerManager().SetShipAsPlayer(this);
+        }
+    }
+
+    protected virtual bool DoesPlayerShipAlreadyExist()
+    {
+        return GameManager.Instance.GetPlayerManager().DoesPlayerShipExist();
+    }
+
+
+
+    //Getters, Setters, & Commands
+    public string GetName()
+    {
+        return _name;
+    }
+
+    public string GetTag()
+    {
+        return tag;
+    }
+
+    public void SetName(string newName)
+    {
+        _name = newName;
+    }
+
+    public string GetFaction()
+    {
+        return _faction;
+    }
+
+    public void SetFaction(string newFaction)
+    {
+        _faction = newFaction;
+    }
+
+    public bool IsShipDisabled()
+    {
+        return _isShipDisabled;
+    }
+
+    public bool IsPlayer()
+    {
+        return _isPlayer;
+    }
+
+    public virtual void Die()
+    {
+        _deathBehavior.TriggerDeathSequence();
+    }
+
     public bool IsDisabled()
     {
         return _isShipDisabled;
@@ -505,75 +729,13 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
 
     public virtual void TakeDamage(int damage, bool preserveShip)
     {
-        SufferHullDamage(damage, preserveShip);
+        SufferDamage(damage, preserveShip);
     }
 
     public virtual void RepairDamage(int value)
     {
         _hullBehavior.RepairHull(value);
     }
-
-
-    //Utils
-    protected virtual void InitializeAwakeBehaviorReferences()
-    {
-        //Initialize local personal references
-        _shipController = GetComponent<IShipController>();
-        _hullBehavior = GetComponent<IHullBehavior>();
-        _deathBehavior = GetComponent<IDeathBehavior>();
-
-        _engineBehavior = GetComponent<IEngineSubsystemBehavior>();
-        _shieldsBehavior = GetComponent<IShieldSubsystemBehavior>();
-        _weaponsBehavior = GetComponent<IWeaponsSubsystemBehavior>();
-        _cargoBehavior = GetComponent<ICargoSubsystemBehavior>();
-        _warpBehavior = GetComponent<IWarpSubsystemBehavior>();
-        _busterBehavior = GetComponent<IBusterSubsystemBehavior>();
-        
-
-
-        //Initialize component nonSubsystem references
-        _shipController.SetParentShipAndInitializeAwakeReferences(this);
-        _hullBehavior.SetParentShipAndInitializeAwakeReferences(this);
-        _deathBehavior.SetParentShipAndInitializeAwakeReferences(this);
-
-
-
-        //Initialize component Subsystems
-        _engineBehavior.SetParentShipAndInitializeAwakeReferences(this);
-        _shieldsBehavior.SetParentShipAndInitializeAwakeReferences(this);
-        _weaponsBehavior.SetParentShipAndInitializeAwakeReferences(this);
-        //_cargoBehavior.SetParentShipAndInitializeAwakeReferences(this);
-        //_warpBehavior.SetParentShipAndInitializeAwakeReferences(this);
-        //_busterBehavior.SetParentShipAndInitializeAwakeReferences(this);
-
-    }
-
-    protected virtual void InitializeGameManagerSourcedReferences()
-    {
-        //Initialize component nonSubsystem references
-        _shipController.InitializeGameManagerDependentReferences();
-        _hullBehavior.InitializeGameManagerDependentReferences();
-        _deathBehavior.InitializeGameManagerDependentReferences();
-
-
-
-        //Initialize component Subsystems
-        _engineBehavior.InitializeGameManagerDependentReferences();
-        _shieldsBehavior.InitializeGameManagerDependentReferences();
-        _weaponsBehavior.InitializeGameManagerDependentReferences();
-        //_cargoBehavior.InitializeGameManagerDependentReferences();
-        //_warpBehavior.InitializeGameManagerDependentReferences();
-        //_busterBehavior.InitializeGameManagerDependentReferences();
-    }
-
-    protected virtual void ControlShip()
-    {
-        _shipController.DetermineDecisions();
-        _shipController.CommunicateDecisionsToSubsystems();
-    }
-
-
-
 
     public virtual void DisableShip()
     {
@@ -604,115 +766,46 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
         }
     }
 
-    public virtual void Die()
+    public virtual void MakeShipAiControlled()
     {
-        _deathBehavior.TriggerDeathSequence();
+        if (_shipController != null)
+            RemoveShipController();
+
+        _shipController = gameObject.AddComponent<ShipControllerViaAi>();
+        _shipController.InitializeReferences(this);
+
+        if (_isPlayer)
+            MakeShipUnplayable();
+
     }
 
-    public virtual void SufferHullDamage(int value, bool preserveShip)
+    public virtual void MakeShipPlayerControlled()
     {
-        
-        if (preserveShip == true)
+        if (DoesPlayerShipAlreadyExist() == false)
         {
-            if (_hullBehavior.GetCurrentValue() < value)
-            {
-                _hullBehavior.DamageHullToNearDeath();
-                _hullBehavior.DisableShipFromCriticalDamage();
-            }
+            if (_shipController != null)
+                RemoveShipController();
 
-            else _hullBehavior.DamageHull(value);
+            //Add new playerControlled Ship Controller
+            _shipController = gameObject.AddComponent<ShipControllerViaPlayerInput>();
+            _shipController.InitializeReferences(this);
+
+            MakeShipPlayable();
         }
 
-        else _hullBehavior.DamageHull(value);
-        
-    }
-
-    public virtual void SufferShieldDamage(int value, bool applyPiercingDamage)
-    {
-        if (_shieldsBehavior != null)
+        else
         {
-
+            if (_isPlayer)
+                STKDebugLogger.LogWarning($"Attempted to make ship {_name} playable when it's already the player ship");
+            else
+                STKDebugLogger.LogWarning($"Failed to make ship {_name} playable. Ship {GameManager.Instance.GetPlayerManager().GetPlayerShip()._name}" +
+                                          $" is already playable");
         }
-    }
-
-
-    protected virtual void WatchDebugMode()
-    {
-        if (_debugMode != _debugFlag)
-        {
-            if (_debugMode)
-                EnterDebugMode();
-            else ExitDebugMode();
-
-            _debugFlag = _debugMode;
-        }
-    }
-
-    public virtual void EnterDebugMode()
-    {
-        _debugMode = true;
-        Debug.Log("Entered DebugMode");
-        if (_hullBehavior.IsDebugActive() == false)
-            _hullBehavior.ToggleDebugMode();
-        if (_engineBehavior.IsDebugActive() == false)
-            _engineBehavior.ToggleDebugMode();
-        if (_deathBehavior.IsDebugActive() == false)
-            _deathBehavior.ToggleDebugMode();
-        if (_weaponsBehavior.IsDebugActive() == false)
-            _weaponsBehavior.ToggleDebugMode();
-
-
-    }
-
-    public virtual void ExitDebugMode()
-    {
-        _debugMode = false;
-        Debug.Log("Exited DebugMode");
-        if (_hullBehavior.IsDebugActive())
-            _hullBehavior.ToggleDebugMode();
-        if (_engineBehavior.IsDebugActive())
-            _engineBehavior.ToggleDebugMode();
-        if (_deathBehavior.IsDebugActive())
-            _deathBehavior.ToggleDebugMode();
-        if (_weaponsBehavior.IsDebugActive())
-            _weaponsBehavior.ToggleDebugMode();
+            
     }
 
 
 
-
-    //External Control Utils
-    public string GetName()
-    {
-        return _name;
-    }
-
-    public void SetName(string newName)
-    {
-        _name = newName;
-    }
-
-    public string GetFaction()
-    {
-        return _faction;
-    }
-
-    public void SetFaction(string newFaction)
-    {
-        _faction = newFaction;
-    }
-
-    public bool IsShipDisabled()
-    {
-        return _isShipDisabled;
-    }
-
-    public bool IsPlayer()
-    {
-        return _isPlayer;
-    }
-
-    
 
     public IShipController GetShipControllerBehavior()
     {
@@ -729,6 +822,10 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
         return _deathBehavior;
     }
 
+    public ScannerBehaviour GetScannerBehavior()
+    {
+        return _scanner;
+    }
 
 
     public IEngineSubsystemBehavior GetEnginesBehavior()
@@ -761,4 +858,51 @@ public abstract class AbstractShip : MonoBehaviour, IDisableable, IDamageable, I
         return _busterBehavior;
     }
 
+    public IPhaseSubsystemBehavior GetPhaseBehavior()
+    {
+        return null;
+    }
+
+    public GameObject GetGameObject()
+    {
+        return gameObject;
+    }
+
+    public string GetNameAsScannedObject()
+    {
+        return GetName();
+    }
+
+
+    //Debugging
+    public virtual void EnterDebugMode()
+    {
+        _debugMode = true;
+        Debug.Log("Entered DebugMode");
+        //if (_hullBehavior.IsDebugActive() == false)
+        //    _hullBehavior.ToggleDebugMode();
+        //if (_engineBehavior.IsDebugActive() == false)
+        //    _engineBehavior.ToggleDebugMode();
+        //if (_deathBehavior.IsDebugActive() == false)
+        //    _deathBehavior.ToggleDebugMode();
+        //if (_weaponsBehavior.IsDebugActive() == false)
+        //    _weaponsBehavior.ToggleDebugMode();
+
+    }
+
+    public virtual void ExitDebugMode()
+    {
+        _debugMode = false;
+        Debug.Log("Exited DebugMode");
+        //if (_hullBehavior.IsDebugActive())
+        //    _hullBehavior.ToggleDebugMode();
+        //if (_engineBehavior.IsDebugActive())
+        //    _engineBehavior.ToggleDebugMode();
+        //if (_deathBehavior.IsDebugActive())
+        //    _deathBehavior.ToggleDebugMode();
+        //if (_weaponsBehavior.IsDebugActive())
+        //    _weaponsBehavior.ToggleDebugMode();
+    }
+
+ 
 }

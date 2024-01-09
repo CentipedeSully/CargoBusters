@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2823438137008020644
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3320024494597104461}
+  - component: {fileID: 6305412645146617676}
+  m_Layer: 0
+  m_Name: Generic Blaster
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3320024494597104461
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2823438137008020644}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6305412645146617676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2823438137008020644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21d5202044782214c822a9bbf3c71e48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parentShip: {fileID: 0}
+  _weaponName: Generic Blaster
+  _weaponDescription: Undefined Description
+  _damage: 1
+  _cooldownTime: 0.5
+  _warmupTime: 0
+  _shootCommand: 0
+  _isSubsystemOnline: 1
+  _isWarmingUp: 0
+  _isFiring: 0
+  _isCooledDown: 1
+  _isDebugActive: 0
+  _projectilePrefab: {fileID: 1395907952926232425, guid: 71139297da7ff244a8302646c2844071, type: 3}
+  _localShotDirection: {x: 0, y: 1}
+  _projectileSpeed: 0.1
+  _projectileLifetime: 50

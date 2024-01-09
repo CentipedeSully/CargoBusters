@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class ShipControllerViaPlayerInput : MonoBehaviour, IShipController
+public abstract class AbstractShipController: MonoBehaviour, IShipController
 {
     //Declarations
-    [SerializeField] private bool _showDebug = false;
+    [SerializeField] protected bool _isInitialized = false;
+    [SerializeField] protected bool _showDebug = false;
 
     //references
-    private AbstractShip _parent;
-    private IEngineSubsystemBehavior _engineBehaviorRef;
-    private IWeaponsSubsystemBehavior _weaponBehaviorRef;
-    private InputReader _inputReaderReference;
+    protected AbstractShip _parent;
 
 
 
@@ -21,45 +19,42 @@ public class ShipControllerViaPlayerInput : MonoBehaviour, IShipController
     //...
 
 
-    //Interface Utils
-    public void SetParentShipAndInitializeAwakeReferences(AbstractShip parent)
+
+
+    //Internal Utils
+    protected virtual void InitializeMoreReferences()
+    {
+
+    }
+
+
+
+
+
+    //Getters, Setters, & Commands
+    public virtual void InitializeReferences(AbstractShip parent)
     {
         _parent = parent;
-        _engineBehaviorRef = _parent.GetEnginesBehavior();
-        _weaponBehaviorRef = _parent.GetWeaponsBehavior();
+        InitializeMoreReferences();
+        _isInitialized = true;
     }
 
-    public void InitializeGameManagerDependentReferences()
+
+    public virtual void RemoveController()
     {
-        _inputReaderReference = GameManager.Instance.GetInputReader();
+        Destroy(this);
     }
 
+    public abstract void DetermineDecisions();
 
-    public void DetermineDecisions()
-    {
-        //Decisions are made by the InputSystem via UnityEvents. Not Here.
-        //...
-    }
-
-    public void CommunicateDecisionsToSubsystems()
-    {
-        _engineBehaviorRef.SetStrafeInput(_inputReaderReference.GetPlayerStrafeInput());
-        _engineBehaviorRef.SetThrustInput(_inputReaderReference.GetPlayerThrustInput());
-        _engineBehaviorRef.SetTurnInput(_inputReaderReference.GetPlayerTurnInput());
-
-        if (_inputReaderReference.GetPlayerShootInput() == true)
-            _weaponBehaviorRef.FireWeapons();
-    }
+    public abstract void CommunicateDecisionsToSubsystems();
 
 
 
-
-    //Utils
-    //...
 
 
     //Debugging
-    private void LogResponse(string responseDescription)
+    protected virtual void LogResponse(string responseDescription)
     {
         if (_parent != null)
             Debug.Log(_parent.GetName() + " " + responseDescription);
@@ -70,15 +65,68 @@ public class ShipControllerViaPlayerInput : MonoBehaviour, IShipController
         }
     }
 
-    public void ToggleDebug()
+    public virtual void ToggleDebug()
     {
         if (_showDebug)
             _showDebug = false;
         else _showDebug = true;
     }
 
-    public bool IsDebugActive()
+    public virtual bool IsDebugActive()
     {
         return _showDebug;
     }
+
+}
+
+
+
+public class ShipControllerViaPlayerInput : AbstractShipController
+{
+    //Declarations
+    protected IEngineSubsystemBehavior _engineBehaviorRef;
+    protected IWeaponsSubsystemBehavior _weaponBehaviorRef;
+    protected InputReader _inputReaderReference;
+
+
+
+    //Monobehaviors
+    //...
+
+
+
+
+    //Internal Utils
+    protected override void InitializeMoreReferences()
+    {
+        _engineBehaviorRef = _parent.GetEnginesBehavior();
+        _weaponBehaviorRef = _parent.GetWeaponsBehavior();
+        _inputReaderReference = GameManager.Instance.GetInputReader();
+    }
+
+
+
+
+    //Getters Setters, & commands
+    public override void DetermineDecisions()
+    {
+        //Inputs determined via player input Reader
+    }
+
+    public override void CommunicateDecisionsToSubsystems()
+    {
+        if (_isInitialized)
+        {
+            _engineBehaviorRef.SetStrafeInput(_inputReaderReference.GetPlayerStrafeInput());
+            _engineBehaviorRef.SetThrustInput(_inputReaderReference.GetPlayerThrustInput());
+            _engineBehaviorRef.SetTurnInput(_inputReaderReference.GetPlayerTurnInput());
+
+            _weaponBehaviorRef.SetShootInput(_inputReaderReference.GetPlayerShootInput());
+        }
+
+    }
+
+
+
+
 }

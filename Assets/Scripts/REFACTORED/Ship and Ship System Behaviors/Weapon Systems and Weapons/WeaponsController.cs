@@ -1,117 +1,284 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SullysToolkit;
 
 
 public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
 {
     //Declarations
     [Header("Weapons")]
-    [SerializeField] private int _weaponCount;
-    [SerializeField] private List<Transform> _weaponPositions;
-    [SerializeField] private AbstractShipWeapon[] _weaponsReferenceList;
-    [SerializeField] private WeaponFactory _factoryReference;
+    [SerializeField] private bool _shootInput = false;
+    [SerializeField] private Transform _weaponPositionParent;
+    [SerializeField] private List<Transform> _baseWeaponPositions;
+    [SerializeField] private string[] _slotVisualizer;
+    private Dictionary<int,Transform> _weaponSlots;
+    private Dictionary<int, AbstractShipWeapon> _equiptWeapons;
+    private WeaponFactory _factoryReference;
+
 
     [Header("Debugging")]
-    [SerializeField] private bool _testAddWeapon = false;
-    [SerializeField] private bool _testRemoveWeapon = false;
-    [SerializeField] private bool _testGetWeaponAtPosition = false;
-    [SerializeField] private bool _testEnableDisableWeapons = false;
+    [SerializeField] private int _debugSlotIndex;
+    [SerializeField] private string _debugWeaponName;
+    [SerializeField] private Vector3 _debugNewSlotPosition;
+    [SerializeField] private bool _addFullArsenalCmd = false;
+    [SerializeField] private bool _addWeaponCmd = false;
+    [SerializeField] private bool _addSlotCmd = false;
+    [SerializeField] private bool _removeWeaponCmd = false;
+    [SerializeField] private bool _logWeaponAtSlotCmd = false;
+    [SerializeField] private bool _disableWeaponsCmd = false;
+    [SerializeField] private bool _enableWeaponsCmd = false;
+    [SerializeField] private bool _logWeaponCountCmd = false;
+    [SerializeField] private bool _logSlotCountCmd = false;
+    [SerializeField] private bool _addLaserPairCmd = false;
+    [SerializeField] private bool _removeAllWeaponsCmd = false;
+    [SerializeField] private bool _autoFireWeaponsCmd = false;
+    private bool _isWeaponsAutoFiring = false;
+
+
+    //events
+    public delegate void WeaponryUpdateEvent(WeaponDetails aboutNewWeapon);
+    public event WeaponryUpdateEvent OnWeaponAdded;
+    public event WeaponryUpdateEvent OnWeaponRemoved;
+
+    public delegate void WeaponsControllerEvent();
+    public event WeaponsControllerEvent OnWeaponsDisabled;
+    public event WeaponsControllerEvent OnWeaponsEnabled;
+    public event WeaponsControllerEvent OnSlotAdded;
+
 
 
     //Monobehaviours
     private void Update()
     {
+        if (_isDisabled == false)
+            PassShootCommandToWeapons();
+
         if (_showDebug)
+        {
             ListenForDebugCommands();
-    }
-
-
-
-
-    //Interface Utils
-    public void AddWeapon(string weaponName, int position)
-    {
-        if (position >= 0 && position < _weaponPositions.Count)
-        {
-            if (GetWeaponFromPosition(position) == null)
-            {
-                //Ask the factory to create a new weapon
-                GameObject newWeaponObject = _factoryReference.CreateWeaponObject(weaponName);
-
-                //bind the new weapon to the desired position.
-                newWeaponObject.transform.SetParent(_weaponPositions[position]);
-                newWeaponObject.transform.position = _weaponPositions[position].position;
-
-                //Initialize the weapon
-                newWeaponObject.GetComponent<IShipWeaponry>().SetParentSubsystemAndInitialize(this);
-
-                //Update the weapon count and weapon references
-                RebuildWeaponReferences();
-                UpdateWeaponCountUsingWeaponReferences();
-            }
-            else
-                Debug.LogWarning($"Caution: position {position} already holds a weapon on ship {_parentShip.GetName()}. " +
-                    $"Ignoring request to add weapon {weaponName} to position {position}");
         }
-        else
-            Debug.LogWarning($"Caution: position {position} doesn't exist on ship {_parentShip.GetName()}" +
-                $"Ignoring request to add weapon {weaponName} to position {position}");
-        
-    }
-
-    public GameObject RemoveWeapon(int position)
-    {
-        GameObject removedWeapon = null;
-        if (position >= 0 && position < _weaponsReferenceList.Length)
-        {
             
-            if (GetWeaponFromPosition(position) == null)
-                Debug.LogWarning($"Caution: no weapon exists at position {position} on ship {_parentShip.GetName()}." +
-                    $"Ignoring request to remove weapon from position {position}");
-            else
+    }
+
+
+
+
+    //Internal Utils
+    private void InitializeSlotDictionary()
+    {
+        _weaponSlots = new Dictionary<int, Transform>();
+        for (int i = 0; i < _baseWeaponPositions.Count; i++)
+            _weaponSlots.Add(i, _baseWeaponPositions[i]);
+    }
+
+    private void InitializeEquiptWeaponsDictionary()
+    {
+        _equiptWeapons = new Dictionary<int, AbstractShipWeapon>();
+    }
+
+    private void InitializeSlotVisualizer()
+    {
+        _slotVisualizer = new string[_baseWeaponPositions.Count];
+        for (int i = 0; i < _slotVisualizer.Length; i++)
+            _slotVisualizer[i] = "None";
+    }
+
+    private void RebuildSlotVisualizer()
+    {
+        _slotVisualizer = new string[_weaponSlots.Count];
+
+        for (int i = 0; i < _slotVisualizer.Length; i++)
+        {
+            if (_equiptWeapons.ContainsKey(i))
+                _slotVisualizer[i] = _equiptWeapons[i].GetWeaponName();
+            else _slotVisualizer[i] = "None";
+        }
+
+    }
+
+    private void ReinitializeWeapons()
+    {
+        //Each of the ship's weapon-prefabs are positioned under a separate transform(which determines where the gun will fire from)
+        //Only one weapon should exist under each positional transform;
+
+        foreach (KeyValuePair<int, Transform> slot in _weaponSlots)
+        {
+            if (slot.Value == null)
+                STKDebugLogger.LogError($"Weapon slot {slot.Key} has no Transform set on ship {_parentShip.GetName()}.");
+            else if (slot.Value.childCount > 0)
             {
-                removedWeapon = _weaponsReferenceList[position].gameObject;
-                removedWeapon.SetActive(false);
 
-                //Move the weapon from its position in the weapon system
-                removedWeapon.transform.SetParent(GameManager.Instance.GetInstanceTracker().GetWeaponContainer()); ;
+                Transform weaponObjectTransform = slot.Value.GetChild(0);
+                AbstractShipWeapon weaponReference = weaponObjectTransform.GetComponent<AbstractShipWeapon>();
+                if (weaponReference != null)
+                {
+                    weaponReference.SetParentSubsystemAndInitialize(this, _parentShip);
+                    _slotVisualizer[slot.Key] = weaponObjectTransform.GetComponent<AbstractShipWeapon>().GetWeaponName();
+                    _equiptWeapons.Add(slot.Key, weaponReference);
+                }
 
-
-                RebuildWeaponReferences();
-                UpdateWeaponCountUsingWeaponReferences();
+                else
+                    STKDebugLogger.LogError($"No ShipWeapon component is detected on transform {weaponObjectTransform} on ship" +
+                                            $" {_parentShip.GetName()}. Each weapon position may have ONLY ONE child object, which must possess" +
+                                            $" a SINGLE ShipWeapon component. Ignoring this transform as a weapon position until weapons are " +
+                                            $"reinitialized");
             }
         }
-        else
-            Debug.LogWarning($"Caution: Attempted OutOfBounds removal of weapon at position {position} on {_parentShip.GetName()}." +
-                $"Ignoring request to remove weapon from position {position}");
+    }
 
-        return removedWeapon;
+
+
+
+    //Getters, Setters, & Commands
+    public void AddWeaponSlot(Vector2 newLocalPosition)
+    {
+        Transform newPosition = Instantiate(new GameObject("Custom Position")).transform;
+        newPosition.SetParent(_weaponPositionParent, false);
+        newPosition.localPosition = newLocalPosition;
+
+        int newSlotIndex = _weaponSlots.Count;
+        _weaponSlots.Add(newSlotIndex, newPosition);
+
+        if (newPosition.childCount > 0)
+        {
+            Transform childTransform = newPosition.GetChild(0);
+            AbstractShipWeapon weaponReference = childTransform.GetComponent<AbstractShipWeapon>();
+
+            if (weaponReference != null)
+            {
+                _equiptWeapons.Add(newSlotIndex, weaponReference);
+                weaponReference.SetParentSubsystemAndInitialize(this, _parentShip);
+            }
+        }
+
+        RebuildSlotVisualizer();
+        OnSlotAdded?.Invoke();
+
+    }
+
+    public List<int> GetUnoccupiedSlots()
+    {
+        List<int> unoccupiedPositions = new List<int>();
         
+        for (int i = 0; i < _weaponSlots.Count; i++)
+        {
+            if (!_equiptWeapons.ContainsKey(i))
+                unoccupiedPositions.Add(i);
+        }
+
+        return unoccupiedPositions;
+    }
+
+    public List<int> GetOccupiedSlots()
+    {
+        List<int> OccupiedSlots = new List<int>();
+
+        foreach (KeyValuePair<int, AbstractShipWeapon> weaponRecord in _equiptWeapons)
+            OccupiedSlots.Add(weaponRecord.Key);
+
+        return OccupiedSlots;
+    }
+
+    public void AddWeapon(string weaponName, int slot)
+    {
+        if (_factoryReference.DoesWeaponExist(weaponName) && _weaponSlots.ContainsKey(slot) && !_equiptWeapons.ContainsKey(slot))
+        {
+            GameObject newWeapon = _factoryReference.CreateWeaponObject(weaponName);
+            newWeapon.transform.SetParent(_weaponSlots[slot],false);
+
+            AbstractShipWeapon weaponReference = newWeapon.GetComponent<AbstractShipWeapon>();
+            weaponReference.SetParentSubsystemAndInitialize(this, _parentShip);
+            _equiptWeapons.Add(slot, weaponReference);
+
+            RebuildSlotVisualizer();
+            OnWeaponAdded?.Invoke(new WeaponDetails(weaponReference, slot, _parentShip));
+        }
+    }
+
+    public void RemoveWeapon(int slot)
+    {
+        if (_weaponSlots.ContainsKey(slot) && _equiptWeapons.ContainsKey(slot))
+        {
+            AbstractShipWeapon weaponReference = _equiptWeapons[slot];
+            GameObject weaponObject = weaponReference.gameObject;
+            _equiptWeapons.Remove(slot);
+
+            _factoryReference.DecomissionWeapon(weaponObject);
+
+            RebuildSlotVisualizer();
+            OnWeaponRemoved?.Invoke(new WeaponDetails(weaponReference, slot, _parentShip));
+        }
+    }
+
+    public AbstractShipWeapon GetWeaponAtSlot(int slot)
+    {
+        if (_weaponSlots.ContainsKey(slot))
+        {
+            if (_weaponSlots[slot].childCount > 0)
+                return _weaponSlots[slot].GetChild(0).GetComponent<AbstractShipWeapon>();
+
+            else
+            {
+                STKDebugLogger.LogStatement(_showDebug, $"No weapon in slot {slot} on Ship {_parentShip.GetName()}");
+                return null;
+            }
+        }
+
+        else
+        {
+            STKDebugLogger.LogStatement(_showDebug, $"No slot {slot} exists on Ship {_parentShip.GetName()}");
+            return null;
+        }
+    }
+
+    public Dictionary<int,AbstractShipWeapon> GetAllWeapons()
+    {
+
+        Dictionary<int, AbstractShipWeapon> copyOfWeaponRecords = new Dictionary<int, AbstractShipWeapon>();
+
+        foreach (KeyValuePair<int, AbstractShipWeapon> record in _equiptWeapons)
+            copyOfWeaponRecords.Add(record.Key,record.Value);
+
+        return copyOfWeaponRecords;
+    }
+
+    public Dictionary<int,Transform> GetAllSlots()
+    {
+        Dictionary<int, Transform> copyOfShipSlots = new Dictionary<int, Transform>();
+
+        foreach (KeyValuePair<int, Transform> record in _weaponSlots)
+            copyOfShipSlots.Add(record.Key, record.Value);
+
+        return copyOfShipSlots;
+    }
+
+    public void PassShootCommandToWeapons()
+    {
+        foreach (KeyValuePair<int, AbstractShipWeapon> registeredWeapon in _equiptWeapons)
+        {
+            if (_isWeaponsAutoFiring == false)
+                registeredWeapon.Value.SetShootCommand(_shootInput);
+            else registeredWeapon.Value.SetShootCommand(true);
+        }
+            
     }
 
     public void DisableWeapons()
     {
         DisableSubsystem();
+        OnWeaponsDisabled?.Invoke();
     }
 
     public void EnableWeapons()
     {
         EnableSubsystem();
-    }
-
-    public void FireWeapons()
-    {
-        foreach (IShipWeaponry weapon in _weaponsReferenceList)
-        {
-            if (weapon != null)
-                weapon.FireWeapon();
-        }
+        OnWeaponsEnabled?.Invoke();
     }
 
     public int GetWeaponCount()
     {
-        return _weaponCount;
+        return _equiptWeapons.Count;
     }
 
     public void InitializeGameManagerDependentReferences()
@@ -127,217 +294,182 @@ public class WeaponsController : ShipSubsystem, IWeaponsSubsystemBehavior
     public void SetParentShipAndInitializeAwakeReferences(AbstractShip parent)
     {
         _parentShip = parent;
-        RebuildWeaponReferences();
-        UpdateWeaponCountUsingWeaponReferences();
+
+        InitializeSlotVisualizer();
+        InitializeSlotDictionary();
+        InitializeEquiptWeaponsDictionary();
 
         //in case the weapon positions are populated thru the inspector before runtime
         ReinitializeWeapons();
     }
 
-    public IShipWeaponry GetWeaponFromPosition(int position)
+    public int GetSlotCount()
     {
-        if (position >= 0 && position < _weaponsReferenceList.Length)
-            return _weaponsReferenceList[position];
-        else
-        {
-            Debug.LogWarning($"Weapon position {position} is out of bounds on ship {_parentShip.GetName()}" +
-                $"Ignoring weapon-request on position {position}");
-            return null;
-        }
-            
+        return _weaponSlots.Count;
     }
 
-    public int GetPositionCount()
-    {
-        return _weaponPositions.Count;
-    }
-
-    public int GetAvailablePosition()
-    {
-        for (int i = 0; i < _weaponsReferenceList.Length; i++)
-        {
-            if (_weaponsReferenceList[i] == null)
-                return i;
-        }
-
-        return -1;
-    }
-
-
-
-
-    //Utils
     public override void DisableSubsystem()
     {
-        foreach (IShipWeaponry weapon in _weaponsReferenceList)
-        {
-            if (weapon != null)
-                weapon.SetSubsystemOnlineStatus(false);
-        }
+        foreach (KeyValuePair<int,AbstractShipWeapon> registeredWeaponRecord in _equiptWeapons)
+            registeredWeaponRecord.Value.SetSubsystemOnlineStatus(false);
 
         base.DisableSubsystem();
     }
 
     public override void EnableSubsystem()
     {
-        foreach (IShipWeaponry weapon in _weaponsReferenceList)
-        {
-            if (weapon != null)
-                weapon.SetSubsystemOnlineStatus(true);
-        }
+        foreach (KeyValuePair<int, AbstractShipWeapon> registeredWeaponRecord in _equiptWeapons)
+            registeredWeaponRecord.Value.SetSubsystemOnlineStatus(true);
 
         base.EnableSubsystem();
     }
 
-    public void RebuildWeaponReferences()
-    {
-        _weaponsReferenceList = new AbstractShipWeapon[_weaponPositions.Count];
 
-        for (int i = 0; i < _weaponPositions.Count; i++)
-        {
-            if (_weaponPositions[i].childCount > 0)
-                _weaponsReferenceList[i] = _weaponPositions[i].GetChild(0).gameObject.GetComponent<AbstractShipWeapon>();
-        }            
+    public bool GetShootInput()
+    {
+        return _shootInput;
     }
 
-    public void UpdateWeaponCountUsingWeaponReferences()
+    public void SetShootInput(bool value)
     {
-        int newWeaponCount = 0;
-        foreach (IShipWeaponry weapon in _weaponsReferenceList)
-        {
-            if (weapon != null)
-                newWeaponCount++;
-        }
-
-        _weaponCount = newWeaponCount;
+        _shootInput = value;
     }
-
-    public void ReinitializeWeapons()
-    {
-        foreach (IShipWeaponry weapon in _weaponsReferenceList)
-        {
-            if (weapon != null)
-                weapon.SetParentSubsystemAndInitialize(this);
-        }
-    }
-
 
 
 
     //Debugging Debug.Log($"");
     private void ListenForDebugCommands()
     {
-        if (_testAddWeapon)
+        if (_addWeaponCmd)
         {
-            _testAddWeapon = false;
-            AddWeaponTest();
+            _addWeaponCmd = false;
+            TestAddingWeaponToDebugSlot();
         }
-        if (_testRemoveWeapon)
+
+        if (_removeWeaponCmd)
         {
-            _testRemoveWeapon = false;
-            RemoveWeaponTest();
+            _removeWeaponCmd = false;
+            TestRemovingWeaponFromDebugSlot();
         }
-        if (_testGetWeaponAtPosition)
+
+        if (_logWeaponAtSlotCmd)
         {
-            _testGetWeaponAtPosition = false;
-            GetWeaponFromPositionTest();
+            _logWeaponAtSlotCmd = false;
+            LogWeaponAtDebugSlot();
         }
-        if (_testEnableDisableWeapons)
+
+        if (_disableWeaponsCmd)
         {
-            _testEnableDisableWeapons = false;
-            EnableAndDisableWeaponsTest();
+            _disableWeaponsCmd = false;
+            DisableWeapons();
         }
+            
+        if (_enableWeaponsCmd)
+        {
+            _enableWeaponsCmd = false;
+            EnableWeapons();
+        }
+
+        if (_addSlotCmd)
+        {
+            _addSlotCmd = false;
+            TestAddingNewSlot();
+        }
+
+        if (_logSlotCountCmd)
+        {
+            _logSlotCountCmd = false;
+            LogSlotCount();
+        }
+
+        if (_logWeaponCountCmd)
+        {
+            _logWeaponCountCmd = false;
+            LogWeaponCount();
+        }
+        if (_addFullArsenalCmd)
+        {
+            _addFullArsenalCmd = false;
+            AddFullArsenal();
+        }
+        if (_addLaserPairCmd)
+        {
+            _addLaserPairCmd = false;
+            AddLaserPair();
+        }
+        if (_removeAllWeaponsCmd)
+        {
+            _removeAllWeaponsCmd = false;
+            RemoveAllWeapons();
+        }
+        if (_autoFireWeaponsCmd)
+        {
+            _autoFireWeaponsCmd = false;
+            ToggleAutoFiring();
+        }
+
     }
 
-    private void AddWeaponTest()
+    private void TestAddingWeaponToDebugSlot()
     {
-        //Testing AddWeapon.
-        Debug.Log($"Testing Adding weapons...");
-
-        Debug.Log($"Adding 'Test Weapon' to all positions...");
-        for (int i = 0; i < _weaponsReferenceList.Length; i++)
-            AddWeapon("Test Weapon", i);
-
-        //Add weapon to nonexistent position
-        Debug.Log($"Adding 'Test Weapon' to position that doesn't exist. Expect a warning...");
-        AddWeapon("Test Weapon", _weaponsReferenceList.Length);
-
-        //Add weapon to a position with a preexisting weapon
-        Debug.Log($"Adding 'Test Weapon' to position that already holds a weapon. Expect a warning...");
-        AddWeapon("Test Weapon", 0);
-
-        //Add undefined weapon
-        Debug.Log($"Adding undefined weapon to posiion 0. Expect an Error 'Weapon doesnt exist'...");
-        AddWeapon("Nonexistent Weapon", 0);
-
-        Debug.Log($"Add Weapon Testing Completed");
-
+        AddWeapon(_debugWeaponName, _debugSlotIndex);
     }
 
-    private void RemoveWeaponTest()
+    private void TestRemovingWeaponFromDebugSlot()
     {
-        //Testing RemoveWeapon
-        Debug.Log($"Testing Removing Weapons...");
-
-        //Remove valid weapon
-        Debug.Log($"Removing Weapon from an occupied position...");
-        int position = 0;
-        if (_weaponCount > 0)
-        {
-            //find an occupied position
-           for (int i =0; i < _weaponsReferenceList.Length; i++)
-            {
-                if (_weaponsReferenceList[i] != null)
-                    position = i;
-            }
-
-            Debug.Log($"Attempting to remove weapon from position {position}..."); 
-            GameObject removedWeapon = RemoveWeapon(position);
-            Debug.Log($"Removed {removedWeapon.GetComponent<IShipWeaponry>().GetWeaponName()} from position {position}");
-        }
-        else Debug.Log($"No weapons exist on ship {_parentShip.GetName()} to remove!");
-
-        //remove nonexistent weapon
-        Debug.Log($"Attempting to remove weapon from empty position {position}. Expect a warning...");
-        RemoveWeapon(position);
-
-        Debug.Log($"REmove Weapon Testing Completed");
-
-
-
+        RemoveWeapon(_debugSlotIndex);
     }
 
-    private void EnableAndDisableWeaponsTest()
+    private void LogWeaponAtDebugSlot()
     {
-        //Test Enabling/disabling weapons
-        Debug.Log($"Testing Weapon Enabling and Disabling...");
-        Debug.Log($"Disabling Weapons and Firing. Expect no weapons fire...");
-        DisableWeapons();
-        FireWeapons();
-        
-        Debug.Log($"Enabling Weapons and Firing. Expect weapons fire...");
-        EnableWeapons();
-        FireWeapons();
-
-        Debug.Log($"Weapon Enabling and Disabling Completed");
+        string weaponName = "None";
+        if (GetWeaponAtSlot(_debugSlotIndex) != null)
+            weaponName = GetWeaponAtSlot(_debugSlotIndex).GetWeaponName();
+        STKDebugLogger.LogStatement(_showDebug, $"Weapon at Slot {_debugSlotIndex}: {weaponName}");
     }
 
-    private void GetWeaponFromPositionTest()
+    private void TestAddingNewSlot()
     {
-        //Test Getting weapons from slots
-        Debug.Log($"Testing Getting Weapon from all positions and one Out of bounds position...");
-        Debug.Log($"Testing InBounds positions...");
-        for (int i = 0; i < _weaponsReferenceList.Length; i++)
-            Debug.Log($"Weapon at position {i}: {GetWeaponFromPosition(i)}");
-
-        Debug.Log($"Testing OutofBounds position...");
-        Debug.Log($"Weapon at position {_weaponsReferenceList.Length}: {GetWeaponFromPosition(_weaponsReferenceList.Length)}");
-
-        Debug.Log($"Getting Weapon from position test Completed");
+        AddWeaponSlot(_debugNewSlotPosition);
     }
 
+    private void LogSlotCount()
+    {
+        STKDebugLogger.LogStatement(_showDebug,$"Current slot count: {GetSlotCount()}");
+    }
 
+    private void LogWeaponCount()
+    {
+        STKDebugLogger.LogStatement(_showDebug, $"Current weapon count: {GetWeaponCount()}");
+    }
 
+    private void AddFullArsenal()
+    {
+        AddWeapon("Generic Laser", 0);
+        AddWeapon("Generic Laser", 1);
+        AddWeapon("Generic Blaster", 2);
+        AddWeapon("Generic Blaster", 3);
+    }
 
+    private void AddLaserPair()
+    {
+        AddWeapon("Generic Laser", 0);
+        AddWeapon("Generic Laser", 1);
+    }
+
+    private void RemoveAllWeapons()
+    {
+        RemoveWeapon(0);
+        RemoveWeapon(1);
+        RemoveWeapon(2);
+        RemoveWeapon(3);
+    }
+
+    private void ToggleAutoFiring()
+    {
+        if (_isWeaponsAutoFiring)
+            _isWeaponsAutoFiring = false;
+        else _isWeaponsAutoFiring = true;
+    }
 
 }

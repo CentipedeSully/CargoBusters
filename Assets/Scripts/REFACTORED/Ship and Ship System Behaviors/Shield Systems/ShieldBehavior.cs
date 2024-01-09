@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SullysToolkit;
 
 public class ShieldBehavior : ShipSubsystem, IShieldSubsystemBehavior
 {
     //Declarations
-    [Header ("Shield Settings")]
+    [Header("Shield Settings")]
+    [SerializeField] private bool _startShieldsFull = true;
     [SerializeField] private int _shieldMaxValue;
     [SerializeField] private int _shieldCurrentValue;
     [SerializeField] private bool _isShieldFull = true;
@@ -19,7 +21,13 @@ public class ShieldBehavior : ShipSubsystem, IShieldSubsystemBehavior
     [SerializeField] private bool _isShieldRegenerating = false;
     [SerializeField] private bool _isShieldDestablized = false;
 
-    
+    [Header("Debug Commands")]
+    [SerializeField] private int _debugModifierValue;
+    [SerializeField] private bool _damageShieldCmd;
+    [SerializeField] private bool _setMaxShieldCmd;
+    [SerializeField] private bool _setCurrentShieldCmd;
+
+
     //events
     public delegate void ShieldEvent();
     public event ShieldEvent OnDamaged;
@@ -29,10 +37,30 @@ public class ShieldBehavior : ShipSubsystem, IShieldSubsystemBehavior
 
 
     //references
-    private IEnumerator _regenCounter;
+    //...
+
+
 
     //MonoBehaviours
+    private void Awake()
+    {
+        if (_startShieldsFull)
+            SetCurrentValue(_shieldMaxValue);
+        else
+            UpdateShieldStatus();
+    }
 
+    private void Start()
+    {
+        if (_isShieldFull == false && _isDisabled == false)
+            RestabilizeShield();
+    }
+
+    private void Update()
+    {
+        if (_showDebug)
+            ListenForDebugCommands();
+    }
 
 
 
@@ -48,8 +76,9 @@ public class ShieldBehavior : ShipSubsystem, IShieldSubsystemBehavior
 
     private void EnterRegenIfShieldStableAndNotFull()
     {
-        if (_isShieldFull == false && _isShieldRegenerating  == false && _isShieldDestablized == false)
+        if (_isShieldFull == false && _isShieldRegenerating == false && _isShieldDestablized == false && _isDisabled == false)
         {
+            STKDebugLogger.LogStatement(_showDebug, $"{_parentShip.GetName()} Shield Regen Started...");
             _isShieldRegenerating = true;
             InvokeRepeating("TickRegen", _regenTickDurationSeconds, _regenTickDurationSeconds);
         }
@@ -58,46 +87,93 @@ public class ShieldBehavior : ShipSubsystem, IShieldSubsystemBehavior
     private void TickRegen()
     {
         SetCurrentValue(_shieldCurrentValue + _regenAmountPerTick);
+        OnRegenTicked?.Invoke();
+        STKDebugLogger.LogStatement(_showDebug, $"{_parentShip.GetName()} Shield Regenerated {_regenAmountPerTick} point");
+
         if (_isShieldFull)
+        {
+            STKDebugLogger.LogStatement(_showDebug, $"{_parentShip.GetName()} Shields Full");
             ExitRegen();
+            OnShieldFull?.Invoke();
+        }
+
     }
 
     private void ExitRegen()
     {
         _isShieldRegenerating = false;
         CancelInvoke();
+        STKDebugLogger.LogStatement(_showDebug, $"{_parentShip.GetName()} Shield Regeneration Stopped");
     }
 
     private void DestabilizeShield()
     {
+        STKDebugLogger.LogStatement(_showDebug, $"{_parentShip.GetName()} Shield Destabilization in Progress...");
+
         if (_isShieldRegenerating)
-            ExitRegen(); //Also Cancels any other previous "DestabilizeShield" Invokes
+            ExitRegen(); //Also Cancels any other previous "RestabilizeShields" Invokes
+
+        if (_isShieldDestablized)
+            CancelInvoke(); //Make certain to not Invoke "RestabilizeShields" multiple times
 
         _isShieldDestablized = true;
-        Invoke("RestabilizeShield", _regenDelaySeconds);
+        STKDebugLogger.LogStatement(_showDebug, $"{_parentShip.GetName()} Shield Destabilization Complete");
+
+        if (_isDisabled == false)
+        {
+            STKDebugLogger.LogStatement(_showDebug, $"{_parentShip.GetName()} Beginning Shield Restabilization...");
+            Invoke("RestabilizeShield", _regenDelaySeconds);
+        }
+
 
     }
 
     private void RestabilizeShield()
     {
+        STKDebugLogger.LogStatement(_showDebug, $"{_parentShip.GetName()} Shield Stabilized");
         _isShieldDestablized = false;
         EnterRegenIfShieldStableAndNotFull();
     }
 
+
+
     //External Utils
     public void DamageShields(int damage)
     {
-        InterruptShieldingProcess();
+        if (_isDisabled == false)
+        {
+            damage = Mathf.Max(0, damage);
+            STKDebugLogger.LogStatement(_showDebug, $"Applying {damage} damage to {_parentShip.GetName()} Shield Subsystem...");
+            SetCurrentValue(_shieldCurrentValue - damage);
+            InterruptShieldingProcess();
+            OnDamaged?.Invoke();
+
+            if (_shieldCurrentValue == 0)
+            {
+                STKDebugLogger.LogStatement(_showDebug, $"{_parentShip.GetName()} Shield Broken!");
+                OnShieldBroken?.Invoke();
+            }
+
+        }
+
+        else
+            STKDebugLogger.LogWarning("Cant apply shield damage to disabled shields subsystem");
     }
 
     public void DisableShields()
     {
+        STKDebugLogger.LogStatement(_showDebug, $"Disabling {_parentShip.GetName()} Shield Subsystem...");
         DisableSubsystem();
+        DestabilizeShield();
+        SetCurrentValue(0);
+        STKDebugLogger.LogStatement(_showDebug, $"{_parentShip.GetName()} Shields Disabled");
     }
 
     public void EnableShields()
     {
+        STKDebugLogger.LogStatement(_showDebug, $"Enabling {_parentShip.GetName()} Shield Subsystem...");
         EnableSubsystem();
+        STKDebugLogger.LogStatement(_showDebug, $"{_parentShip.GetName()} Shields Enabled");
         EnterRegenIfShieldStableAndNotFull();
     }
 
@@ -125,12 +201,12 @@ public class ShieldBehavior : ShipSubsystem, IShieldSubsystemBehavior
 
     public void InitializeGameManagerDependentReferences()
     {
-        throw new System.NotImplementedException();
+        //...
     }
 
     public void InterruptShieldingProcess()
     {
-        ExitRegen();
+        DestabilizeShield();
     }
 
     public bool IsShieldsDisabled()
@@ -140,7 +216,7 @@ public class ShieldBehavior : ShipSubsystem, IShieldSubsystemBehavior
 
     public void LogAllData()
     {
-        throw new System.NotImplementedException();
+        //...
     }
 
     public void SetCurrentValue(int newValue)
@@ -159,4 +235,29 @@ public class ShieldBehavior : ShipSubsystem, IShieldSubsystemBehavior
     {
         _parentShip = parent;
     }
+
+
+
+    //Debug Utils
+    private void ListenForDebugCommands()
+    {
+        if (_damageShieldCmd)
+        {
+            _damageShieldCmd = false;
+            DamageShields(_debugModifierValue);
+        }
+
+        if (_setCurrentShieldCmd)
+        {
+            _setCurrentShieldCmd = false;
+            SetCurrentValue(_debugModifierValue);
+        }
+
+        if (_setMaxShieldCmd)
+        {
+            _setMaxShieldCmd = false;
+            SetMaxValue(_debugModifierValue);
+        }
+    }
 }
+
