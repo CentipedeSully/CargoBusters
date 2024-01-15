@@ -9,7 +9,13 @@ public class DeathBehavior : MonoBehaviour, IDeathBehavior
 
     [SerializeField] [Min(0)] private float _deathSequenceDuration;
     [SerializeField] private bool _isDeathTriggered;
-    [SerializeField] private bool _showDebug;
+
+
+    [Header("Debug Utils")]
+    [SerializeField] private bool _isDebugActive;
+    [SerializeField] private bool _forceDeathCmd;
+
+
 
     //References
     private AbstractShip _parentShip;
@@ -19,7 +25,11 @@ public class DeathBehavior : MonoBehaviour, IDeathBehavior
 
 
     //Monobehaviour
-    //...
+    private void Update()
+    {
+        if (_isDebugActive)
+            ListenForDebugCommands();
+    }
 
 
     //Interface Utils
@@ -55,20 +65,21 @@ public class DeathBehavior : MonoBehaviour, IDeathBehavior
 
     public void ToggleDebugMode()
     {
-        if (_showDebug)
-            _showDebug = false;
-        else _showDebug = true;
+        if (_isDebugActive)
+            _isDebugActive = false;
+        else _isDebugActive = true;
     }
 
     public bool IsDebugActive()
     {
-        return _showDebug;
+        return _isDebugActive;
     }
 
 
     //Utils
     private void ReportDeathAndDie()
     {
+        GameManager.Instance.GetInstanceTracker().RemoveShip(_parentShip.GetInstanceID());
         Destroy(this.gameObject);
     }
 
@@ -78,14 +89,20 @@ public class DeathBehavior : MonoBehaviour, IDeathBehavior
     {
         if (_parentShip == null)
         {
-            Debug.LogError($"NULL_PARENT_SHIP on DeathBehavior of obejct: {this.gameObject}");
-            Debug.Log("NULL_SHIP " + responseDescription);
+            Debug.LogError($"NULL_PARENT_SHIP on DeathBehavior of obejct: {this.gameObject}\n" + "NULL_SHIP " + responseDescription);
         }
 
         else
             Debug.Log(_parentShip.name + " " + responseDescription);
     }
 
-
+    private void ListenForDebugCommands()
+    {
+        if (_forceDeathCmd)
+        {
+            _forceDeathCmd = false;
+            TriggerDeathSequence();
+        }
+    }
 
 }

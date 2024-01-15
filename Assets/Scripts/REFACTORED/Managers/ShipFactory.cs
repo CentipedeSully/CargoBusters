@@ -86,6 +86,9 @@ public class ShipFactory : MonoBehaviour
             else
                 newShip.MakeShipAiControlled();
 
+            //Add ship to instance tracker
+            GameManager.Instance.GetInstanceTracker().AddShip(newShip);
+
             return newShip;
         }
 

@@ -10,6 +10,7 @@ public class GameManager : MonoSingleton<GameManager>
     //Declarations
     [SerializeField] private List<string> _damageableTagsList;
     [SerializeField] private InputReader _inputReaderReference;
+    [SerializeField] private InstanceTracker _instanceTrackerRef;
     [SerializeField] private ShipFactory _shipFactoryReference;
     [SerializeField] private WeaponFactory _weaponFactoryReference;
     [SerializeField] private UiManager _UiManagerReference;
@@ -90,6 +91,11 @@ public class GameManager : MonoSingleton<GameManager>
     public InputReader GetInputReader()
     {
         return _inputReaderReference;
+    }
+
+    public InstanceTracker GetInstanceTracker()
+    {
+        return _instanceTrackerRef;
     }
 
     public PlayerManager GetPlayerManager()

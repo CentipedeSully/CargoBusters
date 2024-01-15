@@ -5,10 +5,11 @@ using Cinemachine;
 using SullysToolkit;
 
 
-public class CameraController : MonoSingleton<CameraController>
+public class CameraController : MonoBehaviour
 {
     //Declarations
     [Header("Camera Controller Settings")]
+    [SerializeField] private InstanceTracker _instanceTrackerRef;
     [SerializeField] private CinemachineVirtualCamera _mainVirtualCamera;
     [SerializeField] private Transform _playspaceOrigin;
     [SerializeField] private LookAheadFocus _lookAheadFocusRef;
@@ -39,8 +40,26 @@ public class CameraController : MonoSingleton<CameraController>
     [SerializeField] private bool _playParticlesCmd;
 
 
+    //events
+
 
     //Monobehaviors
+    private void Awake()
+    {
+        InitializeUtils();
+    }
+
+    private void OnEnable()
+    {
+        _instanceTrackerRef.OnShipDied += ReleaseCameraIfFollowTargetIsDead;
+    }
+
+    private void OnDisable()
+    {
+        _instanceTrackerRef.OnShipDied -= ReleaseCameraIfFollowTargetIsDead;
+    }
+
+
     private void Update()
     {
         ZoomBasedOnInput();
@@ -57,11 +76,6 @@ public class CameraController : MonoSingleton<CameraController>
 
 
     //Internal Utils
-    protected override void InitializeAwakeUtils()
-    {
-        InitializeUtils();
-    }
-
     private void InitializeUtils()
     {
         if (_mainVirtualCamera == null)
@@ -79,6 +93,7 @@ public class CameraController : MonoSingleton<CameraController>
             _mainVirtualCamera.Follow = _lookAheadFocusRef.transform;
 
     }
+
 
 
     //FIX THIS vvv
@@ -117,7 +132,12 @@ public class CameraController : MonoSingleton<CameraController>
         }
     }
 
-
+    private void ReleaseCameraIfFollowTargetIsDead(int instanceID)
+    {
+        //Get the ship's gameobject, and see if that object is the current follow object
+        if (GameManager.Instance.GetInstanceTracker().GetShipWithID(instanceID).gameObject == _followObject)
+            ReleaseCameraFocus();
+    }
 
 
     //Getters, Setters, & Commands
