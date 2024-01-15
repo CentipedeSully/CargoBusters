@@ -6,8 +6,8 @@ public class InstanceTracker : MonoBehaviour
 {
     //Declarations
     [SerializeField] private bool _isDebugActive = true;
-    private Dictionary<int, AbstractShip> _aliveShips;
-    private Dictionary<int, ProjectileBehavior> _aliveProjectiles;
+    private Dictionary<int, AbstractShip> _aliveShips; //keys are instance IDs
+    private Dictionary<int, ProjectileBehavior> _aliveProjectiles; //keys are instance IDs
     [SerializeField] private bool _logShipsCmd;
     [SerializeField] private bool _logProjectilesCmd;
 
